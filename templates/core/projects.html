@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+{% block title %}Projects{% endblock %}
+{% block content %}
+    <h2>Projects</h2>
+    {% if projects %}
+        <ul class="list-group">
+            {% for project in projects %}
+                <li class="list-group-item">
+                    <strong>{{ project.title }}</strong> (Semester: {{ project.semester }})<br>
+                    {{ project.description }}<br>
+                    Uploaded by {{ project.uploaded_by }} on {{ project.uploaded_at }}<br>
+                    <a href="{{ project.zip_file.url }}" class="btn btn-sm btn-primary mt-2" download>Download</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No projects available.</p>
+    {% endif %}
+{% endblock %}  

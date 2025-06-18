@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+{% block title %}Blogs{% endblock %}
+{% block content %}
+    <h2>Blogs</h2>
+    {% if user.is_authenticated %}
+        <a href="{% url 'blog_create' %}" class="btn btn-primary mb-3">Create Blog</a>
+    {% endif %}
+    {% if blogs %}
+        <ul class="list-group">
+            {% for blog in blogs %}
+                <li class="list-group-item">
+                    <h4>{{ blog.title }}</h4>
+                    <p>{{ blog.content|truncatewords:30 }}</p>
+                    <small>By {{ blog.author }} on {{ blog.created_at }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No blogs available.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'core/base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <h1>Welcome to AcademicHub {{ user.username }} </h1>
+    <p>Share and explore academic resources, including old question papers, projects, and blogs.</p>
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}! Start by uploading resources or writing a blog.</p>
+    {% else %}
+        <p>Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">register</a> to contribute.</p>
+    {% endif %}
+    
+{% endblock %}

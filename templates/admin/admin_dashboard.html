@@ -1,0 +1,122 @@
+{% extends 'admin/base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <!-- Dashboard Header -->
+    <div class="d-flex align-items-center mb-4 p-3 bg-light rounded shadow-sm">
+        <i class="bi bi-speedometer2 display-4 text-primary mr-3"></i>
+        <div>
+            <h2 class="mb-0">Admin Dashboard</h2>
+            <small class="text-muted">Welcome back, Admin!</small>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row mb-5">
+        <div class="col-md-3 mb-3">
+            <div class="card text-center shadow border-0 bg-primary text-white">
+                <div class="card-body">
+                    <i class="bi bi-people display-4 mb-2"></i>
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text h4">{{ total_users }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center shadow border-0 bg-success text-white">
+                <div class="card-body">
+                    <i class="bi bi-file-earmark-pdf display-4 mb-2"></i>
+                    <h5 class="card-title">Total Papers</h5>
+                    <p class="card-text h4">{{ total_papers }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center shadow border-0 bg-warning text-white">
+                <div class="card-body">
+                    <i class="bi bi-archive display-4 mb-2"></i>
+                    <h5 class="card-title">Total Projects</h5>
+                    <p class="card-text h4">{{ total_projects }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center shadow border-0 bg-danger text-white">
+                <div class="card-body">
+                    <i class="bi bi-journal-text display-4 mb-2"></i>
+                    <h5 class="card-title">Total Blogs</h5>
+                    <p class="card-text h4">{{ total_blogs }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="mb-5">
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <h4 class="mb-3"><i class="bi bi-file-earmark-pdf text-success mr-2"></i>Recent Papers</h4>
+            {% if recent_papers %}
+            <ul class="list-group">
+                {% for paper in recent_papers %}
+                <li class="list-group-item d-flex flex-column align-items-start">
+                    <div class="w-100">
+                        <strong>{{ paper.title }}</strong> <span class="badge badge-secondary">{{ paper.university }}</span>
+                    </div>
+                    <small class="text-muted">Semester: {{ paper.semester }}</small>
+                    <div class="mt-1">
+                        <i class="bi bi-person-circle"></i> {{ paper.uploaded_by }}
+                        <span class="badge badge-light ml-2"><i class="bi bi-clock"></i> {{ paper.uploaded_at }}</span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No recent papers.</p>
+            {% endif %}
+        </div>
+        <div class="col-md-4 mb-4">
+            <h4 class="mb-3"><i class="bi bi-archive text-warning mr-2"></i>Recent Projects</h4>
+            {% if recent_projects %}
+            <ul class="list-group">
+                {% for project in recent_projects %}
+                <li class="list-group-item d-flex flex-column align-items-start">
+                    <div class="w-100">
+                        <strong>{{ project.title }}</strong>
+                    </div>
+                    <small class="text-muted">Semester: {{ project.semester }}</small>
+                    <div class="mt-1">
+                        <i class="bi bi-person-circle"></i> {{ project.uploaded_by }}
+                        <span class="badge badge-light ml-2"><i class="bi bi-clock"></i> {{ project.uploaded_at }}</span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No recent projects.</p>
+            {% endif %}
+        </div>
+        <div class="col-md-4 mb-4">
+            <h4 class="mb-3"><i class="bi bi-journal-text text-danger mr-2"></i>Recent Blogs</h4>
+            {% if recent_blogs %}
+            <ul class="list-group">
+                {% for blog in recent_blogs %}
+                <li class="list-group-item d-flex flex-column align-items-start">
+                    <div class="w-100">
+                        <strong>{{ blog.title }}</strong>
+                    </div>
+                    <div class="mt-1">
+                        <i class="bi bi-person-circle"></i> {{ blog.author }}
+                        <span class="badge badge-light ml-2"><i class="bi bi-clock"></i> {{ blog.created_at }}</span>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No recent blogs.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

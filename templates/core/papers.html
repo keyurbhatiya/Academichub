@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+{% block title %}Old Papers{% endblock %}
+{% block content %}
+    <h2>Old Question Papers</h2>
+    {% if papers %}
+        <ul class="list-group">
+            {% for paper in papers %}
+                <li class="list-group-item">
+                    <strong>{{ paper.title }}</strong> - {{ paper.university }} (Semester: {{ paper.semester }})<br>
+                    Uploaded by {{ paper.uploaded_by }} on {{ paper.uploaded_at }}<br>
+                    <a href="{{ paper.file.url }}" class="btn btn-sm btn-primary mt-2" download>Download</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No papers available.</p>
+    {% endif %}
+{% endblock %}
