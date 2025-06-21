@@ -1,0 +1,73 @@
+            <!-- Top Header -->
+            <header class="sticky top-0 z-30 bg-white border-b shadow-sm">
+                <div class="flex items-center justify-between px-4 py-3">
+                    <div class="flex items-center">
+                        <button class="p-2 rounded-full hover:bg-gray-100 md:hidden" id="openSidebar">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-menu-line ri-lg"></i>
+                            </div>
+                        </button>
+                        <h1 class="ml-2 text-xl font-semibold md:ml-0">Admin Dashboard</h1>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="relative dropdown">
+                            <button class="p-2 rounded-full hover:bg-gray-100 relative">
+                                <div class="w-6 h-6 flex items-center justify-center">
+                                    <i class="ri-notification-3-line"></i>
+                                </div>
+                                <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                            </button>
+                            <div class="dropdown-content mt-2 bg-white rounded-md shadow-lg border">
+                                <div class="p-3 border-b">
+                                    <h3 class="text-sm font-semibold">Notifications</h3>
+                                </div>
+                                <div class="max-h-64 overflow-y-auto">
+                                    <a href="#" class="block px-4 py-2 hover:bg-gray-50">
+                                        <p class="text-sm font-medium">New paper uploaded</p>
+                                        <p class="text-xs text-gray-500">2 minutes ago</p>
+                                    </a>
+                                    <a href="#" class="block px-4 py-2 hover:bg-gray-50">
+                                        <p class="text-sm font-medium">New user registered</p>
+                                        <p class="text-xs text-gray-500">1 hour ago</p>
+                                    </a>
+                                    <a href="#" class="block px-4 py-2 hover:bg-gray-50">
+                                        <p class="text-sm font-medium">System update completed</p>
+                                        <p class="text-xs text-gray-500">Yesterday</p>
+                                    </a>
+                                </div>
+                                <div class="p-2 border-t text-center">
+                                    <a href="#" class="text-xs text-primary font-medium">View all notifications</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative dropdown">
+                            <button class="flex items-center space-x-1 p-1 rounded-full hover:bg-gray-100">
+                                <div class="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white">
+                                    <i class="ri-user-line"></i>
+                                </div>
+                                <div class="hidden md:block">
+                                    <span class="text-sm font-medium">{{ user.username }}</span>
+                                </div>
+                                <div class="w-4 h-4 flex items-center justify-center">
+                                    <i class="ri-arrow-down-s-line"></i>
+                                </div>
+                            </button>
+                            <div class="dropdown-content mt-2 bg-white rounded-md shadow-lg border">
+                                <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Profile</a>
+                                <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Settings</a>
+                                <div class="border-t"></div>
+                                <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-50">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-4 py-2 bg-gray-50 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <a href="#" class="text-gray-500 hover:text-primary">Home</a>
+                        <div class="w-4 h-4 flex items-center justify-center text-gray-400">
+                            <i class="ri-arrow-right-s-line"></i>
+                        </div>
+                        <span class="text-gray-700">Dashboard</span>
+                    </div>
+                </div>
+            </header>

@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import RegisterForm, OldPaperForm, ProjectForm, BlogForm
 from .models import OldPaper, Project, Blog
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .forms import ContentModerationForm
 
 def home(request):
     return render(request, 'core/home.html')
@@ -93,6 +94,9 @@ def blog_create(request):
         form = BlogForm()
     return render(request, 'core/blog_create.html', {'form': form})
 
+
+# admin_dashboard view 
+
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def admin_dashboard(request):
@@ -113,4 +117,110 @@ def admin_dashboard(request):
         'recent_projects': recent_projects,
         'recent_blogs': recent_blogs,
     }
-    return render(request, 'admin/admin_dashboard.html', context)
+    return render(request, 'admin/dashboard.html', context)
+
+def admin_users(request):
+    if not request.user.is_superuser:
+        return redirect('home')
+    
+    users = User.objects.all().order_by('username')
+    return render(request, 'admin/users.html', {'users': users})
+
+def admin_papers(request):
+    if not request.user.is_superuser:
+        return redirect('home')
+    
+    papers = OldPaper.objects.all().order_by('-uploaded_at')
+    return render(request, 'admin/papers.html', {'papers': papers})
+
+def admin_projects(request):
+    if not request.user.is_superuser:
+        return redirect('home')
+    
+    projects = Project.objects.all().order_by('-uploaded_at')
+    return render(request, 'admin/projects.html', {'projects': projects})
+
+def admin_blogs(request):
+    if not request.user.is_superuser:
+        return redirect('home')
+    
+    blogs = Blog.objects.all().order_by('-created_at')
+    return render(request, 'admin/blogs.html', {'blogs': blogs})
+
+def Content_Moderation(request):
+    if not request.user.is_superuser:
+        return redirect('home')
+
+    if request.method == 'POST':
+        form = ContentModerationForm(request.POST)
+        if form.is_valid():
+            content_type = form.cleaned_data['content_type']
+            content_id = form.cleaned_data['content_id']
+            action = form.cleaned_data['action']
+            reason = form.cleaned_data['reason']
+
+            model_map = {
+                'paper': OldPaper,
+                'project': Project,
+                'blog': Blog,
+            }
+
+            model = model_map.get(content_type)
+            if not model:
+                messages.error(request, 'Invalid content type.')
+                return redirect('content_moderation')
+
+            obj = get_object_or_404(model, id=content_id)
+            obj.status = 'Approved' if action == 'approve' else 'Rejected'
+            obj.save()
+
+            messages.success(request, f'{content_type.title()} has been {action}d.')
+            return redirect('content_moderation')
+
+    else:
+        form = ContentModerationForm()
+
+    # 🔁 Merge and annotate all pending content
+    papers = OldPaper.objects.filter(status='Pending').select_related('uploaded_by')
+    projects = Project.objects.filter(status='Pending').select_related('uploaded_by')
+    blogs = Blog.objects.filter(status='Pending').select_related('author')
+
+    contents = []
+
+    for paper in papers:
+        contents.append({
+            'id': paper.id,
+            'title': paper.title,
+            'type': 'Paper',
+            'uploader': paper.uploaded_by.username,
+            'submitted': paper.uploaded_at,
+            'status': paper.status,
+        })
+
+    for project in projects:
+        contents.append({
+            'id': project.id,
+            'title': project.title,
+            'type': 'Project',
+            'uploader': project.uploaded_by.username,
+            'submitted': project.uploaded_at,
+            'status': project.status,
+        })
+
+    for blog in blogs:
+        contents.append({
+            'id': blog.id,
+            'title': blog.title,
+            'type': 'Blog',
+            'uploader': blog.author.username,
+            'submitted': blog.created_at,
+            'status': blog.status,
+        })
+
+    return render(request, 'admin/content_moderation.html', {
+        'form': form,
+        'contents': contents
+    })
+
+
+

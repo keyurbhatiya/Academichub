@@ -1,0 +1,240 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Content Moderation | AcademicHub{% endblock %}
+
+{% block content %}
+
+<!-- Content Moderation Section -->
+<div class="bg-white rounded-lg shadow mb-6">
+    <div class="flex justify-between items-center p-4 border-b">
+        <h3 class="font-semibold">Content Moderation</h3>
+        <div class="flex space-x-2">
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <div class="w-4 h-4 flex items-center justify-center text-gray-500">
+                        <i class="ri-search-line"></i>
+                    </div>
+                </div>
+                <input type="text"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-button block w-full pl-10 p-2.5"
+                    placeholder="Search content...">
+            </div>
+            <div class="relative dropdown">
+                <button
+                    class="p-2.5 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <i class="ri-filter-3-line"></i>
+                    </div>
+                </button>
+                <div class="dropdown-content mt-2 right-0 bg-white rounded-md shadow-lg border">
+                    <div class="p-3 border-b">
+                        <h3 class="text-sm font-semibold">Filter Content</h3>
+                    </div>
+                    <div class="p-3">
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                            <div class="flex items-center space-x-4">
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="hidden peer">
+                                    <div
+                                        class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                        <div
+                                            class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                    </div>
+                                    <span class="ml-2 text-sm">Papers</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="hidden peer">
+                                    <div
+                                        class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                        <div
+                                            class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                    </div>
+                                    <span class="ml-2 text-sm">Projects</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="hidden peer">
+                                    <div
+                                        class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                        <div
+                                            class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                    </div>
+                                    <span class="ml-2 text-sm">Blogs</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                            <div class="flex items-center space-x-4">
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="hidden peer">
+                                    <div
+                                        class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                        <div
+                                            class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                    </div>
+                                    <span class="ml-2 text-sm">Pending</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="hidden peer">
+                                    <div
+                                        class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                        <div
+                                            class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                    </div>
+                                    <span class="ml-2 text-sm">Approved</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="hidden peer">
+                                    <div
+                                        class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                        <div
+                                            class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                    </div>
+                                    <span class="ml-2 text-sm">Rejected</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button
+                                class="w-full py-2 bg-primary text-white rounded-button !rounded-button hover:bg-primary/90 whitespace-nowrap">Apply</button>
+                            <button
+                                class="w-full py-2 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="border-b">
+        <div class="flex">
+            <button class="px-4 py-3 text-sm font-medium border-b-2 border-primary text-primary">Pending (8)</button>
+            <button
+                class="px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Approved
+                (42)</button>
+            <button
+                class="px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Rejected
+                (5)</button>
+            <button
+                class="px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Flagged
+                (3)</button>
+        </div>
+    </div>
+    <div class="table-container">
+        <table class="w-full">
+            <thead>
+                <tr>
+                    <th>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="hidden peer">
+                            <div
+                                class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                <div
+                                    class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                    <i class="ri-check-line"></i>
+                                </div>
+                            </div>
+                        </label>
+                    </th>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Uploader</th>
+                    <th>Submitted</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for content in contents %}
+                <tr>
+                    <td>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="hidden peer">
+                            <div
+                                class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                <div class="w-3 h-3 text-white scale-0 peer-checked:scale-100">
+                                    <i class="ri-check-line"></i>
+                                </div>
+                            </div>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <div
+                                class="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 mr-3">
+                                <i class="ri-file-paper-2-line"></i>
+                            </div>
+                            <span class="text-sm font-medium">{{ content.title }}</span>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-info">{{ content.type }}</span></td>
+                    <td><span class="text-sm">{{ content.uploader }}</span></td>
+                    <td><span class="text-sm text-gray-500">{{ content.submitted|date:"M d, Y" }}</span></td>
+                    <td><span class="badge badge-warning">{{ content.status }}</span></td>
+                    <td>
+                        <form method="post" class="flex space-x-1">
+                            {% csrf_token %}
+                            <input type="hidden" name="content_type" value="{{ content.type|lower }}">
+                            <input type="hidden" name="content_id" value="{{ content.id }}">
+
+                            <button name="action" value="approve"
+                                class="p-1.5 bg-green-50 text-green-600 rounded-button hover:bg-green-100">
+                                <i class="ri-check-line"></i>
+                            </button>
+                            <button name="action" value="reject"
+                                class="p-1.5 bg-red-50 text-red-600 rounded-button hover:bg-red-100">
+                                <i class="ri-close-line"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+
+
+        </table>
+    </div>
+    <div class="flex justify-between items-center p-4 border-t">
+        <div class="text-sm text-gray-500">
+            Showing 1 to 5 of 8 entries
+        </div>
+        <div class="pagination flex space-x-1">
+            <button
+                class="p-2 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">
+                <div class="w-4 h-4 flex items-center justify-center">
+                    <i class="ri-arrow-left-s-line"></i>
+                </div>
+            </button>
+            <button
+                class="p-2 bg-primary text-white rounded-button !rounded-button hover:bg-primary/90 whitespace-nowrap active">1</button>
+            <button
+                class="p-2 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">2</button>
+            <button
+                class="p-2 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">
+                <div class="w-4 h-4 flex items-center justify-center">
+                    <i class="ri-arrow-right-s-line"></i>
+                </div>
+            </button>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+{% endblock %}

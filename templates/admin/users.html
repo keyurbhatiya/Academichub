@@ -1,0 +1,520 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}User Management | AcademicHub{% endblock %}
+
+{% block content %}
+
+<!-- User Management Section -->
+<div class="bg-white rounded-lg shadow mb-6">
+    <div class="flex justify-between items-center p-4 border-b">
+        <h3 class="font-semibold">User Management</h3>
+        <div class="flex space-x-2">
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <div class="w-4 h-4 flex items-center justify-center text-gray-500">
+                        <i class="ri-search-line"></i>
+                    </div>
+                </div>
+                <input type="text"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-button block w-full pl-10 p-2.5"
+                    placeholder="Search users...">
+            </div>
+            <button
+                class="p-2.5 bg-primary text-white rounded-button !rounded-button hover:bg-primary/90 whitespace-nowrap">
+                <div class="w-4 h-4 flex items-center justify-center">
+                    <i class="ri-add-line"></i>
+                </div>
+            </button>
+            <button
+                class="p-2.5 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">
+                <div class="w-4 h-4 flex items-center justify-center">
+                    <i class="ri-download-2-line"></i>
+                </div>
+            </button>
+            <div class="relative dropdown">
+                <button
+                    class="p-2.5 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <i class="ri-filter-3-line"></i>
+                    </div>
+                </button>
+                <div class="dropdown-content mt-2 right-0 bg-white rounded-md shadow-lg border">
+                    <div class="p-3 border-b">
+                        <h3 class="text-sm font-semibold">Filter Users</h3>
+                    </div>
+                    <div class="p-3">
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                            <div class="flex items-center space-x-4">
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="hidden peer">
+                                    <div
+                                        class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                        <div
+                                            class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                    </div>
+                                    <span class="ml-2 text-sm">Admin</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="hidden peer">
+                                    <div
+                                        class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                        <div
+                                            class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                    </div>
+                                    <span class="ml-2 text-sm">User</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                            <div class="flex items-center space-x-4">
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="hidden peer">
+                                    <div
+                                        class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                        <div
+                                            class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                    </div>
+                                    <span class="ml-2 text-sm">Active</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="hidden peer">
+                                    <div
+                                        class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                        <div
+                                            class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                            <i class="ri-check-line"></i>
+                                        </div>
+                                    </div>
+                                    <span class="ml-2 text-sm">Inactive</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button
+                                class="w-full py-2 bg-primary text-white rounded-button !rounded-button hover:bg-primary/90 whitespace-nowrap">Apply</button>
+                            <button
+                                class="w-full py-2 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-container">
+        <table class="w-full">
+            <thead>
+                <tr>
+                    <th>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="hidden peer">
+                            <div
+                                class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                <div
+                                    class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                    <i class="ri-check-line"></i>
+                                </div>
+                            </div>
+                        </label>
+                    </th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Joined Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="hidden peer">
+                            <div
+                                class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                <div
+                                    class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                    <i class="ri-check-line"></i>
+                                </div>
+                            </div>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <div
+                                class="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white mr-3">
+                                <i class="ri-user-line"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">James Wilson</p>
+                                <p class="text-xs text-gray-500">ID: 1001</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="text-sm">james.wilson@example.com</span>
+                    </td>
+                    <td>
+                        <span class="badge badge-success">Admin</span>
+                    </td>
+                    <td>
+                        <span class="text-sm text-gray-500">Jan 15, 2025</span>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <div class="w-2.5 h-2.5 rounded-full bg-green-500 mr-2"></div>
+                            <span class="text-sm">Active</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex space-x-1">
+                            <button
+                                class="p-1.5 bg-blue-50 text-blue-600 rounded-button !rounded-button hover:bg-blue-100 whitespace-nowrap">
+                                <div class="w-4 h-4 flex items-center justify-center">
+                                    <i class="ri-edit-line"></i>
+                                </div>
+                            </button>
+                            <button
+                                class="p-1.5 bg-red-50 text-red-600 rounded-button !rounded-button hover:bg-red-100 whitespace-nowrap">
+                                <div class="w-4 h-4 flex items-center justify-center">
+                                    <i class="ri-delete-bin-line"></i>
+                                </div>
+                            </button>
+                            <div class="relative dropdown">
+                                <button
+                                    class="p-1.5 bg-gray-50 text-gray-600 rounded-button !rounded-button hover:bg-gray-100 whitespace-nowrap">
+                                    <div class="w-4 h-4 flex items-center justify-center">
+                                        <i class="ri-more-2-fill"></i>
+                                    </div>
+                                </button>
+                                <div class="dropdown-content mt-1 right-0 bg-white rounded-md shadow-lg border">
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Profile</a>
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Reset Password</a>
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Disable Account</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="hidden peer">
+                            <div
+                                class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                <div
+                                    class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                    <i class="ri-check-line"></i>
+                                </div>
+                            </div>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <div
+                                class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 text-white mr-3">
+                                <i class="ri-user-line"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">Emily Johnson</p>
+                                <p class="text-xs text-gray-500">ID: 1002</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="text-sm">emily.johnson@example.com</span>
+                    </td>
+                    <td>
+                        <span class="badge badge-info">User</span>
+                    </td>
+                    <td>
+                        <span class="text-sm text-gray-500">Feb 28, 2025</span>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <div class="w-2.5 h-2.5 rounded-full bg-green-500 mr-2"></div>
+                            <span class="text-sm">Active</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex space-x-1">
+                            <button
+                                class="p-1.5 bg-blue-50 text-blue-600 rounded-button !rounded-button hover:bg-blue-100 whitespace-nowrap">
+                                <div class="w-4 h-4 flex items-center justify-center">
+                                    <i class="ri-edit-line"></i>
+                                </div>
+                            </button>
+                            <button
+                                class="p-1.5 bg-red-50 text-red-600 rounded-button !rounded-button hover:bg-red-100 whitespace-nowrap">
+                                <div class="w-4 h-4 flex items-center justify-center">
+                                    <i class="ri-delete-bin-line"></i>
+                                </div>
+                            </button>
+                            <div class="relative dropdown">
+                                <button
+                                    class="p-1.5 bg-gray-50 text-gray-600 rounded-button !rounded-button hover:bg-gray-100 whitespace-nowrap">
+                                    <div class="w-4 h-4 flex items-center justify-center">
+                                        <i class="ri-more-2-fill"></i>
+                                    </div>
+                                </button>
+                                <div class="dropdown-content mt-1 right-0 bg-white rounded-md shadow-lg border">
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Profile</a>
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Reset Password</a>
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Promote to Admin</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="hidden peer">
+                            <div
+                                class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                <div
+                                    class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                    <i class="ri-check-line"></i>
+                                </div>
+                            </div>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <div
+                                class="w-8 h-8 flex items-center justify-center rounded-full bg-green-500 text-white mr-3">
+                                <i class="ri-user-line"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">Michael Thompson</p>
+                                <p class="text-xs text-gray-500">ID: 1003</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="text-sm">michael.thompson@example.com</span>
+                    </td>
+                    <td>
+                        <span class="badge badge-info">User</span>
+                    </td>
+                    <td>
+                        <span class="text-sm text-gray-500">Mar 12, 2025</span>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <div class="w-2.5 h-2.5 rounded-full bg-green-500 mr-2"></div>
+                            <span class="text-sm">Active</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex space-x-1">
+                            <button
+                                class="p-1.5 bg-blue-50 text-blue-600 rounded-button !rounded-button hover:bg-blue-100 whitespace-nowrap">
+                                <div class="w-4 h-4 flex items-center justify-center">
+                                    <i class="ri-edit-line"></i>
+                                </div>
+                            </button>
+                            <button
+                                class="p-1.5 bg-red-50 text-red-600 rounded-button !rounded-button hover:bg-red-100 whitespace-nowrap">
+                                <div class="w-4 h-4 flex items-center justify-center">
+                                    <i class="ri-delete-bin-line"></i>
+                                </div>
+                            </button>
+                            <div class="relative dropdown">
+                                <button
+                                    class="p-1.5 bg-gray-50 text-gray-600 rounded-button !rounded-button hover:bg-gray-100 whitespace-nowrap">
+                                    <div class="w-4 h-4 flex items-center justify-center">
+                                        <i class="ri-more-2-fill"></i>
+                                    </div>
+                                </button>
+                                <div class="dropdown-content mt-1 right-0 bg-white rounded-md shadow-lg border">
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Profile</a>
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Reset Password</a>
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Promote to Admin</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="hidden peer">
+                            <div
+                                class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                <div
+                                    class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                    <i class="ri-check-line"></i>
+                                </div>
+                            </div>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <div
+                                class="w-8 h-8 flex items-center justify-center rounded-full bg-purple-500 text-white mr-3">
+                                <i class="ri-user-line"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">Sarah Williams</p>
+                                <p class="text-xs text-gray-500">ID: 1004</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="text-sm">sarah.williams@example.com</span>
+                    </td>
+                    <td>
+                        <span class="badge badge-info">User</span>
+                    </td>
+                    <td>
+                        <span class="text-sm text-gray-500">Apr 5, 2025</span>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <div class="w-2.5 h-2.5 rounded-full bg-yellow-500 mr-2"></div>
+                            <span class="text-sm">Inactive</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex space-x-1">
+                            <button
+                                class="p-1.5 bg-blue-50 text-blue-600 rounded-button !rounded-button hover:bg-blue-100 whitespace-nowrap">
+                                <div class="w-4 h-4 flex items-center justify-center">
+                                    <i class="ri-edit-line"></i>
+                                </div>
+                            </button>
+                            <button
+                                class="p-1.5 bg-red-50 text-red-600 rounded-button !rounded-button hover:bg-red-100 whitespace-nowrap">
+                                <div class="w-4 h-4 flex items-center justify-center">
+                                    <i class="ri-delete-bin-line"></i>
+                                </div>
+                            </button>
+                            <div class="relative dropdown">
+                                <button
+                                    class="p-1.5 bg-gray-50 text-gray-600 rounded-button !rounded-button hover:bg-gray-100 whitespace-nowrap">
+                                    <div class="w-4 h-4 flex items-center justify-center">
+                                        <i class="ri-more-2-fill"></i>
+                                    </div>
+                                </button>
+                                <div class="dropdown-content mt-1 right-0 bg-white rounded-md shadow-lg border">
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Profile</a>
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Reset Password</a>
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Activate Account</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="hidden peer">
+                            <div
+                                class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary">
+                                <div
+                                    class="w-3 h-3 flex items-center justify-center text-white scale-0 peer-checked:scale-100">
+                                    <i class="ri-check-line"></i>
+                                </div>
+                            </div>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <div
+                                class="w-8 h-8 flex items-center justify-center rounded-full bg-amber-500 text-white mr-3">
+                                <i class="ri-user-line"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">Robert Chen</p>
+                                <p class="text-xs text-gray-500">ID: 1005</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="text-sm">robert.chen@example.com</span>
+                    </td>
+                    <td>
+                        <span class="badge badge-success">Admin</span>
+                    </td>
+                    <td>
+                        <span class="text-sm text-gray-500">May 18, 2025</span>
+                    </td>
+                    <td>
+                        <div class="flex items-center">
+                            <div class="w-2.5 h-2.5 rounded-full bg-green-500 mr-2"></div>
+                            <span class="text-sm">Active</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex space-x-1">
+                            <button
+                                class="p-1.5 bg-blue-50 text-blue-600 rounded-button !rounded-button hover:bg-blue-100 whitespace-nowrap">
+                                <div class="w-4 h-4 flex items-center justify-center">
+                                    <i class="ri-edit-line"></i>
+                                </div>
+                            </button>
+                            <button
+                                class="p-1.5 bg-red-50 text-red-600 rounded-button !rounded-button hover:bg-red-100 whitespace-nowrap">
+                                <div class="w-4 h-4 flex items-center justify-center">
+                                    <i class="ri-delete-bin-line"></i>
+                                </div>
+                            </button>
+                            <div class="relative dropdown">
+                                <button
+                                    class="p-1.5 bg-gray-50 text-gray-600 rounded-button !rounded-button hover:bg-gray-100 whitespace-nowrap">
+                                    <div class="w-4 h-4 flex items-center justify-center">
+                                        <i class="ri-more-2-fill"></i>
+                                    </div>
+                                </button>
+                                <div class="dropdown-content mt-1 right-0 bg-white rounded-md shadow-lg border">
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Profile</a>
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Reset Password</a>
+                                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Disable Account</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="flex justify-between items-center p-4 border-t">
+        <div class="text-sm text-gray-500">
+            Showing 1 to 5 of 42 entries
+        </div>
+        <div class="pagination flex space-x-1">
+            <button
+                class="p-2 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">
+                <div class="w-4 h-4 flex items-center justify-center">
+                    <i class="ri-arrow-left-s-line"></i>
+                </div>
+            </button>
+            <button
+                class="p-2 bg-primary text-white rounded-button !rounded-button hover:bg-primary/90 whitespace-nowrap active">1</button>
+            <button
+                class="p-2 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">2</button>
+            <button
+                class="p-2 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">3</button>
+            <button
+                class="p-2 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">4</button>
+            <button
+                class="p-2 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">5</button>
+            <button
+                class="p-2 bg-gray-100 text-gray-700 rounded-button !rounded-button hover:bg-gray-200 whitespace-nowrap">
+                <div class="w-4 h-4 flex items-center justify-center">
+                    <i class="ri-arrow-right-s-line"></i>
+                </div>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,791 @@
+<!-- templates/dashboard.html -->
+{% extends 'admin/base.html' %}
+
+{% block title %}Dashboard | AcademicHub{% endblock %}
+
+{% block content %}
+<!-- Quick Actions Button -->
+<div class="fixed bottom-6 right-6 z-40">
+    <div class="relative dropdown">
+        <button
+            class="w-12 h-12 flex items-center justify-center rounded-full bg-primary text-white shadow-lg hover:bg-primary/90">
+            <div class="w-6 h-6 flex items-center justify-center">
+                <i class="ri-add-line ri-lg"></i>
+            </div>
+        </button>
+        <div class="dropdown-content bottom-14 right-0 mb-2 bg-white rounded-md shadow-lg border">
+            <div class="p-3 border-b">
+                <h3 class="text-sm font-semibold">Quick Actions</h3>
+            </div>
+            <a href="#" class="flex items-center px-4 py-2 text-sm hover:bg-gray-50">
+                <div class="w-5 h-5 flex items-center justify-center mr-3 text-primary">
+                    <i class="ri-file-add-line"></i>
+                </div>
+                <span>Add New Paper</span>
+            </a>
+            <a href="#" class="flex items-center px-4 py-2 text-sm hover:bg-gray-50">
+                <div class="w-5 h-5 flex items-center justify-center mr-3 text-primary">
+                    <i class="ri-folder-add-line"></i>
+                </div>
+                <span>Add New Project</span>
+            </a>
+            <a href="#" class="flex items-center px-4 py-2 text-sm hover:bg-gray-50">
+                <div class="w-5 h-5 flex items-center justify-center mr-3 text-primary">
+                    <i class="ri-edit-line"></i>
+                </div>
+                <span>Create New Blog</span>
+            </a>
+            <a href="#" class="flex items-center px-4 py-2 text-sm hover:bg-gray-50">
+                <div class="w-5 h-5 flex items-center justify-center mr-3 text-primary">
+                    <i class="ri-user-add-line"></i>
+                </div>
+                <span>Add New User</span>
+            </a>
+            <a href="#" class="flex items-center px-4 py-2 text-sm hover:bg-gray-50">
+                <div class="w-5 h-5 flex items-center justify-center mr-3 text-primary">
+                    <i class="ri-download-2-line"></i>
+                </div>
+                <span>Export Data</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Date and Refresh -->
+<div class="flex justify-between items-center mb-6">
+    <h2 class="text-lg font-semibold text-gray-800">Overview</h2>
+    <div class="flex items-center space-x-2">
+        <span class="text-sm text-gray-500">June 21, 2025</span>
+        <button class="p-2 rounded-full hover:bg-gray-100">
+            <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-refresh-line"></i>
+            </div>
+        </button>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+    <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
+        <div class="flex items-center">
+            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-indigo-100 text-primary">
+                <i class="ri-user-line ri-lg"></i>
+            </div>
+            <div class="ml-4">
+                <h3 class="text-2xl font-semibold">1,254</h3>
+                <p class="text-sm text-gray-500">Total Users</p>
+            </div>
+        </div>
+        <div class="mt-2 text-xs text-green-600 flex items-center">
+            <div class="w-3 h-3 flex items-center justify-center mr-1">
+                <i class="ri-arrow-up-line"></i>
+            </div>
+            <span>12% from last month</span>
+        </div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
+        <div class="flex items-center">
+            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                <i class="ri-file-paper-2-line ri-lg"></i>
+            </div>
+            <div class="ml-4">
+                <h3 class="text-2xl font-semibold">876</h3>
+                <p class="text-sm text-gray-500">Total Papers</p>
+            </div>
+        </div>
+        <div class="mt-2 text-xs text-green-600 flex items-center">
+            <div class="w-3 h-3 flex items-center justify-center mr-1">
+                <i class="ri-arrow-up-line"></i>
+            </div>
+            <span>8% from last month</span>
+        </div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
+        <div class="flex items-center">
+            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-green-100 text-green-600">
+                <i class="ri-folder-zip-line ri-lg"></i>
+            </div>
+            <div class="ml-4">
+                <h3 class="text-2xl font-semibold">542</h3>
+                <p class="text-sm text-gray-500">Total Projects</p>
+            </div>
+        </div>
+        <div class="mt-2 text-xs text-green-600 flex items-center">
+            <div class="w-3 h-3 flex items-center justify-center mr-1">
+                <i class="ri-arrow-up-line"></i>
+            </div>
+            <span>15% from last month</span>
+        </div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
+        <div class="flex items-center">
+            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-purple-100 text-purple-600">
+                <i class="ri-article-line ri-lg"></i>
+            </div>
+            <div class="ml-4">
+                <h3 class="text-2xl font-semibold">328</h3>
+                <p class="text-sm text-gray-500">Total Blogs</p>
+            </div>
+        </div>
+        <div class="mt-2 text-xs text-green-600 flex items-center">
+            <div class="w-3 h-3 flex items-center justify-center mr-1">
+                <i class="ri-arrow-up-line"></i>
+            </div>
+            <span>6% from last month</span>
+        </div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
+        <div class="flex items-center">
+            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-amber-100 text-amber-600">
+                <i class="ri-download-line ri-lg"></i>
+            </div>
+            <div class="ml-4">
+                <h3 class="text-2xl font-semibold">12.5K</h3>
+                <p class="text-sm text-gray-500">Total Downloads</p>
+            </div>
+        </div>
+        <div class="mt-2 text-xs text-green-600 flex items-center">
+            <div class="w-3 h-3 flex items-center justify-center mr-1">
+                <i class="ri-arrow-up-line"></i>
+            </div>
+            <span>18% from last month</span>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+    <div class="bg-white rounded-lg shadow p-4">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold">Monthly Uploads</h3>
+            <div class="relative dropdown">
+                <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500">
+                    <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-more-2-fill"></i>
+                    </div>
+                </button>
+                <div class="dropdown-content mt-2 right-0 bg-white rounded-md shadow-lg border">
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export as PNG</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export Data</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Full Report</a>
+                </div>
+            </div>
+        </div>
+        <div id="monthlyUploadsChart" class="h-64"></div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-4">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold">Content Distribution</h3>
+            <div class="relative dropdown">
+                <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500">
+                    <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-more-2-fill"></i>
+                    </div>
+                </button>
+                <div class="dropdown-content mt-2 right-0 bg-white rounded-md shadow-lg border">
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export as PNG</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export Data</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Full Report</a>
+                </div>
+            </div>
+        </div>
+        <div id="contentDistributionChart" class="h-64"></div>
+    </div>
+    <div class="bg-white rounded-lg shadow p-4">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold">User Growth</h3>
+            <div class="relative dropdown">
+                <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500">
+                    <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-more-2-fill"></i>
+                    </div>
+                </button>
+                <div class="dropdown-content mt-2 right-0 bg-white rounded-md shadow-lg border">
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export as PNG</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export Data</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Full Report</a>
+                </div>
+            </div>
+        </div>
+        <div id="userGrowthChart" class="h-64"></div>
+    </div>
+</div>
+
+<!-- Recent Activity Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+    <!-- Latest Papers -->
+    <div class="bg-white rounded-lg shadow">
+        <div class="flex justify-between items-center p-4 border-b">
+            <h3 class="font-semibold">Latest Papers</h3>
+            <a href="#" class="text-sm text-primary hover:underline">View All</a>
+        </div>
+        <div class="table-container">
+            <table class="w-full">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Uploader</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 mr-3">
+                                    <i class="ri-file-paper-2-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">Advanced Machine Learning</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Emily Johnson</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 20, 2025</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 mr-3">
+                                    <i class="ri-file-paper-2-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">Quantum Computing Basics</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Michael Thompson</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 18, 2025</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 mr-3">
+                                    <i class="ri-file-paper-2-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">Blockchain Technology</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Sarah Williams</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 15, 2025</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 mr-3">
+                                    <i class="ri-file-paper-2-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">Neural Networks</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Robert Chen</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 12, 2025</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 mr-3">
+                                    <i class="ri-file-paper-2-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">Data Structures</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Jessica Martinez</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 10, 2025</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Latest Projects -->
+    <div class="bg-white rounded-lg shadow">
+        <div class="flex justify-between items-center p-4 border-b">
+            <h3 class="font-semibold">Latest Projects</h3>
+            <a href="#" class="text-sm text-primary hover:underline">View All</a>
+        </div>
+        <div class="table-container">
+            <table class="w-full">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Uploader</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-green-100 text-green-600 mr-3">
+                                    <i class="ri-folder-zip-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">Smart Home System</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Daniel Wilson</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 19, 2025</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-green-100 text-green-600 mr-3">
+                                    <i class="ri-folder-zip-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">AI Chatbot</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Olivia Parker</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 17, 2025</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-green-100 text-green-600 mr-3">
+                                    <i class="ri-folder-zip-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">E-commerce Platform</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">William Taylor</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 14, 2025</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-green-100 text-green-600 mr-3">
+                                    <i class="ri-folder-zip-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">Mobile App</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Sophia Anderson</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 11, 2025</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-green-100 text-green-600 mr-3">
+                                    <i class="ri-folder-zip-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">Data Visualization Tool</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Benjamin Harris</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 9, 2025</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Latest Blogs -->
+    <div class="bg-white rounded-lg shadow">
+        <div class="flex justify-between items-center p-4 border-b">
+            <h3 class="font-semibold">Latest Blogs</h3>
+            <a href="#" class="text-sm text-primary hover:underline">View All</a>
+        </div>
+        <div class="table-container">
+            <table class="w-full">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-purple-100 text-purple-600 mr-3">
+                                    <i class="ri-article-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">Future of AI in Education</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Alexander Reed</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 21, 2025</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-purple-100 text-purple-600 mr-3">
+                                    <i class="ri-article-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">Cybersecurity Best Practices</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Victoria Lewis</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 18, 2025</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-purple-100 text-purple-600 mr-3">
+                                    <i class="ri-article-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">Research Methodology</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Christopher Moore</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 16, 2025</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-purple-100 text-purple-600 mr-3">
+                                    <i class="ri-article-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">Cloud Computing Trends</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Natalie Clark</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 13, 2025</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-8 h-8 flex items-center justify-center rounded bg-purple-100 text-purple-600 mr-3">
+                                    <i class="ri-article-line"></i>
+                                </div>
+                                <span class="text-sm font-medium">Academic Writing Tips</span>
+                            </div>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm">Jonathan Miller</span>
+                        </td>
+                        <td class="whitespace-nowrap">
+                            <span class="text-sm text-gray-500">Jun 10, 2025</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script id="chartsInit">
+    document.addEventListener('DOMContentLoaded', function () {
+        // Monthly Uploads Chart
+        const monthlyUploadsChart = echarts.init(document.getElementById('monthlyUploadsChart'));
+        const monthlyUploadsOption = {
+            animation: false,
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                borderColor: '#e5e7eb',
+                borderWidth: 1,
+                textStyle: {
+                    color: '#1f2937'
+                }
+            },
+            legend: {
+                data: ['Papers', 'Projects', 'Blogs'],
+                bottom: 0
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '15%',
+                top: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: true,
+                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                axisLine: {
+                    lineStyle: {
+                        color: '#e5e7eb'
+                    }
+                },
+                axisLabel: {
+                    color: '#1f2937'
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisLine: {
+                    show: false
+                },
+                axisTick: {
+                    show: false
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: '#f3f4f6'
+                    }
+                },
+                axisLabel: {
+                    color: '#1f2937'
+                }
+            },
+            series: [
+                {
+                    name: 'Papers',
+                    type: 'bar',
+                    barWidth: '20%',
+                    itemStyle: {
+                        color: 'rgba(87, 181, 231, 1)',
+                        borderRadius: [4, 4, 0, 0]
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            color: 'rgba(87, 181, 231, 0.8)'
+                        }
+                    },
+                    data: [120, 132, 101, 134, 90, 180]
+                },
+                {
+                    name: 'Projects',
+                    type: 'bar',
+                    barWidth: '20%',
+                    itemStyle: {
+                        color: 'rgba(141, 211, 199, 1)',
+                        borderRadius: [4, 4, 0, 0]
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            color: 'rgba(141, 211, 199, 0.8)'
+                        }
+                    },
+                    data: [60, 72, 71, 74, 60, 120]
+                },
+                {
+                    name: 'Blogs',
+                    type: 'bar',
+                    barWidth: '20%',
+                    itemStyle: {
+                        color: 'rgba(251, 191, 114, 1)',
+                        borderRadius: [4, 4, 0, 0]
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            color: 'rgba(251, 191, 114, 0.8)'
+                        }
+                    },
+                    data: [40, 32, 41, 54, 30, 60]
+                }
+            ]
+        };
+        monthlyUploadsChart.setOption(monthlyUploadsOption);
+
+        // Content Distribution Chart
+        const contentDistributionChart = echarts.init(document.getElementById('contentDistributionChart'));
+        const contentDistributionOption = {
+            animation: false,
+            tooltip: {
+                trigger: 'item',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                borderColor: '#e5e7eb',
+                borderWidth: 1,
+                textStyle: {
+                    color: '#1f2937'
+                }
+            },
+            legend: {
+                orient: 'horizontal',
+                bottom: 0,
+                left: 'center',
+                textStyle: {
+                    color: '#1f2937'
+                }
+            },
+            series: [
+                {
+                    name: 'Content Distribution',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    center: ['50%', '45%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 8,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: {
+                        show: false
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '14',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 876, name: 'Papers', itemStyle: { color: 'rgba(87, 181, 231, 1)' } },
+                        { value: 542, name: 'Projects', itemStyle: { color: 'rgba(141, 211, 199, 1)' } },
+                        { value: 328, name: 'Blogs', itemStyle: { color: 'rgba(251, 191, 114, 1)' } }
+                    ]
+                }
+            ]
+        };
+        contentDistributionChart.setOption(contentDistributionOption);
+        // User Growth Chart
+        const userGrowthChart = echarts.init(document.getElementById('userGrowthChart'));
+        const userGrowthOption = {
+            animation: false,
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                borderColor: '#e5e7eb',
+                borderWidth: 1,
+                textStyle: {
+                    color: '#1f2937'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '10%',
+                top: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                axisLine: {
+                    lineStyle: {
+                        color: '#e5e7eb'
+                    }
+                },
+                axisLabel: {
+                    color: '#1f2937'
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisLine: {
+                    show: false
+                },
+                axisTick: {
+                    show: false
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: '#f3f4f6'
+                    }
+                },
+                axisLabel: {
+                    color: '#1f2937'
+                }
+            },
+            series: [
+                {
+                    name: 'User Growth',
+                    type: 'line',
+                    smooth: true,
+                    symbol: 'none',
+                    lineStyle: {
+                        width: 3,
+                        color: 'rgba(252, 141, 98, 1)'
+                    },
+                    areaStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [{
+                                offset: 0, color: 'rgba(252, 141, 98, 0.2)'
+                            }, {
+                                offset: 1, color: 'rgba(252, 141, 98, 0.01)'
+                            }]
+                        }
+                    },
+                    emphasis: {
+                        lineStyle: {
+                            width: 4
+                        }
+                    },
+                    data: [150, 230, 320, 480, 750, 1254]
+                }
+            ]
+        };
+        userGrowthChart.setOption(userGrowthOption);
+
+        // Handle window resize
+        window.addEventListener('resize', function () {
+            monthlyUploadsChart.resize();
+            contentDistributionChart.resize();
+            userGrowthChart.resize();
+        });
+    });
+</script>
+{% endblock %}

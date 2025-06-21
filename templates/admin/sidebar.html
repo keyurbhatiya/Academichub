@@ -1,0 +1,144 @@
+<!-- templates/core/sidebar.html -->
+<aside
+    class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out"
+    id="sidebar">
+    <div class="flex items-center justify-between p-4 border-b">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl font-['Pacifico'] text-primary">logo</span>
+            <span class="text-lg font-semibold">AcademicHub</span>
+        </div>
+        <button class="p-2 rounded-full hover:bg-gray-100 md:hidden" id="closeSidebar">
+            <div class="w-6 h-6 flex items-center justify-center">
+                <i class="ri-close-line ri-lg"></i>
+            </div>
+        </button>
+    </div>
+    <div class="py-4">
+        <div class="px-4 mb-4">
+            <div class="flex items-center p-2 rounded-button bg-gray-100">
+                <div class="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white">
+                    <i class="ri-user-line"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium">{{ user.username }}</p>
+                    <p class="text-xs text-gray-500">Administrator</p>
+                </div>
+            </div>
+        </div>
+        <div class="space-y-1 px-3">
+            <a href="{% url 'admin_dashboard' %}"
+                class="sidebar-item active flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-dashboard-line"></i>
+                </div>
+                <span>Dashboard</span>
+            </a>
+            <a href="{% url 'admin_users' %}"
+                class="sidebar-item  flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-user-line"></i>
+                </div>
+                <span>User Management</span>
+            </a>
+            <a href="{% url 'content_moderation' %}"
+                class="sidebar-item flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-group-line"></i>
+                </div>
+                <span>Content Moderation</span>
+            </a>
+            <a href="{% url 'admin_papers' %}"
+                class="sidebar-item flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-file-paper-2-line"></i>
+                </div>
+                <span>Papers</span>
+            </a>
+            <a href="{% url 'admin_projects' %}"
+                class="sidebar-item flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-folder-zip-line"></i>
+                </div>
+                <span>Projects</span>
+            </a>
+            <a href="{% url 'admin_blogs' %}"
+                class="sidebar-item flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-article-line"></i>
+                </div>
+                <span>Blogs</span>
+            </a>
+            <a href="#"
+                class="sidebar-item flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-line-chart-line"></i>
+                </div>
+                <span>Analytics</span>
+            </a>
+            <a href="#"
+                class="sidebar-item flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-settings-3-line"></i>
+                </div>
+                <span>Settings</span>
+            </a>
+        </div>
+    </div>
+    <div class="absolute bottom-0 w-full p-4 border-t">
+        <a href="{% url 'logout' %}"
+            class="flex items-center px-3 py-2 text-sm font-medium text-red-600 rounded-button hover:bg-red-50">
+            <div class="w-5 h-5 flex items-center justify-center mr-3">
+                <i class="ri-logout-box-line"></i>
+            </div>
+            <span>Logout</span>
+        </a>
+    </div>
+</aside>
+<script id="sidebarToggle">
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.getElementById('sidebar');
+        const openSidebarBtn = document.getElementById('openSidebar');
+        const closeSidebarBtn = document.getElementById('closeSidebar');
+
+        openSidebarBtn.addEventListener('click', function () {
+            sidebar.classList.remove('-translate-x-full');
+        });
+
+        closeSidebarBtn.addEventListener('click', function () {
+            sidebar.classList.add('-translate-x-full');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function (event) {
+            const isClickInsideSidebar = sidebar.contains(event.target);
+            const isClickOnOpenButton = openSidebarBtn.contains(event.target);
+
+            if (!isClickInsideSidebar && !isClickOnOpenButton && window.innerWidth < 768) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+    });
+</script>
+<script id="checkboxToggle">
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxContainers = document.querySelectorAll('.inline-flex.items-center');
+
+        checkboxContainers.forEach(container => {
+            container.addEventListener('click', function (e) {
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+
+                // Prevent propagation for nested checkboxes
+                e.stopPropagation();
+            });
+        });
+    });
+</script>
+<script>
+    // Handle window resize
+    window.addEventListener('resize', function () {
+        monthlyUploadsChart.resize();
+        contentDistributionChart.resize();
+        userGrowthChart.resize();
+    });
+</script>

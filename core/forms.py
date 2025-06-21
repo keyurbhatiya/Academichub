@@ -24,3 +24,10 @@ class BlogForm(forms.ModelForm):
     class Meta:
         model = Blog
         fields = ['title', 'content']
+
+class ContentModerationForm(forms.Form):
+    content_type = forms.ChoiceField(choices=[('paper', 'Paper'), ('project', 'Project'), ('blog', 'Blog')])
+    content_id = forms.IntegerField()
+    action = forms.ChoiceField(choices=[('approve', 'Approve'), ('reject', 'Reject')])
+    reason = forms.CharField(widget=forms.Textarea, required=False)
+
