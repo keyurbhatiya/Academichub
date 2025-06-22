@@ -1,0 +1,82 @@
+<header class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <a href="{% url 'home' %}" class="text-2xl font-['Pacifico'] text-primary">AcademicHub</a>
+
+        <div class="hidden md:flex space-x-6 items-center">
+            <a href="{% url 'home' %}" class="text-gray-800 hover:text-primary font-medium">Home</a>
+            <a href="{% url 'papers' %}" class="text-gray-600 hover:text-primary">Papers</a>
+            <a href="{% url 'projects' %}" class="text-gray-600 hover:text-primary">Projects</a>
+            <a href="{% url 'blogs' %}" class="text-gray-600 hover:text-primary">Blogs</a>
+            {% if user.is_authenticated %}
+            <!-- Upload Dropdown -->
+            <div class="relative group">
+                <button class="text-gray-600 hover:text-primary font-medium flex items-center">
+                    Upload <i class="ri-arrow-down-s-line ml-1"></i>
+                </button>
+                <div class="absolute hidden group-hover:block bg-white shadow-lg mt-2 rounded w-48 z-50">
+                    <a href="{% url 'upload_paper' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Upload Paper</a>
+                    <a href="{% url 'upload_project' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Upload Project</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+
+
+        <div class="flex items-center space-x-4">
+            <div class="relative w-10 h-10 flex items-center justify-center cursor-pointer">
+                <i class="ri-search-line text-gray-600 ri-lg"></i>
+            </div>
+
+            {% if user.is_authenticated %}
+            <div class="relative">
+                <button class="flex items-center space-x-2 focus:outline-none" id="profileDropdownButton">
+                    <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center">
+                        <span class="font-semibold text-sm sm:text-lg">{% firstof user.first_name|slice:":1" user.username|slice:":1" %}</span>
+                    </div>
+                    <div class="hidden md:block">
+                        <span class="text-sm font-medium text-gray-700">
+                            {% firstof user.first_name user.username %}
+                        </span>
+                    </div>
+                    <div class="w-5 h-5 flex items-center justify-center">
+                        <i class="ri-arrow-down-s-line text-gray-600"></i>
+                    </div>
+                </button>
+
+                <div id="profileDropdown"
+                    class="hidden absolute right-0 mt-2 w-56 bg-white rounded shadow-lg py-2 z-10">
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
+                    <!-- <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Uploads</a> -->
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                    <div class="border-t border-gray-100 my-1"></div>
+
+                    <div class="border-t border-gray-100 my-1"></div>
+                    <a href="{% url 'logout' %}"
+                        class="block px-4 py-2 text-sm text-red-700 hover:bg-gray-100">Logout</a>
+                </div>
+            </div>
+            {% else %}
+            <div class="flex items-center space-x-2">
+                <a href="{% url 'login' %}"
+                    class="bg-primary text-white hover:bg-secondary font-medium px-4 py-2 rounded-button">Login</a>
+            </div>
+            {% endif %}
+
+            <button class="md:hidden w-10 h-10 flex items-center justify-center" id="mobileMenuButton">
+                <i class="ri-menu-line text-gray-700 ri-lg"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-2">
+        <div class="flex flex-col space-y-3 py-2">
+            <a href="{% url 'home' %}" class="text-gray-800 font-medium py-2">Home</a>
+            <a href="{% url 'papers' %}" class="text-gray-600 py-2">Papers</a>
+            <a href="{% url 'projects' %}" class="text-gray-600 py-2">Projects</a>
+            <a href="{% url 'blogs' %}" class="text-gray-600 py-2">Blogs</a>
+        </div>
+    </div>
+</header>

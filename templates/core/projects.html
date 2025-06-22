@@ -1,19 +1,42 @@
 {% extends 'core/base.html' %}
 {% block title %}Projects{% endblock %}
 {% block content %}
-    <h2>Projects</h2>
-    {% if projects %}
-        <ul class="list-group">
+<main class="py-12 sm:py-16 bg-gray-100">
+    <div class="container mx-auto px-4 sm:px-6">
+        <!-- Header Section -->
+        <div class="mb-8 sm:mb-12">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Research Projects</h2>
+            <p class="text-base sm:text-lg text-gray-600 max-w-xl sm:max-w-2xl">Discover innovative academic projects shared by students and researchers from various disciplines.</p>
+        </div>
+
+        <!-- Projects List -->
+        {% if projects %}
+        <div class="grid grid-cols-1 gap-4 sm:gap-6">
             {% for project in projects %}
-                <li class="list-group-item">
-                    <strong>{{ project.title }}</strong> (Semester: {{ project.semester }})<br>
-                    {{ project.description }}<br>
-                    Uploaded by {{ project.uploaded_by }} on {{ project.uploaded_at }}<br>
-                    <a href="{{ project.zip_file.url }}" class="btn btn-sm btn-primary mt-2" download>Download</a>
-                </li>
+            <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 p-4 sm:p-6 border border-gray-100">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <!-- Project Details -->
+                    <div class="mb-4 sm:mb-0">
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">{{ project.title }}</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm mb-2 line-clamp-3">{{ project.description }}</p>
+                        <p class="text-gray-500 text-xs sm:text-sm">Year: {{ project.semester }} | Uploaded by <span class="font-medium">{{ project.uploaded_by }}</span> on {{ project.uploaded_at|date:"F d, Y" }}</p>
+                    </div>
+                    <!-- Download Button -->
+                    <a href="{{ project.zip_file.url }}" class="bg-indigo-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold text-xs sm:text-sm hover:bg-indigo-700 transition duration-200 flex items-center shrink-0" download>
+                        <i class="ri-download-line mr-2"></i> Download
+                    </a>
+                </div>
+            </div>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>No projects available.</p>
-    {% endif %}
-{% endblock %}  
+        </div>
+        {% else %}
+        <div class="bg-white rounded-xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
+            <i class="ri-folder-open-line text-3xl sm:text-4xl text-gray-400 mb-4"></i>
+            <p class="text-base sm:text-lg text-gray-600">No projects available at the moment.</p>
+            <p class="text-xs sm:text-sm text-gray-500 mt-2">Contribute by sharing your own project!</p>
+            <a href="{% url 'upload_project' %}" class="inline-block mt-4 bg-indigo-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold text-xs sm:text-sm hover:bg-indigo-700 transition duration-200">Upload Project</a>
+        </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

@@ -1,12 +1,243 @@
 {% extends 'core/base.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
-    <h1>Welcome to AcademicHub {{ user.username }} </h1>
-    <p>Share and explore academic resources, including old question papers, projects, and blogs.</p>
-    {% if user.is_authenticated %}
-        <p>Hello, {{ user.username }}! Start by uploading resources or writing a blog.</p>
-    {% else %}
-        <p>Please <a href="{% url 'login' %}">log in</a> or <a href="{% url 'register' %}">register</a> to contribute.</p>
-    {% endif %}
+   
+       <main>
+        <!-- message popup -->
+         {% if messages %}
+            <div class="fixed top-4 right-4 z-50">
+                {% for message in messages %}
+                    <div class="bg-white border border-gray-200 rounded-lg shadow-md p-4 mb-2">
+                        <p class="text-gray-800">{{ message }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <div class="fixed top-4 right-4 z-50">
+                <div class="bg-white border border-gray-200 rounded-lg shadow-md p-4 mb-2">
+                    <p class="text-gray-800">Welcome back, {{ user.username }}!</p>
+                </div>
+            </div>
+        {% endif %}
+        <!-- Hero Section -->
+        <section class="relative bg-white overflow-hidden">
+            <div class="absolute inset-0 z-0" style="background-image: url('https://readdy.ai/api/search-image?query=modern%20academic%20campus%20with%20students%20studying%2C%20digital%20learning%20environment%2C%20soft%20lighting%2C%20professional%20atmosphere%2C%20blurred%20background%20with%20bookshelves%20and%20computers%2C%20clean%20minimalist%20design%2C%20suitable%20for%20text%20overlay%20on%20left%20side&width=1600&height=800&seq=hero1&orientation=landscape'); background-size: cover; background-position: center right; opacity: 0.9;"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent z-0"></div>
+            
+            <div class="container mx-auto px-4 py-16 md:py-24 relative z-10">
+                <div class="max-w-2xl">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Share Knowledge, Inspire Innovation</h1>
+                    <p class="text-lg text-gray-700 mb-8">AcademicHub connects students and faculty to share research papers, projects, and ideas. Join our community to collaborate and advance academic excellence.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#" class="bg-primary text-white px-6 py-3 rounded-button font-medium hover:bg-primary/90 transition whitespace-nowrap">Upload Content</a>
+                        <a href="#" class="bg-white text-primary border border-primary px-6 py-3 rounded-button font-medium hover:bg-gray-50 transition whitespace-nowrap">Explore Resources</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Access Section -->
+        <section class="py-12 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">Quick Access</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <a href="#" class="bg-white rounded shadow-sm hover:shadow-md transition p-6 border border-gray-100 group">
+                        <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition">
+                            <i class="ri-file-paper-2-line text-primary ri-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Upload Papers</h3>
+                        <p class="text-gray-600">Share academic papers, research, and study materials with the community.</p>
+                    </a>
+                    
+                    <a href="#" class="bg-white rounded shadow-sm hover:shadow-md transition p-6 border border-gray-100 group">
+                        <div class="w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition">
+                            <i class="ri-folder-5-line text-primary ri-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Upload Projects</h3>
+                        <p class="text-gray-600">Showcase your academic projects, code, and research implementations.</p>
+                    </a>
+                    
+                    <a href="#" class="bg-white rounded shadow-sm hover:shadow-md transition p-6 border border-gray-100 group">
+                        <div class="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition">
+                            <i class="ri-article-line text-primary ri-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Write Blogs</h3>
+                        <p class="text-gray-600">Share your thoughts, insights, and academic experiences with others.</p>
+                    </a>
+                    
+                    <a href="#" class="bg-white rounded shadow-sm hover:shadow-md transition p-6 border border-gray-100 group">
+                        <div class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition">
+                            <i class="ri-user-line text-primary ri-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">My Uploads</h3>
+                        <p class="text-gray-600">Manage your uploaded papers, projects, and blogs in one place.</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Uploads Section -->
+        <section class="py-12 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900">Recent Uploads</h2>
+                    <a href="#" class="text-primary font-medium hover:underline flex items-center">
+                        View All
+                        <i class="ri-arrow-right-line ml-1"></i>
+                    </a>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Recent Paper -->
+                    <div class="bg-white rounded shadow-sm hover:shadow-md transition overflow-hidden">
+                        <div class="p-5">
+                            <div class="flex items-center mb-4">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Paper</span>
+                                <span class="text-gray-500 text-sm ml-auto">June 18, 2025</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Machine Learning Applications in Healthcare: A Comprehensive Review</h3>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">This paper explores the current applications of machine learning in healthcare diagnostics, patient care, and medical research...</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center mr-2">
+                                        <span class="text-xs font-medium text-indigo-800">EM</span>
+                                    </div>
+                                    <span class="text-sm text-gray-700">Emily Martinez</span>
+                                </div>
+                                <a href="#" class="text-primary hover:text-primary/80">
+                                    <div class="w-8 h-8 flex items-center justify-center">
+                                        <i class="ri-download-line"></i>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Project -->
+                    <div class="bg-white rounded shadow-sm hover:shadow-md transition overflow-hidden">
+                        <div class="p-5">
+                            <div class="flex items-center mb-4">
+                                <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">Project</span>
+                                <span class="text-gray-500 text-sm ml-auto">June 19, 2025</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Sustainable Urban Planning Simulator</h3>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">A simulation tool that helps urban planners visualize the environmental impact of different city development strategies...</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-2">
+                                        <span class="text-xs font-medium text-green-800">RJ</span>
+                                    </div>
+                                    <span class="text-sm text-gray-700">Robert Johnson</span>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <div class="w-5 h-5 flex items-center justify-center mr-1">
+                                        <i class="ri-download-line"></i>
+                                    </div>
+                                    <span>42</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Blog -->
+                    <div class="bg-white rounded shadow-sm hover:shadow-md transition overflow-hidden">
+                        <div class="p-5">
+                            <div class="flex items-center mb-4">
+                                <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">Blog</span>
+                                <span class="text-gray-500 text-sm ml-auto">June 20, 2025</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">The Future of Remote Learning in Higher Education</h3>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">As universities adapt to post-pandemic realities, hybrid learning models are becoming increasingly prevalent. This article examines...</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-2">
+                                        <span class="text-xs font-medium text-red-800">SK</span>
+                                    </div>
+                                    <span class="text-sm text-gray-700">Sarah Kim</span>
+                                </div>
+                                <div class="flex items-center text-sm text-gray-500">
+                                    <div class="w-5 h-5 flex items-center justify-center mr-1">
+                                        <i class="ri-eye-line"></i>
+                                    </div>
+                                    <span>128</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Stats Section -->
+        <section class="py-12 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">Community Contributions</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded shadow-sm p-6 border border-gray-100">
+                        <div class="flex items-center justify-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i class="ri-file-paper-2-line text-primary ri-xl"></i>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-3xl font-bold text-gray-900 mb-2">1,248</h3>
+                            <p class="text-gray-600">Academic Papers</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded shadow-sm p-6 border border-gray-100">
+                        <div class="flex items-center justify-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
+                                <i class="ri-folder-5-line text-primary ri-xl"></i>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-3xl font-bold text-gray-900 mb-2">876</h3>
+                            <p class="text-gray-600">Research Projects</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded shadow-sm p-6 border border-gray-100">
+                        <div class="flex items-center justify-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+                                <i class="ri-article-line text-primary ri-xl"></i>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-3xl font-bold text-gray-900 mb-2">2,154</h3>
+                            <p class="text-gray-600">Blog Articles</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CTA Section -->
+        <section class="py-16 bg-primary/5">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Ready to contribute to academic knowledge?</h2>
+                <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Join thousands of students and faculty members who are sharing their academic work and advancing research together.</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#" class="bg-primary text-white px-6 py-3 rounded-button font-medium hover:bg-primary/90 transition whitespace-nowrap">Upload Your Work</a>
+                    <a href="#" class="bg-white text-primary border border-primary px-6 py-3 rounded-button font-medium hover:bg-gray-50 transition whitespace-nowrap">Learn More</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // msg popup auto-hide
+        document.addEventListener('DOMContentLoaded', function() {
+            const messages = document.querySelectorAll('.fixed.top-4.right-4.z-50 > div');
+            messages.forEach((message, index) => {
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 2000 + (index * 2000)); // Each message hides after 5 seconds, with a staggered delay
+            });
+        });
+    </script>
     
 {% endblock %}

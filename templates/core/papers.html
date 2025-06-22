@@ -1,18 +1,42 @@
 {% extends 'core/base.html' %}
-{% block title %}Old Papers{% endblock %}
+{% block title %}Old Question Papers{% endblock %}
 {% block content %}
-    <h2>Old Question Papers</h2>
-    {% if papers %}
-        <ul class="list-group">
+<main class="py-12 sm:py-16 bg-gray-100">
+    <div class="container mx-auto px-4 sm:px-6">
+        <!-- Header Section -->
+        <div class="mb-8 sm:mb-12">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Old Question Papers</h2>
+            <p class="text-base sm:text-lg text-gray-600 max-w-xl sm:max-w-2xl">Access a collection of past question papers from various universities to aid your exam preparation.</p>
+        </div>
+
+        <!-- Papers List -->
+        {% if papers %}
+        <div class="grid grid-cols-1 gap-4 sm:gap-6">
             {% for paper in papers %}
-                <li class="list-group-item">
-                    <strong>{{ paper.title }}</strong> - {{ paper.university }} (Semester: {{ paper.semester }})<br>
-                    Uploaded by {{ paper.uploaded_by }} on {{ paper.uploaded_at }}<br>
-                    <a href="{{ paper.file.url }}" class="btn btn-sm btn-primary mt-2" download>Download</a>
-                </li>
+            <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 p-4 sm:p-6 border border-gray-100">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <!-- Paper Details -->
+                    <div class="mb-4 sm:mb-0">
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">{{ paper.title }}</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm mb-1">{{ paper.university }} (Year: {{ paper.semester }})</p>
+                        <p class="text-gray-500 text-xs sm:text-sm">Uploaded by <span class="font-medium">{{ paper.uploaded_by }}</span> on {{ paper.uploaded_at|date:"F d, Y" }}</p>
+                    </div>
+                    <!-- Download Button -->
+                    <a href="{{ paper.file.url }}" class="bg-indigo-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold text-xs sm:text-sm hover:bg-indigo-700 transition duration-200 flex items-center shrink-0" download>
+                        <i class="ri-download-line mr-2"></i> Download
+                    </a>
+                </div>
+            </div>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>No papers available.</p>
-    {% endif %}
+        </div>
+        {% else %}
+        <div class="bg-white rounded-xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
+            <i class="ri-file-warning-line text-3xl sm:text-4xl text-gray-400 mb-4"></i>
+            <p class="text-base sm:text-lg text-gray-600">No papers available at the moment.</p>
+            <p class="text-xs sm:text-sm text-gray-500 mt-2">Check back later or contribute by uploading a paper!</p>
+            <a href="{% url 'upload_paper' %}" class="inline-block mt-4 bg-indigo-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold text-xs sm:text-sm hover:bg-indigo-700 transition duration-200">Upload Paper</a>
+        </div>
+        {% endif %}
+    </div>
+</main>
 {% endblock %}
