@@ -1,11 +1,9 @@
-
-<aside
-    class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out"
+<aside class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out"
     id="sidebar">
     <div class="flex items-center justify-between p-4 border-b">
         <div class="flex items-center space-x-2">
-            <span class="text-2xl font-['Pacifico'] text-primary">logo</span>
-            <span class="text-lg font-semibold">AcademicHub</span>
+            <!-- <span class="text-2xl font-['Pacifico'] text-primary">logo</span> -->
+            <span class="text-2xl font-['Pacifico'] text-primary">AcademicHub</span>
         </div>
         <button class="p-2 rounded-full hover:bg-gray-100 md:hidden" id="closeSidebar">
             <div class="w-6 h-6 flex items-center justify-center">
@@ -27,42 +25,42 @@
         </div>
         <div class="space-y-1 px-3">
             <a href="{% url 'admin_dashboard' %}"
-                class="sidebar-item active flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                class="sidebar-item {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %} flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
                 <div class="w-5 h-5 flex items-center justify-center mr-3">
                     <i class="ri-dashboard-line"></i>
                 </div>
                 <span>Dashboard</span>
             </a>
             <a href="{% url 'admin_users' %}"
-                class="sidebar-item  flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                class="sidebar-item {% if request.resolver_match.url_name == 'admin_users' %}active{% endif %} flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
                 <div class="w-5 h-5 flex items-center justify-center mr-3">
                     <i class="ri-user-line"></i>
                 </div>
                 <span>User Management</span>
             </a>
             <a href="{% url 'content_moderation' %}"
-                class="sidebar-item flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                class="sidebar-item {% if request.resolver_match.url_name == 'content_moderation' %}active{% endif %} flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
                 <div class="w-5 h-5 flex items-center justify-center mr-3">
                     <i class="ri-group-line"></i>
                 </div>
                 <span>Content Moderation</span>
             </a>
             <a href="{% url 'admin_papers' %}"
-                class="sidebar-item flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                class="sidebar-item {% if request.resolver_match.url_name == 'admin_papers' %}active{% endif %} flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
                 <div class="w-5 h-5 flex items-center justify-center mr-3">
                     <i class="ri-file-paper-2-line"></i>
                 </div>
                 <span>Papers</span>
             </a>
             <a href="{% url 'admin_projects' %}"
-                class="sidebar-item flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                class="sidebar-item {% if request.resolver_match.url_name == 'admin_projects' %}active{% endif %} flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
                 <div class="w-5 h-5 flex items-center justify-center mr-3">
                     <i class="ri-folder-zip-line"></i>
                 </div>
                 <span>Projects</span>
             </a>
             <a href="{% url 'admin_blogs' %}"
-                class="sidebar-item flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                class="sidebar-item {% if request.resolver_match.url_name == 'admin_blogs' %}active{% endif %} flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
                 <div class="w-5 h-5 flex items-center justify-center mr-3">
                     <i class="ri-article-line"></i>
                 </div>

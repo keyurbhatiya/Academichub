@@ -3,7 +3,18 @@
 
 {% block title %}Dashboard | AcademicHub{% endblock %}
 
+
 {% block content %}
+<!-- Breadcrumb -->
+<div class="px-4 py-2 bg-gray-50 text-sm">
+    <div class="flex items-center space-x-2">
+        <a href="{% url 'admin_dashboard' %}" class="text-gray-500 hover:text-primary">Home</a>
+        <div class="w-4 h-4 flex items-center justify-center text-gray-400">
+            <i class="ri-arrow-right-s-line"></i>
+        </div>
+        <span class="text-gray-700">Dashboard</span>
+    </div>
+</div>
 <!-- Quick Actions Button -->
 <div class="fixed bottom-6 right-6 z-40">
     <div class="relative dropdown">
@@ -73,7 +84,7 @@
                 <i class="ri-user-line ri-lg"></i>
             </div>
             <div class="ml-4">
-                <h3 class="text-2xl font-semibold">1,254</h3>
+                <h3 class="text-2xl font-semibold">{{ total_users }}</h3>
                 <p class="text-sm text-gray-500">Total Users</p>
             </div>
         </div>
@@ -90,7 +101,7 @@
                 <i class="ri-file-paper-2-line ri-lg"></i>
             </div>
             <div class="ml-4">
-                <h3 class="text-2xl font-semibold">876</h3>
+                <h3 class="text-2xl font-semibold">{{ total_papers }}</h3>
                 <p class="text-sm text-gray-500">Total Papers</p>
             </div>
         </div>
@@ -107,7 +118,7 @@
                 <i class="ri-folder-zip-line ri-lg"></i>
             </div>
             <div class="ml-4">
-                <h3 class="text-2xl font-semibold">542</h3>
+                <h3 class="text-2xl font-semibold">{{ total_projects }}</h3>
                 <p class="text-sm text-gray-500">Total Projects</p>
             </div>
         </div>
@@ -124,7 +135,7 @@
                 <i class="ri-article-line ri-lg"></i>
             </div>
             <div class="ml-4">
-                <h3 class="text-2xl font-semibold">328</h3>
+                <h3 class="text-2xl font-semibold">{{ total_blogs }}</h3>
                 <p class="text-sm text-gray-500">Total Blogs</p>
             </div>
         </div>
@@ -534,7 +545,7 @@
 </div>
 
 
-<script id="chartsInit">
+<!-- <script id="chartsInit">
     document.addEventListener('DOMContentLoaded', function () {
         // Monthly Uploads Chart
         const monthlyUploadsChart = echarts.init(document.getElementById('monthlyUploadsChart'));
@@ -787,5 +798,76 @@
             userGrowthChart.resize();
         });
     });
+</script> -->
+<script id="chartsInit">
+    const months = JSON.parse('{{ months|safe }}');
+    const paperData = JSON.parse('{{ paper_data|safe }}');
+    const projectData = JSON.parse('{{ project_data|safe }}');
+    const blogData = JSON.parse('{{ blog_data|safe }}');
+    const userData = JSON.parse('{{ user_data|safe }}');
+    const contentDistribution = JSON.parse('{{ distribution_data|safe }}');
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // monthly charts
+        const monthlyUploadsChart = echarts.init(document.getElementById('monthlyUploadsChart'));
+        monthlyUploadsChart.setOption({
+            tooltip: { trigger: 'axis' },
+            legend: { data: ['Papers', 'Projects', 'Blogs'], bottom: 0 },
+            xAxis: { type: 'category', data: months },
+            yAxis: { type: 'value' },
+            series: [
+                { name: 'Papers', type: 'bar', data: paperData },
+                { name: 'Projects', type: 'bar', data: projectData },
+                { name: 'Blogs', type: 'bar', data: blogData }
+            ]
+        });
+
+        // user growth and content distribution charts
+
+        const userGrowthChart = echarts.init(document.getElementById('userGrowthChart'));
+        userGrowthChart.setOption({
+            tooltip: { trigger: 'axis' },
+            xAxis: { type: 'category', data: months },
+            yAxis: { type: 'value' },
+            series: [{
+                name: 'User Growth',
+                type: 'line',
+                data: userData,
+                areaStyle: {}
+            }]
+        });
+
+        // content distribution chart
+
+        const contentDistributionChart = echarts.init(document.getElementById('contentDistributionChart'));
+        contentDistributionChart.setOption({
+            tooltip: { trigger: 'item' },
+            legend: { bottom: 0, left: 'center' },
+            series: [{
+                name: 'Content Distribution',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                center: ['50%', '45%'],
+                data: contentDistribution.map(item => ({
+                    ...item,
+                    itemStyle: {
+                        color: item.name === 'Papers' ? 'rgba(87, 181, 231, 1)' :
+                               item.name === 'Projects' ? 'rgba(141, 211, 199, 1)' :
+                               'rgba(251, 191, 114, 1)'
+                    }
+                }))
+            }]
+        });
+
+        // Handle window resize
+
+        window.addEventListener('resize', () => {
+            monthlyUploadsChart.resize();
+            userGrowthChart.resize();
+            contentDistributionChart.resize();
+        });
+    });
 </script>
+
+
 {% endblock %}

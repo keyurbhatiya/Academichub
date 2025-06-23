@@ -6,6 +6,9 @@ from .models import OldPaper, Project, Blog
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import ContentModerationForm
+from django.db.models.functions import TruncMonth
+from django.db.models import Count
+import json
 
 def home(request):
     return render(request, 'core/home.html')
@@ -107,7 +110,7 @@ def admin_dashboard(request):
     recent_papers = OldPaper.objects.order_by('-uploaded_at')[:5]
     recent_projects = Project.objects.order_by('-uploaded_at')[:5]
     recent_blogs = Blog.objects.order_by('-created_at')[:5]
-    
+
     context = {
         'total_users': total_users,
         'total_papers': total_papers,
@@ -117,6 +120,34 @@ def admin_dashboard(request):
         'recent_projects': recent_projects,
         'recent_blogs': recent_blogs,
     }
+
+    # Chart data
+    def format_data(queryset):
+        return {entry['month'].strftime('%b'): entry['total'] for entry in queryset}
+
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+
+    def get_values(data_map):
+        return [data_map.get(month, 0) for month in months]
+
+    papers_by_month = OldPaper.objects.annotate(month=TruncMonth('uploaded_at')).values('month').annotate(total=Count('id')).order_by('month')
+    projects_by_month = Project.objects.annotate(month=TruncMonth('uploaded_at')).values('month').annotate(total=Count('id')).order_by('month')
+    blogs_by_month = Blog.objects.annotate(month=TruncMonth('created_at')).values('month').annotate(total=Count('id')).order_by('month')
+    user_growth = User.objects.annotate(month=TruncMonth('date_joined')).values('month').annotate(total=Count('id')).order_by('month')
+
+    context.update({
+        'months': json.dumps(months),
+        'paper_data': json.dumps(get_values(format_data(papers_by_month))),
+        'project_data': json.dumps(get_values(format_data(projects_by_month))),
+        'blog_data': json.dumps(get_values(format_data(blogs_by_month))),
+        'user_data': json.dumps(get_values(format_data(user_growth))),
+        'distribution_data': json.dumps([
+            {'value': total_papers, 'name': 'Papers'},
+            {'value': total_projects, 'name': 'Projects'},
+            {'value': total_blogs, 'name': 'Blogs'},
+        ])
+    })
+
     return render(request, 'admin/dashboard.html', context)
 
 def admin_users(request):
@@ -180,7 +211,7 @@ def Content_Moderation(request):
     else:
         form = ContentModerationForm()
 
-    # 🔁 Merge and annotate all pending content
+    # Merge and annotate all pending content
     papers = OldPaper.objects.filter(status='Pending').select_related('uploaded_by')
     projects = Project.objects.filter(status='Pending').select_related('uploaded_by')
     blogs = Blog.objects.filter(status='Pending').select_related('author')
