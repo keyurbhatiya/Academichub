@@ -9,6 +9,8 @@ from .forms import ContentModerationForm
 from django.db.models.functions import TruncMonth
 from django.db.models import Count
 import json
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 def home(request):
     return render(request, 'core/home.html')
@@ -78,6 +80,7 @@ def papers(request):
 def projects(request):
     projects = Project.objects.all().order_by('-uploaded_at')
     return render(request, 'core/projects.html', {'projects': projects})
+
 
 def blogs(request):
     blogs = Blog.objects.all().order_by('-created_at')
@@ -150,13 +153,60 @@ def admin_dashboard(request):
 
     return render(request, 'admin/dashboard.html', context)
 
+@login_required
 def admin_users(request):
-    if not request.user.is_superuser:
-        return redirect('home')
-    
-    users = User.objects.all().order_by('username')
-    return render(request, 'admin/users.html', {'users': users})
+    # Get query parameters
+    search_query = request.GET.get('search', '')
+    sort_by = request.GET.get('sort', 'username')
+    role_filter = request.GET.getlist('role')  # accepts multiple: admin/user
+    status_filter = request.GET.getlist('status')  # accepts multiple: active/inactive
 
+    # Base query
+    users = User.objects.all()
+
+    # Search
+    if search_query:
+        users = users.filter(Q(username__icontains=search_query) | Q(email__icontains=search_query))
+
+    # Role Filter
+    if 'admin' in role_filter:
+        users = users.filter(is_superuser=True)
+    if 'user' in role_filter:
+        users = users.filter(is_superuser=False)
+
+    # Status Filter
+    if 'active' in status_filter:
+        users = users.filter(is_active=True)
+    if 'inactive' in status_filter:
+        users = users.filter(is_active=False)
+
+    # Sorting
+    sort_options = {
+        'username': 'username',
+        'email': 'email',
+        'date_joined': 'date_joined',
+        'is_active': 'is_active',
+        'is_superuser': 'is_superuser'
+    }
+    users = users.order_by(sort_options.get(sort_by, 'username'))
+
+    # Pagination
+    paginator = Paginator(users, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'users': page_obj.object_list,
+        'search_query': search_query,
+        'role_filter': role_filter,
+        'status_filter': status_filter,
+        'sort_by': sort_by
+    }
+
+    return render(request, 'admin/users.html', context)
+
+@login_required
 def admin_papers(request):
     if not request.user.is_superuser:
         return redirect('home')
@@ -164,6 +214,7 @@ def admin_papers(request):
     papers = OldPaper.objects.all().order_by('-uploaded_at')
     return render(request, 'admin/papers.html', {'papers': papers})
 
+@login_required
 def admin_projects(request):
     if not request.user.is_superuser:
         return redirect('home')
@@ -171,6 +222,7 @@ def admin_projects(request):
     projects = Project.objects.all().order_by('-uploaded_at')
     return render(request, 'admin/projects.html', {'projects': projects})
 
+@login_required
 def admin_blogs(request):
     if not request.user.is_superuser:
         return redirect('home')
@@ -178,6 +230,7 @@ def admin_blogs(request):
     blogs = Blog.objects.all().order_by('-created_at')
     return render(request, 'admin/blogs.html', {'blogs': blogs})
 
+@login_required
 def Content_Moderation(request):
     if not request.user.is_superuser:
         return redirect('home')
