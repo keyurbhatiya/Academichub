@@ -77,6 +77,19 @@
             <a href="{% url 'papers' %}" class="text-gray-600 py-2">Papers</a>
             <a href="{% url 'projects' %}" class="text-gray-600 py-2">Projects</a>
             <a href="{% url 'blogs' %}" class="text-gray-600 py-2">Blogs</a>
+            {% if user.is_authenticated %}
+            <div class="relative group">
+                <button class="text-gray-600 hover:text-primary font-medium flex items-center">
+                    Upload <i class="ri-arrow-down-s-line ml-1"></i>
+                </button>
+                <div class="absolute hidden group-hover:block bg-white shadow-lg mt-2 rounded w-48 z-50">
+                    <a href="{% url 'upload_paper' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Upload Paper</a>
+                    <a href="{% url 'upload_project' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Upload Project</a>
+                </div>
+            </div>
+            {% endif %} 
         </div>
     </div>
 </header>

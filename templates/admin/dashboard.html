@@ -1,6 +1,6 @@
 <!-- templates/dashboard.html -->
 {% extends 'admin/base.html' %}
-
+{% load tz %}
 {% block title %}Dashboard | AcademicHub{% endblock %}
 
 
@@ -67,12 +67,13 @@
 <div class="flex justify-between items-center mb-6">
     <h2 class="text-lg font-semibold text-gray-800">Overview</h2>
     <div class="flex items-center space-x-2">
-        <span class="text-sm text-gray-500">June 21, 2025</span>
-        <button class="p-2 rounded-full hover:bg-gray-100">
+        <span class="text-sm text-gray-500">{% now "F j, Y" %}</span>
+        <button class="p-2 rounded-full hover:bg-gray-100" onclick="location.reload()">
             <div class="w-5 h-5 flex items-center justify-center">
                 <i class="ri-refresh-line"></i>
             </div>
         </button>
+
     </div>
 </div>
 
@@ -852,8 +853,8 @@
                     ...item,
                     itemStyle: {
                         color: item.name === 'Papers' ? 'rgba(87, 181, 231, 1)' :
-                               item.name === 'Projects' ? 'rgba(141, 211, 199, 1)' :
-                               'rgba(251, 191, 114, 1)'
+                            item.name === 'Projects' ? 'rgba(141, 211, 199, 1)' :
+                                'rgba(251, 191, 114, 1)'
                     }
                 }))
             }]
@@ -868,6 +869,5 @@
         });
     });
 </script>
-
 
 {% endblock %}

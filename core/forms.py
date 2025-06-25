@@ -13,7 +13,11 @@ class RegisterForm(UserCreationForm):
 class OldPaperForm(forms.ModelForm):
     class Meta:
         model = OldPaper
-        fields = ['title', 'university', 'semester', 'file']
+        fields = ['title', 'university', 'course', 'semester', 'file']
+        labels = {
+            'title': 'Subject',
+        }
+
 
 class ProjectForm(forms.ModelForm):
     class Meta:

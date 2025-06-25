@@ -40,14 +40,33 @@
                             id="{{ field.id_for_label }}"
                             name="{{ field.name }}"
                             class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base"
-                            {% if field.field.required %}required{% endif %}
-                        >
-                            <option value="" disabled selected>Select a year</option>
-                            {% for i in "1234" %}
-                                <option value="{{ i }}" {% if field.value == i %}selected{% endif %}>Year {{ i }}</option>
+                            {% if field.field.required %}required{% endif %}>
+                            <option value="" disabled selected>Select a Semester</option>
+                            {% for i in "123456" %}
+                                <option value="{{ i }}" {% if field.value == i %}selected{% endif %}>Sem {{ i }}</option>
                             {% endfor %}
                         </select>
+                       {% elif field.name == 'university' %}
+                        <!-- University Dropdown -->
+                        <div class="relative">
+                            <select id="{{ field.id_for_label }}" name="{{ field.name }}"
+                                class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base"
+                                {% if field.field.required %}required{% endif %}
+                                onchange="toggleOtherUniversity(this)">
+                                <option value="" disabled selected>Select a University</option>
+                                {% for val, label in field.field.choices %}
+                                {% if val %}
+                                <option value="{{ val }}" {% if field.value == val %}selected{% endif %}>{{ label }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                            <!-- Hidden input field for "Other" university -->
+                            <input type="text" id="other_university" name="other_university"
+                                class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base mt-2 hidden"
+                                placeholder="Enter University Name" />
+                        </div>
                     {% else %}
+                    
                         <!-- Text Inputs -->
                         <input
                             type="{{ field.field.widget.input_type|default:'text' }}"
@@ -100,5 +119,17 @@
             }
         });
     });
+</script>
+<script>
+    function toggleOtherUniversity(selectElement) {
+        const otherInput = document.getElementById('other_university');
+        if (selectElement.value === 'other') {
+            otherInput.classList.remove('hidden');
+            otherInput.required = true;
+        } else {
+            otherInput.classList.add('hidden');
+            otherInput.required = false;
+        }
+    }
 </script>
 {% endblock %}

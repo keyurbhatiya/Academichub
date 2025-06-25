@@ -13,7 +13,21 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 
 def home(request):
-    return render(request, 'core/home.html')
+    # Prepare dynamic data
+    universities = OldPaper.objects.values_list('university', flat=True).distinct()
+    courses = OldPaper.objects.values_list('course', flat=True).distinct()
+
+    # Context for the template
+    context = {
+        'total_papers': OldPaper.objects.count(),
+        'total_projects': Project.objects.count(),
+        'total_blogs': Blog.objects.count(),
+        'total_users': User.objects.count(),
+        'papers': OldPaper.objects.order_by('-uploaded_at')[:9],
+        'universities': universities,
+        'courses': courses,
+    }
+    return render(request, 'core/home.html', context)
 
 def register(request):
     if request.method == 'POST':
