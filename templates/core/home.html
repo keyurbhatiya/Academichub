@@ -1,308 +1,25 @@
 {% extends 'core/base.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
-<style>
-    :where([class^="ri-"])::before {
-        content: "\f3c2";
-    }
+{% load static %}
 
-    body {
-        font-family: 'Inter', sans-serif;
-    }
-
-    .serif {
-        font-family: 'Merriweather', serif;
-    }
-
-    .wave-bg {
-        background-image: url('https://readdy.ai/api/search-image?query=Abstract%2520digital%2520wave%2520pattern%2520with%2520soft%2520blue%2520and%2520teal%2520colors%2520on%2520a%2520white%2520background%252C%2520creating%2520a%2520modern%2520and%2520clean%2520aesthetic%2520suitable%2520for%2520an%2520academic%2520website.%2520The%2520waves%2520should%2520be%2520subtle%2520and%2520flow%2520smoothly%2520across%2520the%2520image%252C%2520providing%2520a%2520sense%2520of%2520movement%2520and%2520innovation&width=1920&height=600&seq=wave123&orientation=landscape');
-        background-size: cover;
-        background-position: center;
-    }
-
-    .typing-animation {
-        border-right: 2px solid #4A90E2;
-        white-space: nowrap;
-        overflow: hidden;
-        animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-    }
-
-    @keyframes typing {
-        from {
-            width: 0
-        }
-
-        to {
-            width: 100%
-        }
-    }
-
-    @keyframes blink-caret {
-
-        from,
-        to {
-            border-color: transparent
-        }
-
-        50% {
-            border-color: #4A90E2
-        }
-    }
-
-    .bounce {
-        animation: bounce 2s infinite;
-    }
-
-    @keyframes bounce {
-
-        0%,
-        20%,
-        50%,
-        80%,
-        100% {
-            transform: translateY(0);
-        }
-
-        40% {
-            transform: translateY(-20px);
-        }
-
-        60% {
-            transform: translateY(-10px);
-        }
-    }
-
-    .logo-pulse:hover {
-        animation: pulse 1s infinite;
-    }
-
-    @keyframes pulse {
-        0% {
-            transform: scale(1);
-        }
-
-        50% {
-            transform: scale(1.05);
-        }
-
-        100% {
-            transform: scale(1);
-        }
-    }
-
-    .card-hover {
-        transition: all 0.3s ease;
-    }
-
-    .card-hover:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-    }
-
-    .masonry-grid {
-        column-count: 3;
-        column-gap: 1.5rem;
-    }
-
-    @media (max-width: 1024px) {
-        .masonry-grid {
-            column-count: 2;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .masonry-grid {
-            column-count: 1;
-        }
-    }
-
-    .masonry-item {
-        break-inside: avoid;
-        margin-bottom: 1.5rem;
-    }
-
-    input[type="range"] {
-        -webkit-appearance: none;
-        height: 6px;
-        border-radius: 5px;
-        background: #e2e8f0;
-        outline: none;
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background: #4A90E2;
-        cursor: pointer;
-    }
-
-    input[type="range"]::-moz-range-thumb {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background: #4A90E2;
-        cursor: pointer;
-    }
-
-    .custom-checkbox {
-        display: inline-block;
-        position: relative;
-        padding-left: 30px;
-        cursor: pointer;
-    }
-
-    .custom-checkbox input {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-    }
-
-    .checkmark {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 20px;
-        width: 20px;
-        background-color: #fff;
-        border: 2px solid #e2e8f0;
-        border-radius: 4px;
-    }
-
-    .custom-checkbox:hover input~.checkmark {
-        border-color: #4A90E2;
-    }
-
-    .custom-checkbox input:checked~.checkmark {
-        background-color: #4A90E2;
-        border-color: #4A90E2;
-    }
-
-    .checkmark:after {
-        content: "";
-        position: absolute;
-        display: none;
-    }
-
-    .custom-checkbox input:checked~.checkmark:after {
-        display: block;
-    }
-
-    .custom-checkbox .checkmark:after {
-        left: 6px;
-        top: 2px;
-        width: 5px;
-        height: 10px;
-        border: solid white;
-        border-width: 0 2px 2px 0;
-        transform: rotate(45deg);
-    }
-
-    .custom-switch {
-        position: relative;
-        display: inline-block;
-        width: 50px;
-        height: 24px;
-    }
-
-    .custom-switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #e2e8f0;
-        transition: .4s;
-        border-radius: 34px;
-    }
-
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 18px;
-        width: 18px;
-        left: 3px;
-        bottom: 3px;
-        background-color: white;
-        transition: .4s;
-        border-radius: 50%;
-    }
-
-    input:checked+.slider {
-        background-color: #4A90E2;
-    }
-
-    input:checked+.slider:before {
-        transform: translateX(26px);
-    }
-
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    .carousel {
-        scroll-behavior: smooth;
-    }
-
-    .carousel::-webkit-scrollbar {
-        display: none;
-    }
-
-    .benefit-item {
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp 0.5s forwards;
-    }
-
-    .benefit-item:nth-child(1) {
-        animation-delay: 0.2s;
-    }
-
-    .benefit-item:nth-child(2) {
-        animation-delay: 0.4s;
-    }
-
-    .benefit-item:nth-child(3) {
-        animation-delay: 0.6s;
-    }
-
-    @keyframes fadeInUp {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/user/styles.css' %}">
 
 <main>
-    <!-- message popup -->
-    {% if messages %}
+    <!-- Welcome Message -->
+    {% if not messages and user.is_authenticated %}
     <div class="fixed top-4 right-4 z-50">
-        {% for message in messages %}
-        <div class="bg-white border border-gray-200 rounded-lg shadow-md p-4 mb-2">
-            <p class="text-gray-800">{{ message }}</p>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% if user.is_authenticated %}
-    <div class="fixed top-4 right-4 z-50">
-        <div class="bg-white border border-gray-200 rounded-lg shadow-md p-4 mb-2">
-            <p class="text-gray-800">Welcome back, {{ user.username }}!</p>
+        <div class="flex items-start max-w-xs w-full p-4 bg-white border-l-4 border-indigo-500 rounded-lg shadow-md">
+            <div class="mt-0.5 mr-3">
+                <i class="ri-user-smile-line text-indigo-500 text-xl"></i>
+            </div>
+            <div class="text-sm text-gray-800">
+                Welcome back, {{ user.first_name|default:user.username }}!
+            </div>
         </div>
     </div>
     {% endif %}
+
 
     <!-- New Hero Section -->
     <section class="wave-bg pt-24 pb-16 md:py-10 relative overflow-hidden">
@@ -401,10 +118,10 @@
                 </p>
             </div>
             <!-- Filter -->
-            <div class="bg-white p-8 rounded-2xl shadow-lg mb-10 backdrop-blur-sm bg-white/80 iteam-center">
+            <!-- <div class="bg-white p-8 rounded-2xl shadow-lg mb-10 backdrop-blur-sm bg-white/80 iteam-center">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- University Dropdown -->
-                    <div>
+                    <!-- <div>
                         <label for="university" class="block text-sm font-medium text-gray-700 mb-2">University</label>
                         <div class="relative">
                             <select id="university" name="university"
@@ -419,10 +136,10 @@
                                 <i class="ri-building-4-line"></i>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Course Dropdown -->
-                    <div>
+                    <!-- <div>
                         <label for="course" class="block text-sm font-medium text-gray-700 mb-2">Course</label>
                         <div class="relative">
                             <select id="course" name="course"
@@ -439,7 +156,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>  -->
 
             <!-- Papers Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">

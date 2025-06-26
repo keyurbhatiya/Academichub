@@ -23,8 +23,6 @@
             {% endif %}
         </div>
 
-
-
         <div class="flex items-center space-x-4">
             <div class="relative w-10 h-10 flex items-center justify-center cursor-pointer">
                 <i class="ri-search-line text-gray-600 ri-lg"></i>
@@ -48,11 +46,10 @@
 
                 <div id="profileDropdown"
                     class="hidden absolute right-0 mt-2 w-56 bg-white rounded shadow-lg py-2 z-10">
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</a>
-                    <!-- <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Uploads</a> -->
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                    <a href="{% url 'profile' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                    <a href="{% url 'user_uploads' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Uploads</a>
+                    <!-- <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a> -->
                     <div class="border-t border-gray-100 my-1"></div>
-
                     <div class="border-t border-gray-100 my-1"></div>
                     <a href="{% url 'logout' %}"
                         class="block px-4 py-2 text-sm text-red-700 hover:bg-gray-100">Logout</a>
@@ -70,7 +67,7 @@
             </button>
         </div>
     </nav>
-
+    <!-- Mobile Menu -->
     <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-2">
         <div class="flex flex-col space-y-3 py-2">
             <a href="{% url 'home' %}" class="text-gray-800 font-medium py-2">Home</a>
@@ -87,6 +84,9 @@
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Upload Paper</a>
                     <a href="{% url 'upload_project' %}"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Upload Project</a>
+                    <!-- my uploads -->
+                    <a href="{% url 'user_uploads' %}"
+                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Uploads</a>
                 </div>
             </div>
             {% endif %} 

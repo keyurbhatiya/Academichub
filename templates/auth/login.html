@@ -95,7 +95,19 @@
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center">
+
     <div class="glass-container p-8 w-full max-w-md">
+                    <!-- Messages -->
+        {% if messages %}
+        <div class="mb-6 space-y-2">
+            {% for message in messages %}
+            <div class="p-4 rounded-lg flex items-center {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                <i class="ri-{% if message.tags == 'success' %}check-circle-line{% else %}error-warning-line{% endif %} mr-2 text-xl"></i>
+                <span>{{ message }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
         <h2 class="text-3xl font-bold text-black text-center mb-6">Login</h2>
         <form method="post" class="space-y-6">
             {% csrf_token %}

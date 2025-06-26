@@ -11,6 +11,9 @@ from django.db.models import Count
 import json
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib import messages
+from django.urls import reverse_lazy
 
 def home(request):
     # Prepare dynamic data
@@ -38,7 +41,7 @@ def register(request):
             return redirect('login')
     else:
         form = RegisterForm()
-    return render(request, 'core/register.html', {'form': form})
+    return render(request, 'auth/register.html', {'form': form})
 
 def login_view(request):
     if request.method == 'POST':
@@ -53,11 +56,40 @@ def login_view(request):
             return redirect('home')
         else:
             messages.error(request, 'Invalid credentials')
-    return render(request, 'core/login.html')
+    return render(request, 'auth/login.html')
 
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+def papers(request):
+
+    papers = OldPaper.objects.all().order_by('-uploaded_at')
+    
+    universities = OldPaper.objects.values_list('university', flat=True).distinct()
+    courses = OldPaper.objects.values_list('course', flat=True).distinct()
+
+    university = request.GET.get('university')
+    course = request.GET.get('course')
+    
+    if university:
+        papers = papers.filter(university=university)
+    if course:
+        papers = papers.filter(course=course)
+    
+    return render(request, 'core/papers.html', {
+        'papers': papers,
+        'universities': universities,
+        'courses': courses
+    })
+
+def projects(request):
+    projects = Project.objects.all().order_by('-uploaded_at')
+    return render(request, 'core/projects.html', {'projects': projects})
+
+def blogs(request):
+    blogs = Blog.objects.all().order_by('-created_at')
+    return render(request, 'core/blogs.html', {'blogs': blogs})
 
 @login_required
 def upload_paper(request):
@@ -87,19 +119,6 @@ def upload_project(request):
         form = ProjectForm()
     return render(request, 'core/upload_project.html', {'form': form})
 
-def papers(request):
-    papers = OldPaper.objects.all().order_by('-uploaded_at')
-    return render(request, 'core/papers.html', {'papers': papers})
-
-def projects(request):
-    projects = Project.objects.all().order_by('-uploaded_at')
-    return render(request, 'core/projects.html', {'projects': projects})
-
-
-def blogs(request):
-    blogs = Blog.objects.all().order_by('-created_at')
-    return render(request, 'core/blogs.html', {'blogs': blogs})
-
 @login_required
 def blog_create(request):
     if request.method == 'POST':
@@ -114,6 +133,40 @@ def blog_create(request):
         form = BlogForm()
     return render(request, 'core/blog_create.html', {'form': form})
 
+# user profile view
+@login_required
+def profile_view(request):
+    return render(request, 'auth/profile.html')
+
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'auth/password_change.html'
+    success_url = reverse_lazy('profile')  # Redirect to profile page after success
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, "Your password was successfully changed!")
+        return response
+
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        messages.error(self.request, "Please correct the errors below.")
+        return response
+
+
+# user_uploads data view
+@login_required
+def user_uploads_view(request):
+    user = request.user
+    papers = OldPaper.objects.filter(uploaded_by=user)
+    projects = Project.objects.filter(uploaded_by=user)
+    blogs = Blog.objects.filter(author=user)
+
+    context = {
+        'papers': papers,
+        'projects': projects,
+        'blogs': blogs,
+    }
+    return render(request, 'core/user_uploads.html', context)
 
 # admin_dashboard view 
 
@@ -319,6 +372,4 @@ def Content_Moderation(request):
         'form': form,
         'contents': contents
     })
-
-
 

@@ -1,0 +1,113 @@
+{% extends 'core/base.html' %}
+{% block title %}My Uploads{% endblock %}
+{% block content %}
+<main class="py-12 sm:py-16 bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 sm:px-6 max-w-4xl">
+        <!-- Header -->
+        <div class="mb-8 sm:mb-12">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">My Uploads</h2>
+            <p class="text-base sm:text-lg text-gray-600 max-w-xl sm:max-w-2xl">View and manage your uploaded papers, projects, and blog posts.</p>
+        </div>
+
+        <!-- Papers Section -->
+        <div class="mb-12">
+            <h3 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">Papers</h3>
+            {% if papers %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                {% for paper in papers|slice:":3" %}
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 p-4 sm:p-6 border border-gray-100">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                        <div class="mb-4 sm:mb-0">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-2">{{ paper.title }}</h4>
+                            <p class="text-gray-600 text-sm mb-1">{{ paper.university }} ({{ paper.semester }})</p>
+                            <p class="text-gray-500 text-xs">Uploaded on {{ paper.uploaded_at|date:"F d, Y" }}</p>
+                        </div>
+                        <a href="{{ paper.file.url }}" 
+                            target="_blank"
+                            class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition duration-200 flex items-center shrink-0">
+                                <i class="ri-eye-line mr-2"></i> View PDF
+                        </a>
+
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if papers.count > 3 %}
+            <a href="{% url 'papers' %}" class="mt-4 inline-block text-indigo-600 hover:text-indigo-700 font-semibold text-sm">View All Papers ({{ papers.count }})</a>
+            {% endif %}
+            {% else %}
+            <div class="bg-white rounded-xl shadow-sm p-6 text-center border border-gray-100">
+                <i class="ri-file-warning-line text-3xl text-gray-400 mb-4"></i>
+                <p class="text-base text-gray-600">You haven't uploaded any papers yet.</p>
+                <a href="{% url 'upload_paper' %}" class="inline-block mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition duration-200">Upload Paper</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Projects Section -->
+        <div class="mb-12">
+            <h3 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">Projects</h3>
+            {% if projects %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                {% for project in projects|slice:":3" %}
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 p-4 sm:p-6 border border-gray-100">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                        <div class="mb-4 sm:mb-0">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-2">{{ project.title }}</h4>
+                            <p class="text-gray-600 text-sm mb-1">{{ project.university }} (Year: {{ project.year }})</p>
+                            <p class="text-gray-500 text-xs">Uploaded on {{ project.uploaded_at|date:"F d, Y" }}</p>
+                        </div>
+                        <a href="{{ project.file.url }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition duration-200 flex items-center shrink-0" download>
+                            <i class="ri-download-line mr-2"></i> Download
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if projects.count > 3 %}
+            <a href="{% url 'projects' %}" class="mt-4 inline-block text-indigo-600 hover:text-indigo-700 font-semibold text-sm">View All Projects ({{ projects.count }})</a>
+            {% endif %}
+            {% else %}
+            <div class="bg-white rounded-xl shadow-sm p-6 text-center border border-gray-100">
+                <i class="ri-file-warning-line text-3xl text-gray-400 mb-4"></i>
+                <p class="text-base text-gray-600">You haven't uploaded any projects yet.</p>
+                <a href="{% url 'upload_project' %}" class="inline-block mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition duration-200">Upload Project</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Blogs Section -->
+        <div>
+            <h3 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">Blogs</h3>
+            {% if blogs %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                {% for blog in blogs|slice:":3" %}
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 p-4 sm:p-6 border border-gray-100">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                        <div class="mb-4 sm:mb-0">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-2">{{ blog.title }}</h4>
+                            <p class="text-gray-600 text-sm mb-1 line-clamp-2">{{ blog.content }}</p>
+                            <p class="text-gray-500 text-xs">Posted on {{ blog.uploaded_at|date:"F d, Y" }}</p>
+                        </div>
+                        <a href="#" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition duration-200 flex items-center shrink-0">
+                            <i class="ri-eye-line mr-2"></i> View
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% if blogs.count > 3 %}
+            <a href="{% url 'blogs' %}" class="mt-4 inline-block text-indigo-600 hover:text-indigo-700 font-semibold text-sm">View All Blogs ({{ blogs.count }})</a>
+            {% endif %}
+            {% else %}
+            <div class="bg-white rounded-xl shadow-sm p-6 text-center border border-gray-100">
+                <i class="ri-file-warning-line text-3xl text-gray-400 mb-4"></i>
+                <p class="text-base text-gray-600">You haven't posted any blogs yet.</p>
+                <a href="{% url 'upload_blog' %}" class="inline-block mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition duration-200">Create Blog</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock %}
