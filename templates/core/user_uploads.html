@@ -55,7 +55,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                         <div class="mb-4 sm:mb-0">
                             <h4 class="text-lg font-semibold text-gray-900 mb-2">{{ project.title }}</h4>
-                            <p class="text-gray-600 text-sm mb-1">{{ project.university }} (Year: {{ project.year }})</p>
+                            <p class="text-gray-600 text-sm mb-1">{{ project.language }} </p>
                             <p class="text-gray-500 text-xs">Uploaded on {{ project.uploaded_at|date:"F d, Y" }}</p>
                         </div>
                         <a href="{{ project.file.url }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition duration-200 flex items-center shrink-0" download>
@@ -104,7 +104,7 @@
             <div class="bg-white rounded-xl shadow-sm p-6 text-center border border-gray-100">
                 <i class="ri-file-warning-line text-3xl text-gray-400 mb-4"></i>
                 <p class="text-base text-gray-600">You haven't posted any blogs yet.</p>
-                <a href="{% url 'upload_blog' %}" class="inline-block mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition duration-200">Create Blog</a>
+                <a href="{% url 'blogs' %}" class="inline-block mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition duration-200">Create Blog</a>
             </div>
             {% endif %}
         </div>

@@ -22,12 +22,16 @@ class OldPaperForm(forms.ModelForm):
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['title', 'description', 'semester', 'zip_file']
+        fields = ['title', 'description', 'semester', 'language', 'image', 'zip_file'] # New field imgage,language
 
 class BlogForm(forms.ModelForm):
     class Meta:
         model = Blog
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'image']
+        widgets = {
+            'content': forms.Textarea(attrs={'id': 'blog-content-editor'}),
+            'image': forms.FileInput(attrs={'accept': 'image/*'}),
+        }
 
 class ContentModerationForm(forms.Form):
     content_type = forms.ChoiceField(choices=[('paper', 'Paper'), ('project', 'Project'), ('blog', 'Blog')])

@@ -84,8 +84,31 @@ def papers(request):
     })
 
 def projects(request):
+    selected_language = request.GET.get('language', '')
+    search_query = request.GET.get('search', '')
+
     projects = Project.objects.all().order_by('-uploaded_at')
-    return render(request, 'core/projects.html', {'projects': projects})
+
+    if selected_language:
+        projects = projects.filter(language=selected_language)
+
+    if search_query:
+        projects = projects.filter(
+            Q(title__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(uploaded_by__username__icontains=search_query)  # 👈 fix here
+        )
+
+    languages = Project.objects.values_list('language', flat=True).distinct()
+
+    context = {
+        'projects': projects,
+        'selected_language': selected_language,
+        'search_query': search_query,
+        'languages': languages
+    }
+
+    return render(request, 'core/projects.html', context)
 
 def blogs(request):
     blogs = Blog.objects.all().order_by('-created_at')
@@ -114,21 +137,28 @@ def upload_project(request):
             project.uploaded_by = request.user
             project.save()
             messages.success(request, 'Project uploaded successfully!')
-            return redirect('projects')
+            return redirect('projects')  # Adjust URL name if needed
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = ProjectForm()
+
     return render(request, 'core/upload_project.html', {'form': form})
+
 
 @login_required
 def blog_create(request):
     if request.method == 'POST':
-        form = BlogForm(request.POST)
+        form = BlogForm(request.POST, request.FILES)
         if form.is_valid():
             blog = form.save(commit=False)
-            blog.author = request.user
+            blog.uploaded_by = request.user
+            blog.author = request.user  # Add this line
             blog.save()
-            messages.success(request, 'Blog created successfully!')
+            messages.success(request, "Blog post created successfully!")
             return redirect('blogs')
+        else:
+            messages.error(request, "Please correct the errors below.")
     else:
         form = BlogForm()
     return render(request, 'core/blog_create.html', {'form': form})

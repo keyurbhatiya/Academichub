@@ -15,60 +15,79 @@
                 {% csrf_token %}
                 <!-- Form Fields -->
                 {% for field in form %}
-                <div class="flex flex-col">
+                <div class="flex flex-col mb-4">
                     <label for="{{ field.id_for_label }}" class="text-sm font-semibold text-gray-700 mb-2">
                         {{ field.label }}{% if field.field.required %} <span class="text-red-500">*</span>{% endif %}
                     </label>
-                    {% if field.name == 'zip_file' %}
-                        <!-- Custom File Input -->
+
+                    {% if field.name == 'zip_file' or field.name == 'image' %}
+                        <!-- File Upload Input -->
                         <div class="relative">
                             <input
                                 type="file"
                                 id="{{ field.id_for_label }}"
                                 name="{{ field.name }}"
-                                class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 opacity-0 absolute z-10 cursor-pointer"
+                                class="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 opacity-0 absolute z-10 cursor-pointer"
                                 {% if field.field.required %}required{% endif %}
                             />
-                            <div class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 bg-white text-gray-700 flex items-center">
+                            <div class="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 bg-white text-gray-700 flex items-center">
                                 <i class="ri-file-upload-line text-indigo-600 mr-2"></i>
-                                <span id="file-name" class="text-gray-500 text-sm sm:text-base">Choose a file...</span>
+                                <span id="file-name-{{ field.name }}" class="text-gray-500 text-sm sm:text-base">Choose a file...</span>
                             </div>
                         </div>
+
                     {% elif field.name == 'description' %}
-                        <!-- Description Textarea -->
+                        <!-- Textarea for Description -->
                         <textarea
                             id="{{ field.id_for_label }}"
                             name="{{ field.name }}"
-                            rows="4 sm:rows-6"
-                            class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 placeholder-gray-400 text-sm sm:text-base"
+                            rows="4"
+                            class="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 placeholder-gray-400 text-sm sm:text-base"
                             placeholder="{{ field.help_text|default:'Describe your project' }}"
                             {% if field.field.required %}required{% endif %}
                         >{{ field.value|default_if_none:'' }}</textarea>
+
                     {% elif field.name == 'semester' %}
-                        <!-- Year Select -->
+                        <!-- Semester Dropdown -->
                         <select
                             id="{{ field.id_for_label }}"
                             name="{{ field.name }}"
-                            class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base"
+                            class="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base"
                             {% if field.field.required %}required{% endif %}
                         >
-                            <option value="" disabled selected>Select a year</option>
+                            <option value="" disabled {% if not field.value %}selected{% endif %}>Select a year</option>
                             {% for i in "1234" %}
                                 <option value="{{ i }}" {% if field.value == i %}selected{% endif %}>Year {{ i }}</option>
                             {% endfor %}
                         </select>
+
+                    {% elif field.name == 'language' %}
+                        <!-- Language Dropdown -->
+                        <select
+                            id="{{ field.id_for_label }}"
+                            name="{{ field.name }}"
+                            class="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base"
+                            {% if field.field.required %}required{% endif %}
+                        >
+                            <option value="" disabled {% if not field.value %}selected{% endif %}>Select a programming language</option>
+                            {% for lang in form.language.field.choices %}
+                                <option value="{{ lang.0 }}" {% if field.value == lang.0 %}selected{% endif %}>{{ lang.1 }}</option>
+                            {% endfor %}
+                        </select>
+
                     {% else %}
-                        <!-- Text Inputs -->
+                        <!-- Default Input -->
                         <input
                             type="{{ field.field.widget.input_type|default:'text' }}"
                             id="{{ field.id_for_label }}"
                             name="{{ field.name }}"
                             value="{{ field.value|default_if_none:'' }}"
-                            class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 placeholder-gray-400 text-sm sm:text-base"
+                            class="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 placeholder-gray-400 text-sm sm:text-base"
                             placeholder="{{ field.help_text|default:field.label }}"
                             {% if field.field.required %}required{% endif %}
                         />
                     {% endif %}
+
                     {% if field.errors %}
                         <div class="mt-2 text-xs sm:text-sm text-red-600">
                             {% for error in field.errors %}
@@ -78,6 +97,8 @@
                     {% endif %}
                 </div>
                 {% endfor %}
+
+
 
                 <!-- Submit Button -->
                 <div class="flex justify-end">
@@ -99,16 +120,23 @@
 <!-- JavaScript for File Input Display -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const fileInput = document.querySelector('input[type="file"]');
-        const fileNameDisplay = document.getElementById('file-name');
+        const fileFields = ['zip_file', 'image'];
 
-        fileInput.addEventListener('change', function () {
-            if (this.files.length > 0) {
-                fileNameDisplay.textContent = this.files[0].name;
-            } else {
-                fileNameDisplay.textContent = 'Choose a file...';
+        fileFields.forEach(function (name) {
+            const input = document.getElementById(`id_${name}`);
+            const label = document.getElementById(`file-name-${name}`);
+
+            if (input && label) {
+                input.addEventListener('change', function () {
+                    if (this.files.length > 0) {
+                        label.textContent = this.files[0].name;
+                    } else {
+                        label.textContent = 'Choose a file...';
+                    }
+                });
             }
         });
     });
 </script>
+
 {% endblock %}
