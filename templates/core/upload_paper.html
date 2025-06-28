@@ -13,12 +13,12 @@
         <div class="bg-white rounded-xl shadow-sm p-6 sm:p-8 border border-gray-100 max-w-3xl mx-auto">
             <form method="post" enctype="multipart/form-data" class="space-y-4 sm:space-y-6">
                 {% csrf_token %}
-                <!-- Form Fields -->
                 {% for field in form %}
                 <div class="flex flex-col">
                     <label for="{{ field.id_for_label }}" class="text-sm font-semibold text-gray-700 mb-2">
                         {{ field.label }}{% if field.field.required %} <span class="text-red-500">*</span>{% endif %}
                     </label>
+
                     {% if field.name == 'file' %}
                         <!-- Custom File Input -->
                         <div class="relative">
@@ -34,40 +34,79 @@
                                 <span id="file-name" class="text-gray-500 text-sm sm:text-base">Choose a file...</span>
                             </div>
                         </div>
+
                     {% elif field.name == 'semester' %}
-                        <!-- Year Select -->
+                        <!-- Semester Dropdown -->
                         <select
                             id="{{ field.id_for_label }}"
                             name="{{ field.name }}"
                             class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base"
                             {% if field.field.required %}required{% endif %}>
-                            <option value="" disabled selected>Select a Semester</option>
+                            <option value="" disabled {% if not field.value %}selected{% endif %}>Select a Semester</option>
                             {% for i in "123456" %}
                                 <option value="{{ i }}" {% if field.value == i %}selected{% endif %}>Sem {{ i }}</option>
                             {% endfor %}
                         </select>
-                       {% elif field.name == 'university' %}
+
+                    {% elif field.name == 'university' %}
                         <!-- University Dropdown -->
                         <div class="relative">
                             <select id="{{ field.id_for_label }}" name="{{ field.name }}"
                                 class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base"
                                 {% if field.field.required %}required{% endif %}
                                 onchange="toggleOtherUniversity(this)">
-                                <option value="" disabled selected>Select a University</option>
+                                <option value="" disabled {% if not field.value %}selected{% endif %}>Select a University</option>
                                 {% for val, label in field.field.choices %}
-                                {% if val %}
-                                <option value="{{ val }}" {% if field.value == val %}selected{% endif %}>{{ label }}</option>
-                                {% endif %}
+                                    {% if val %}
+                                        <option value="{{ val }}" {% if field.value == val %}selected{% endif %}>{{ label }}</option>
+                                    {% endif %}
                                 {% endfor %}
                             </select>
+
                             <!-- Hidden input field for "Other" university -->
                             <input type="text" id="other_university" name="other_university"
-                                class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base mt-2 hidden"
+                                class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base mt-2 {% if field.value != 'other' %}hidden{% endif %}"
                                 placeholder="Enter University Name" />
                         </div>
+
+                    {% elif field.name == 'course' %}
+                        <!-- Course Dropdown -->
+                        <div class="relative">
+                            <select id="{{ field.id_for_label }}" name="{{ field.name }}"
+                                class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base"
+                                {% if field.field.required %}required{% endif %}
+                                onchange="toggleOtherCourse(this)">
+                                <option value="" disabled {% if not field.value %}selected{% endif %}>Select a Course</option>
+                                {% for val, label in field.field.choices %}
+                                    {% if val %}
+                                        <option value="{{ val }}" {% if field.value == val %}selected{% endif %}>{{ label }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                                <!-- Make sure you include an actual 'other' option in your choices -->
+                                <option value="other" {% if field.value == 'other' %}selected{% endif %}>Other</option>
+                            </select>
+
+                            <!-- Hidden input field for "Other" course -->
+                            <input type="text" id="other_course" name="other_course"
+                                class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base mt-2 {% if field.value != 'other' %}hidden{% endif %}"
+                                placeholder="Enter Course Name" />
+                        </div>
+
+                    {% elif field.name == 'title' %}
+                        <!-- Title input -->
+                        <input
+                            type="text"
+                            id="{{ field.id_for_label }}"
+                            name="{{ field.name }}"
+                            value="{{ field.value|default_if_none:'' }}"
+                            class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 placeholder-gray-400 text-sm sm:text-base"
+                            placeholder="{{ field.help_text|default:field.label }}"
+                            {% if field.field.required %}required{% endif %}
+                        />
+
+
                     {% else %}
-                    
-                        <!-- Text Inputs -->
+                        <!-- Default text input for other fields -->
                         <input
                             type="{{ field.field.widget.input_type|default:'text' }}"
                             id="{{ field.id_for_label }}"
@@ -78,6 +117,7 @@
                             {% if field.field.required %}required{% endif %}
                         />
                     {% endif %}
+
                     {% if field.errors %}
                         <div class="mt-2 text-xs sm:text-sm text-red-600">
                             {% for error in field.errors %}
@@ -94,6 +134,7 @@
                         <i class="ri-upload-2-line mr-2"></i> Upload Paper
                     </button>
                 </div>
+
                 <!-- Back Button -->
                 <div class="flex justify-start mt-4">
                     <a href="{% url 'papers' %}" class="text-indigo-600 hover:text-indigo-800 text-sm sm:text-base">
@@ -105,22 +146,19 @@
     </div>
 </main>
 
-<!-- JavaScript for File Input Display -->
+<!-- JS to show selected file name -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const fileInput = document.querySelector('input[type="file"]');
         const fileNameDisplay = document.getElementById('file-name');
 
-        fileInput.addEventListener('change', function () {
-            if (this.files.length > 0) {
-                fileNameDisplay.textContent = this.files[0].name;
-            } else {
-                fileNameDisplay.textContent = 'Choose a file...';
-            }
-        });
+        if (fileInput && fileNameDisplay) {
+            fileInput.addEventListener('change', function () {
+                fileNameDisplay.textContent = this.files.length > 0 ? this.files[0].name : 'Choose a file...';
+            });
+        }
     });
-</script>
-<script>
+
     function toggleOtherUniversity(selectElement) {
         const otherInput = document.getElementById('other_university');
         if (selectElement.value === 'other') {
@@ -129,7 +167,22 @@
         } else {
             otherInput.classList.add('hidden');
             otherInput.required = false;
+            otherInput.value = '';
         }
     }
 </script>
+<script>
+function toggleOtherCourse(selectElement) {
+    const otherInput = document.getElementById('other_course');
+    if (selectElement.value === 'other') {
+        otherInput.classList.remove('hidden');
+        otherInput.required = true;
+    } else {
+        otherInput.classList.add('hidden');
+        otherInput.required = false;
+        otherInput.value = '';
+    }
+}
+</script>
+
 {% endblock %}

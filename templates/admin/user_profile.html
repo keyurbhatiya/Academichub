@@ -1,0 +1,82 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}User Profile | AcademicHub{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 p-6">
+
+    <!-- User Profile Card -->
+    <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-6">User Profile</h2>
+        <div class="space-y-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 text-white">
+                    <i class="ri-user-line"></i>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Username</p>
+                    <p class="text-base text-gray-800">{{ user_profile.username }}</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 pt-4">
+                <p class="text-sm font-medium text-gray-500">Email</p>
+                <p class="text-base text-gray-800">{{ user_profile.email }}</p>
+            </div>
+            <div class="border-t border-gray-100 pt-4">
+                <p class="text-sm font-medium text-gray-500">Date Joined</p>
+                <p class="text-base text-gray-800">{{ user_profile.date_joined|date:"M d, Y" }}</p>
+            </div>
+            <div class="border-t border-gray-100 pt-4">
+                <p class="text-sm font-medium text-gray-500">Last Login</p>
+                <p class="text-base text-gray-800">
+                    {% if user_profile.last_login %}
+                        {{ user_profile.last_login|date:"M d, Y H:i" }}
+                    {% else %}
+                        Never logged in
+                    {% endif %}
+                </p>
+            </div>
+            <div class="border-t border-gray-100 pt-4">
+                <p class="text-sm font-medium text-gray-500">Full Name</p>
+                <p class="text-base text-gray-800">
+                    {% if user_profile.first_name or user_profile.last_name %}
+                        {{ user_profile.get_full_name }}
+                    {% else %}
+                        Not provided
+                    {% endif %}
+                </p>
+            </div>
+            <div class="border-t border-gray-100 pt-4">
+                <p class="text-sm font-medium text-gray-500">Status</p>
+                <div class="flex items-center">
+                    <div class="w-2.5 h-2.5 rounded-full {% if user_profile.is_active %}bg-green-500{% else %}bg-red-500{% endif %} mr-2"></div>
+                    <p class="text-base text-gray-800">
+                        {% if user_profile.is_active %}
+                            Active
+                        {% else %}
+                            Inactive
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-6">
+            <a href="{% url 'deactivate_user' user_profile.id %}" class="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors">
+                <i class="ri-user-unfollow-line mr-2"></i>
+                {% if user_profile.is_active %}
+                    Deactivate User
+                {% else %}
+                    Activate User
+                {% endif %}
+            </a>
+        </div>
+        <!-- back button -->
+        <div class="mt-4">
+            <a href="{% url 'admin_users' %}" class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-800 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors">
+                <i class="ri-arrow-left-line mr-2"></i>
+                Back to User Management
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

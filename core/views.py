@@ -403,3 +403,32 @@ def Content_Moderation(request):
         'contents': contents
     })
 
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def view_user_profile(request, user_id):
+    user_profile = get_object_or_404(User, id=user_id)
+    return render(request, 'admin/user_profile.html', {'user_profile': user_profile})
+
+# Deactivate user view
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def deactivate_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user.is_active = False
+    user.save()
+    messages.success(request, f'User {user.username} has been deactivated.')
+    return redirect('admin_users')
+
+# Activate user view
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def activate_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if not user.is_active:
+        user.is_active = True
+        user.save()
+        messages.success(request, f"{user.username} has been activated.")
+    else:
+        messages.info(request, f"{user.username} is already active.")
+    return redirect('admin_users')  # Redirect to your user management page

@@ -9,26 +9,105 @@ STATUS_CHOICES = [
     ('Approved', 'Approved'),
     ('Rejected', 'Rejected'),
 ]
+
 UNIVERSITY_CHOICES = [
     ('GTU', 'Gujarat Technological University'),
     ('HNGU', 'Hemchandracharya North Gujarat University'),
-    ('other', 'Other'),  # Add more universities as needed
-    # Add more as needed
+    ('SPU', 'Sardar Patel University'),
+    ('MSU', 'The Maharaja Sayajirao University of Baroda'),
+    ('GU', 'Gujarat University'),
+    ('PU', 'Parul University'),
+    ('NFSU', 'National Forensic Sciences University'),
+    ('KSU', 'Krantiguru Shyamji Krishna Verma Kachchh University'),
+    ('PDPU', 'Pandit Deendayal Energy University (formerly PDPU)'),
+    ('DGU', 'Dharmsinh Desai University'),
+    ('SU', 'Sumandeep Vidyapeeth'),
+    ('RKDU', 'Raksha Shakti University'),
+    ('UKU', 'Uka Tarsadia University'),
+    ('CU', 'Charotar University of Science and Technology (CHARUSAT)'),
+    ('INDU', 'Indian Institute of Teacher Education (IITE)'),
+    ('DAIICT', 'Dhirubhai Ambani Institute of Information and Communication Technology'),
+    ('NID', 'National Institute of Design'),
+    ('IITGN', 'Indian Institute of Technology Gandhinagar'),
+    ('IIM', 'Indian Institute of Management Ahmedabad'),
+    ('AIIMS', 'All India Institute of Medical Sciences Rajkot'),
+    ('GNLU', 'Gujarat National Law University'),
+    ('SVNIT', 'Sardar Vallabhbhai National Institute of Technology, Surat'),
+    ('VU', 'Vidyapith Universities (Gujarat Vidyapith, Saurashtra University, etc.)'),
+    ('other', 'Other'),
 ]
+
 LANGUAGE_CHOICES = [
     ('Python', 'Python'),
     ('Java', 'Java'),
+    ('C', 'C'),
     ('C++', 'C++'),
     ('C#', 'C#'),
     ('JavaScript', 'JavaScript'),
+    ('TypeScript', 'TypeScript'),
     ('PHP', 'PHP'),
+    ('Ruby', 'Ruby'),
+    ('Go', 'Go'),
+    ('Swift', 'Swift'),
+    ('Kotlin', 'Kotlin'),
+    ('R', 'R'),
+    ('Dart', 'Dart'),
+    ('Rust', 'Rust'),
+    ('SQL', 'SQL'),
+    ('Shell', 'Shell'),
+    ('Perl', 'Perl'),
+    ('MATLAB', 'MATLAB'),
+    ('Scala', 'Scala'),
+    ('Haskell', 'Haskell'),
+    ('Objective-C', 'Objective-C'),
+    ('Visual Basic', 'Visual Basic'),
+    ('Assembly', 'Assembly'),
     ('Other', 'Other'),
 ]
+
+COURSE_CHOICES = [
+    ('B.Tech', 'Bachelor of Technology'),
+    ('M.Tech', 'Master of Technology'),
+    ('Diploma', 'Diploma in Engineering'),
+    ('B.E', 'Bachelor of Engineering'),
+    ('M.E', 'Master of Engineering'),
+    ('BCA', 'Bachelor of Computer Applications'),
+    ('MCA', 'Master of Computer Applications'),
+    ('BBA', 'Bachelor of Business Administration'),
+    ('MBA', 'Master of Business Administration'),
+    ('B.Com', 'Bachelor of Commerce'),
+    ('M.Com', 'Master of Commerce'),
+    ('B.Sc', 'Bachelor of Science'),
+    ('M.Sc', 'Master of Science'),
+    ('B.A', 'Bachelor of Arts'),
+    ('M.A', 'Master of Arts'),
+    ('B.Ed', 'Bachelor of Education'),
+    ('M.Ed', 'Master of Education'),
+    ('LLB', 'Bachelor of Law'),
+    ('LLM', 'Master of Law'),
+    ('B.Pharm', 'Bachelor of Pharmacy'),
+    ('M.Pharm', 'Master of Pharmacy'),
+    ('B.Arch', 'Bachelor of Architecture'),
+    ('BFA', 'Bachelor of Fine Arts'),
+    ('BJMC', 'Bachelor of Journalism and Mass Communication'),
+    ('B.P.Ed', 'Bachelor of Physical Education'),
+    ('M.P.Ed', 'Master of Physical Education'),
+    ('BDS', 'Bachelor of Dental Surgery'),
+    ('BHMS', 'Bachelor of Homeopathic Medicine and Surgery'),
+    ('B.Voc', 'Bachelor of Vocation'),
+    ('B.Lib.I.Sc', 'Bachelor of Library and Information Science'),
+    ('M.Lib', 'Master of Library Science'),
+    ('M.Phil', 'Master of Philosophy'),
+    ('Ph.D', 'Doctor of Philosophy'),
+    ('PGD', 'Post Graduate Diploma'),
+    ('Diploma (Other)', 'Diploma (Others)'),
+]
+
 
 class OldPaper(models.Model):
     title = models.CharField(max_length=200)
     university = models.CharField(max_length=100, choices=UNIVERSITY_CHOICES)
-    course = models.CharField(max_length=100)  
+    course = models.CharField(max_length=100, choices= COURSE_CHOICES)  
     semester = models.CharField(max_length=50)
     file = models.FileField(upload_to='papers/')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
