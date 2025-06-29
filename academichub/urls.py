@@ -7,7 +7,7 @@ from core import views
 
 urlpatterns = [
     path('admin/',views.admin_dashboard, name='admin_dashboard'),
-    path('admin/user/', views.admin_users, name='admin_users'),
+    path('admin/users/', views.admin_users, name='admin_users'),
     path('admin/papers/', views.admin_papers, name='admin_papers'),
     path('admin/projects/', views.admin_projects, name='admin_projects'),
     path('admin/blogs/', views.admin_blogs, name='admin_blogs'),
@@ -15,6 +15,7 @@ urlpatterns = [
     path('admin/users/<int:user_id>/profile/', views.view_user_profile, name='view_user_profile'),
     path('admin/users/<int:user_id>/deactivate/', views.deactivate_user, name='deactivate_user'),
     path('admin/users/<int:user_id>/activate/', views.activate_user, name='activate_user'),
+    path('admin/papers/upload/', views.upload_old_paper, name='upload_old_paper'),
 
     # path('admin/', admin.site.urls),
     path('', include('core.urls')),

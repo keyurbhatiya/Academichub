@@ -1,805 +1,343 @@
-<!-- templates/dashboard.html -->
 {% extends 'admin/base.html' %}
 {% load tz %}
+
 {% block title %}Dashboard | AcademicHub{% endblock %}
 
-
 {% block content %}
-<!-- Breadcrumb -->
-<div class="px-4 py-2 bg-gray-50 text-sm">
-    <div class="flex items-center space-x-2">
-        <a href="{% url 'admin_dashboard' %}" class="text-gray-500 hover:text-primary">Home</a>
-        <div class="w-4 h-4 flex items-center justify-center text-gray-400">
-            <i class="ri-arrow-right-s-line"></i>
-        </div>
-        <span class="text-gray-700">Dashboard</span>
+<!-- Messages -->
+{% if messages %}
+<div class="mb-6 space-y-2">
+    {% for message in messages %}
+    <div class="p-4 rounded-lg flex items-center {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+        <i class="ri-{% if message.tags == 'success' %}check-circle-line{% else %}error-warning-line{% endif %} mr-2 text-xl"></i>
+        <span>{{ message }}</span>
     </div>
+    {% endfor %}
 </div>
+{% endif %}
+
 <!-- Quick Actions Button -->
 <div class="fixed bottom-6 right-6 z-40">
-    <div class="relative dropdown">
-        <button
-            class="w-12 h-12 flex items-center justify-center rounded-full bg-primary text-white shadow-lg hover:bg-primary/90">
-            <div class="w-6 h-6 flex items-center justify-center">
-                <i class="ri-add-line ri-lg"></i>
-            </div>
+    <div class="relative">
+        <button id="quick-actions-btn" 
+                class="w-12 h-12 flex items-center justify-center rounded-full bg-primary text-white shadow-lg transition-colors focus:outline-none focus:ring-2 focus:ring-white-500" 
+                aria-label="Quick Actions" 
+                aria-expanded="false"
+                aria-controls="quick-actions-dropdown">
+            <i class="ri-add-line ri-lg"></i>
         </button>
-        <div class="dropdown-content bottom-14 right-0 mb-2 bg-white rounded-md shadow-lg border">
+        <div id="quick-actions-dropdown" 
+             class="hidden absolute bottom-14 right-0 mb-2 bg-white rounded-lg shadow-lg border w-48 transform transition-all duration-200 ease-in-out scale-95 opacity-0" 
+             role="menu">
             <div class="p-3 border-b">
-                <h3 class="text-sm font-semibold">Quick Actions</h3>
+                <h3 class="text-sm font-semibold text-gray-800">Quick Actions</h3>
             </div>
-            <a href="#" class="flex items-center px-4 py-2 text-sm hover:bg-gray-50">
-                <div class="w-5 h-5 flex items-center justify-center mr-3 text-primary">
-                    <i class="ri-file-add-line"></i>
-                </div>
-                <span>Add New Paper</span>
+            <a href="{% url 'upload_old_paper' %}" 
+               class="flex items-center px-4 py-2 text-sm hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" 
+               role="menuitem">
+                <i class="ri-file-add-line mr-3 text-blue-600"></i>
+                Add New Paper
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm hover:bg-gray-50">
-                <div class="w-5 h-5 flex items-center justify-center mr-3 text-primary">
-                    <i class="ri-folder-add-line"></i>
-                </div>
-                <span>Add New Project</span>
+            <a href="{% url 'upload_project' %}" 
+               class="flex items-center px-4 py-2 text-sm hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" 
+               role="menuitem">
+                <i class="ri-folder-add-line mr-3 text-blue-600"></i>
+                Add New Project
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm hover:bg-gray-50">
-                <div class="w-5 h-5 flex items-center justify-center mr-3 text-primary">
-                    <i class="ri-edit-line"></i>
-                </div>
-                <span>Create New Blog</span>
+            <a href="#" 
+               class="flex items-center px-4 py-2 text-sm hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" 
+               role="menuitem">
+                <i class="ri-edit-line mr-3 text-blue-600"></i>
+                Create New Blog
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm hover:bg-gray-50">
-                <div class="w-5 h-5 flex items-center justify-center mr-3 text-primary">
-                    <i class="ri-user-add-line"></i>
-                </div>
-                <span>Add New User</span>
+            <a href="3" 
+               class="flex items-center px-4 py-2 text-sm hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" 
+               role="menuitem">
+                <i class="ri-user-add-line mr-3 text-blue-600"></i>
+                Add New User
             </a>
-            <a href="#" class="flex items-center px-4 py-2 text-sm hover:bg-gray-50">
-                <div class="w-5 h-5 flex items-center justify-center mr-3 text-primary">
-                    <i class="ri-download-2-line"></i>
-                </div>
-                <span>Export Data</span>
+            <a href="#" 
+               class="flex items-center px-4 py-2 text-sm hover:bg-gray-50 focus:bg-gray-50 focus:outline-none" 
+               role="menuitem">
+                <i class="ri-download-2-line mr-3 text-blue-600"></i>
+                Export Data
             </a>
         </div>
     </div>
 </div>
 
+<div class="container mx-auto p-6">
+    <!-- Date and Refresh -->
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Overview</h2>
+        <div class="flex items-center space-x-2">
+            <span class="text-sm text-gray-500">{% now "F j, Y" %}</span>
+            <button class="p-2 rounded-full hover:bg-gray-100" onclick="location.reload()" title="Refresh">
+                <i class="ri-refresh-line text-lg"></i>
+            </button>
+        </div>
+    </div>
 
-<!-- Date and Refresh -->
-<div class="flex justify-between items-center mb-6">
-    <h2 class="text-lg font-semibold text-gray-800">Overview</h2>
-    <div class="flex items-center space-x-2">
-        <span class="text-sm text-gray-500">{% now "F j, Y" %}</span>
-        <button class="p-2 rounded-full hover:bg-gray-100" onclick="location.reload()">
-            <div class="w-5 h-5 flex items-center justify-center">
-                <i class="ri-refresh-line"></i>
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+        <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="w-12 h-12 flex items-center justify-center rounded-full bg-indigo-100 text-blue-600">
+                    <i class="ri-user-line ri-lg"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-2xl font-semibold text-gray-800">{{ total_users }}</h3>
+                    <p class="text-sm text-gray-500">Total Users</p>
+                </div>
             </div>
-        </button>
+            <div class="mt-2 text-xs text-green-600 flex items-center">
+                <i class="ri-arrow-up-line mr-1"></i>
+                <span>12% from last month</span>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                    <i class="ri-file-paper-2-line ri-lg"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-2xl font-semibold text-gray-800">{{ total_papers }}</h3>
+                    <p class="text-sm text-gray-500">Total Papers</p>
+                </div>
+            </div>
+            <div class="mt-2 text-xs text-green-600 flex items-center">
+                <i class="ri-arrow-up-line mr-1"></i>
+                <span>8% from last month</span>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="w-12 h-12 flex items-center justify-center rounded-full bg-green-100 text-green-600">
+                    <i class="ri-folder-zip-line ri-lg"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-2xl font-semibold text-gray-800">{{ total_projects }}</h3>
+                    <p class="text-sm text-gray-500">Total Projects</p>
+                </div>
+            </div>
+            <div class="mt-2 text-xs text-green-600 flex items-center">
+                <i class="ri-arrow-up-line mr-1"></i>
+                <span>15% from last month</span>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="w-12 h-12 flex items-center justify-center rounded-full bg-purple-100 text-purple-600">
+                    <i class="ri-article-line ri-lg"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-2xl font-semibold text-gray-800">{{ total_blogs }}</h3>
+                    <p class="text-sm text-gray-500">Total Blogs</p>
+                </div>
+            </div>
+            <div class="mt-2 text-xs text-green-600 flex items-center">
+                <i class="ri-arrow-up-line mr-1"></i>
+                <span>6% from last month</span>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
+            <div class="flex items-center">
+                <div class="w-12 h-12 flex items-center justify-center rounded-full bg-amber-100 text-amber-600">
+                    <i class="ri-download-line ri-lg"></i>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-2xl font-semibold text-gray-800">{{ total_downloads|default:"12.5K" }}</h3>
+                    <p class="text-sm text-gray-500">Total Downloads</p>
+                </div>
+            </div>
+            <div class="mt-2 text-xs text-green-600 flex items-center">
+                <i class="ri-arrow-up-line mr-1"></i>
+                <span>18% from last month</span>
+            </div>
+        </div>
+    </div>
 
-    </div>
-</div>
-
-<!-- Summary Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-    <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
-        <div class="flex items-center">
-            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-indigo-100 text-primary">
-                <i class="ri-user-line ri-lg"></i>
-            </div>
-            <div class="ml-4">
-                <h3 class="text-2xl font-semibold">{{ total_users }}</h3>
-                <p class="text-sm text-gray-500">Total Users</p>
-            </div>
-        </div>
-        <div class="mt-2 text-xs text-green-600 flex items-center">
-            <div class="w-3 h-3 flex items-center justify-center mr-1">
-                <i class="ri-arrow-up-line"></i>
-            </div>
-            <span>12% from last month</span>
-        </div>
-    </div>
-    <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
-        <div class="flex items-center">
-            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                <i class="ri-file-paper-2-line ri-lg"></i>
-            </div>
-            <div class="ml-4">
-                <h3 class="text-2xl font-semibold">{{ total_papers }}</h3>
-                <p class="text-sm text-gray-500">Total Papers</p>
-            </div>
-        </div>
-        <div class="mt-2 text-xs text-green-600 flex items-center">
-            <div class="w-3 h-3 flex items-center justify-center mr-1">
-                <i class="ri-arrow-up-line"></i>
-            </div>
-            <span>8% from last month</span>
-        </div>
-    </div>
-    <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
-        <div class="flex items-center">
-            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-green-100 text-green-600">
-                <i class="ri-folder-zip-line ri-lg"></i>
-            </div>
-            <div class="ml-4">
-                <h3 class="text-2xl font-semibold">{{ total_projects }}</h3>
-                <p class="text-sm text-gray-500">Total Projects</p>
-            </div>
-        </div>
-        <div class="mt-2 text-xs text-green-600 flex items-center">
-            <div class="w-3 h-3 flex items-center justify-center mr-1">
-                <i class="ri-arrow-up-line"></i>
-            </div>
-            <span>15% from last month</span>
-        </div>
-    </div>
-    <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
-        <div class="flex items-center">
-            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-purple-100 text-purple-600">
-                <i class="ri-article-line ri-lg"></i>
-            </div>
-            <div class="ml-4">
-                <h3 class="text-2xl font-semibold">{{ total_blogs }}</h3>
-                <p class="text-sm text-gray-500">Total Blogs</p>
-            </div>
-        </div>
-        <div class="mt-2 text-xs text-green-600 flex items-center">
-            <div class="w-3 h-3 flex items-center justify-center mr-1">
-                <i class="ri-arrow-up-line"></i>
-            </div>
-            <span>6% from last month</span>
-        </div>
-    </div>
-    <div class="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
-        <div class="flex items-center">
-            <div class="w-12 h-12 flex items-center justify-center rounded-full bg-amber-100 text-amber-600">
-                <i class="ri-download-line ri-lg"></i>
-            </div>
-            <div class="ml-4">
-                <h3 class="text-2xl font-semibold">12.5K</h3>
-                <p class="text-sm text-gray-500">Total Downloads</p>
-            </div>
-        </div>
-        <div class="mt-2 text-xs text-green-600 flex items-center">
-            <div class="w-3 h-3 flex items-center justify-center mr-1">
-                <i class="ri-arrow-up-line"></i>
-            </div>
-            <span>18% from last month</span>
-        </div>
-    </div>
-</div>
-
-<!-- Charts Section -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-    <div class="bg-white rounded-lg shadow p-4">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold">Monthly Uploads</h3>
-            <div class="relative dropdown">
-                <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500">
-                    <div class="w-5 h-5 flex items-center justify-center">
-                        <i class="ri-more-2-fill"></i>
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white rounded-lg shadow p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Monthly Uploads</h3>
+                <div class="relative">
+                    <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500" id="monthly-uploads-menu">
+                        <i class="ri-more-2-fill text-lg"></i>
+                    </button>
+                    <div class="hidden absolute right-0 mt-2 bg-white rounded-lg shadow-lg border w-48" id="monthly-uploads-dropdown">
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export as PNG</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export Data</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Full Report</a>
                     </div>
-                </button>
-                <div class="dropdown-content mt-2 right-0 bg-white rounded-md shadow-lg border">
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export as PNG</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export Data</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Full Report</a>
                 </div>
             </div>
+            <div id="monthlyUploadsChart" class="h-64 relative">
+                <div class="absolute inset-0 flex items-center justify-center text-gray-500" id="monthlyUploadsChart-loading">Loading...</div>
+            </div>
         </div>
-        <div id="monthlyUploadsChart" class="h-64"></div>
-    </div>
-    <div class="bg-white rounded-lg shadow p-4">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold">Content Distribution</h3>
-            <div class="relative dropdown">
-                <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500">
-                    <div class="w-5 h-5 flex items-center justify-center">
-                        <i class="ri-more-2-fill"></i>
+        <div class="bg-white rounded-lg shadow p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Content Distribution</h3>
+                <div class="relative">
+                    <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500" id="content-distribution-menu">
+                        <i class="ri-more-2-fill text-lg"></i>
+                    </button>
+                    <div class="hidden absolute right-0 mt-2 bg-white rounded-lg shadow-lg border w-48" id="content-distribution-dropdown">
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export as PNG</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export Data</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Full Report</a>
                     </div>
-                </button>
-                <div class="dropdown-content mt-2 right-0 bg-white rounded-md shadow-lg border">
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export as PNG</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export Data</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Full Report</a>
                 </div>
             </div>
+            <div id="contentDistributionChart" class="h-64 relative">
+                <div class="absolute inset-0 flex items-center justify-center text-gray-500" id="contentDistributionChart-loading">Loading...</div>
+            </div>
         </div>
-        <div id="contentDistributionChart" class="h-64"></div>
-    </div>
-    <div class="bg-white rounded-lg shadow p-4">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold">User Growth</h3>
-            <div class="relative dropdown">
-                <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500">
-                    <div class="w-5 h-5 flex items-center justify-center">
-                        <i class="ri-more-2-fill"></i>
+        <div class="bg-white rounded-lg shadow p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">User Growth</h3>
+                <div class="relative">
+                    <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500" id="user-growth-menu">
+                        <i class="ri-more-2-fill text-lg"></i>
+                    </button>
+                    <div class="hidden absolute right-0 mt-2 bg-white rounded-lg shadow-lg border w-48" id="user-growth-dropdown">
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export as PNG</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export Data</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Full Report</a>
                     </div>
-                </button>
-                <div class="dropdown-content mt-2 right-0 bg-white rounded-md shadow-lg border">
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export as PNG</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export Data</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Full Report</a>
                 </div>
             </div>
-        </div>
-        <div id="userGrowthChart" class="h-64"></div>
-    </div>
-</div>
-
-<!-- Recent Activity Section -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-    <!-- Latest Papers -->
-    <div class="bg-white rounded-lg shadow">
-        <div class="flex justify-between items-center p-4 border-b">
-            <h3 class="font-semibold">Latest Papers</h3>
-            <a href="#" class="text-sm text-primary hover:underline">View All</a>
-        </div>
-        <div class="table-container">
-            <table class="w-full">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Uploader</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 mr-3">
-                                    <i class="ri-file-paper-2-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">Advanced Machine Learning</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Emily Johnson</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 20, 2025</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 mr-3">
-                                    <i class="ri-file-paper-2-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">Quantum Computing Basics</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Michael Thompson</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 18, 2025</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 mr-3">
-                                    <i class="ri-file-paper-2-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">Blockchain Technology</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Sarah Williams</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 15, 2025</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 mr-3">
-                                    <i class="ri-file-paper-2-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">Neural Networks</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Robert Chen</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 12, 2025</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 mr-3">
-                                    <i class="ri-file-paper-2-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">Data Structures</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Jessica Martinez</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 10, 2025</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div id="userGrowthChart" class="h-64 relative">
+                <div class="absolute inset-0 flex items-center justify-center text-gray-500" id="userGrowthChart-loading">Loading...</div>
+            </div>
         </div>
     </div>
 
-    <!-- Latest Projects -->
-    <div class="bg-white rounded-lg shadow">
-        <div class="flex justify-between items-center p-4 border-b">
-            <h3 class="font-semibold">Latest Projects</h3>
-            <a href="#" class="text-sm text-primary hover:underline">View All</a>
+    <!-- Recent Activity Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <!-- Latest Papers -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-lg font-semibold text-gray-800">Latest Papers</h3>
+                <a href="{% url 'admin_papers' %}" class="text-sm text-blue-600 hover:underline">View All</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Title</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Uploader</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for paper in latest_papers %}
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 mr-3">
+                                        <i class="ri-file-paper-2-line"></i>
+                                    </div>
+                                    {{ paper.title|truncatechars:30 }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-700">{{ paper.uploaded_by.username }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-700">{{ paper.uploaded_at|date:"M d, Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center px-6 py-4 text-gray-500">No recent papers found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="table-container">
-            <table class="w-full">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Uploader</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-green-100 text-green-600 mr-3">
-                                    <i class="ri-folder-zip-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">Smart Home System</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Daniel Wilson</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 19, 2025</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-green-100 text-green-600 mr-3">
-                                    <i class="ri-folder-zip-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">AI Chatbot</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Olivia Parker</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 17, 2025</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-green-100 text-green-600 mr-3">
-                                    <i class="ri-folder-zip-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">E-commerce Platform</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">William Taylor</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 14, 2025</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-green-100 text-green-600 mr-3">
-                                    <i class="ri-folder-zip-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">Mobile App</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Sophia Anderson</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 11, 2025</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-green-100 text-green-600 mr-3">
-                                    <i class="ri-folder-zip-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">Data Visualization Tool</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Benjamin Harris</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 9, 2025</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 
-    <!-- Latest Blogs -->
-    <div class="bg-white rounded-lg shadow">
-        <div class="flex justify-between items-center p-4 border-b">
-            <h3 class="font-semibold">Latest Blogs</h3>
-            <a href="#" class="text-sm text-primary hover:underline">View All</a>
+        <!-- Latest Projects -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-lg font-semibold text-gray-800">Latest Projects</h3>
+                <a href="{% url 'admin_projects' %}" class="text-sm text-blue-600 hover:underline">View All</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Title</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Uploader</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for project in latest_projects %}
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 flex items-center justify-center rounded bg-green-100 text-green-600 mr-3">
+                                        <i class="ri-folder-zip-line"></i>
+                                    </div>
+                                    {{ project.title|truncatechars:30 }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-700">{{ project.uploaded_by.username }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-700">{{ project.uploaded_at|date:"M d, Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center px-6 py-4 text-gray-500">No recent projects found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="table-container">
-            <table class="w-full">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-purple-100 text-purple-600 mr-3">
-                                    <i class="ri-article-line"></i>
+
+        <!-- Latest Blogs -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-lg font-semibold text-gray-800">Latest Blogs</h3>
+                <a href="{% url 'admin_blogs' %}" class="text-sm text-blue-600 hover:underline">View All</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Title</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Author</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for blog in latest_blogs %}
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 text-sm text-gray-700">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 flex items-center justify-center rounded bg-purple-100 text-purple-600 mr-3">
+                                        <i class="ri-article-line"></i>
+                                    </div>
+                                    {{ blog.title|truncatechars:30 }}
                                 </div>
-                                <span class="text-sm font-medium">Future of AI in Education</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Alexander Reed</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 21, 2025</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-purple-100 text-purple-600 mr-3">
-                                    <i class="ri-article-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">Cybersecurity Best Practices</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Victoria Lewis</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 18, 2025</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-purple-100 text-purple-600 mr-3">
-                                    <i class="ri-article-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">Research Methodology</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Christopher Moore</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 16, 2025</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-purple-100 text-purple-600 mr-3">
-                                    <i class="ri-article-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">Cloud Computing Trends</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Natalie Clark</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 13, 2025</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-8 h-8 flex items-center justify-center rounded bg-purple-100 text-purple-600 mr-3">
-                                    <i class="ri-article-line"></i>
-                                </div>
-                                <span class="text-sm font-medium">Academic Writing Tips</span>
-                            </div>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm">Jonathan Miller</span>
-                        </td>
-                        <td class="whitespace-nowrap">
-                            <span class="text-sm text-gray-500">Jun 10, 2025</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-700">{{ blog.author.username }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-700">{{ blog.created_at|date:"M d, Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center px-6 py-4 text-gray-500">No recent blogs found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
-
-<!-- <script id="chartsInit">
-    document.addEventListener('DOMContentLoaded', function () {
-        // Monthly Uploads Chart
-        const monthlyUploadsChart = echarts.init(document.getElementById('monthlyUploadsChart'));
-        const monthlyUploadsOption = {
-            animation: false,
-            tooltip: {
-                trigger: 'axis',
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                borderColor: '#e5e7eb',
-                borderWidth: 1,
-                textStyle: {
-                    color: '#1f2937'
-                }
-            },
-            legend: {
-                data: ['Papers', 'Projects', 'Blogs'],
-                bottom: 0
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '15%',
-                top: '3%',
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                boundaryGap: true,
-                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                axisLine: {
-                    lineStyle: {
-                        color: '#e5e7eb'
-                    }
-                },
-                axisLabel: {
-                    color: '#1f2937'
-                }
-            },
-            yAxis: {
-                type: 'value',
-                axisLine: {
-                    show: false
-                },
-                axisTick: {
-                    show: false
-                },
-                splitLine: {
-                    lineStyle: {
-                        color: '#f3f4f6'
-                    }
-                },
-                axisLabel: {
-                    color: '#1f2937'
-                }
-            },
-            series: [
-                {
-                    name: 'Papers',
-                    type: 'bar',
-                    barWidth: '20%',
-                    itemStyle: {
-                        color: 'rgba(87, 181, 231, 1)',
-                        borderRadius: [4, 4, 0, 0]
-                    },
-                    emphasis: {
-                        itemStyle: {
-                            color: 'rgba(87, 181, 231, 0.8)'
-                        }
-                    },
-                    data: [120, 132, 101, 134, 90, 180]
-                },
-                {
-                    name: 'Projects',
-                    type: 'bar',
-                    barWidth: '20%',
-                    itemStyle: {
-                        color: 'rgba(141, 211, 199, 1)',
-                        borderRadius: [4, 4, 0, 0]
-                    },
-                    emphasis: {
-                        itemStyle: {
-                            color: 'rgba(141, 211, 199, 0.8)'
-                        }
-                    },
-                    data: [60, 72, 71, 74, 60, 120]
-                },
-                {
-                    name: 'Blogs',
-                    type: 'bar',
-                    barWidth: '20%',
-                    itemStyle: {
-                        color: 'rgba(251, 191, 114, 1)',
-                        borderRadius: [4, 4, 0, 0]
-                    },
-                    emphasis: {
-                        itemStyle: {
-                            color: 'rgba(251, 191, 114, 0.8)'
-                        }
-                    },
-                    data: [40, 32, 41, 54, 30, 60]
-                }
-            ]
-        };
-        monthlyUploadsChart.setOption(monthlyUploadsOption);
-
-        // Content Distribution Chart
-        const contentDistributionChart = echarts.init(document.getElementById('contentDistributionChart'));
-        const contentDistributionOption = {
-            animation: false,
-            tooltip: {
-                trigger: 'item',
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                borderColor: '#e5e7eb',
-                borderWidth: 1,
-                textStyle: {
-                    color: '#1f2937'
-                }
-            },
-            legend: {
-                orient: 'horizontal',
-                bottom: 0,
-                left: 'center',
-                textStyle: {
-                    color: '#1f2937'
-                }
-            },
-            series: [
-                {
-                    name: 'Content Distribution',
-                    type: 'pie',
-                    radius: ['40%', '70%'],
-                    center: ['50%', '45%'],
-                    avoidLabelOverlap: false,
-                    itemStyle: {
-                        borderRadius: 8,
-                        borderColor: '#fff',
-                        borderWidth: 2
-                    },
-                    label: {
-                        show: false
-                    },
-                    emphasis: {
-                        label: {
-                            show: true,
-                            fontSize: '14',
-                            fontWeight: 'bold'
-                        }
-                    },
-                    labelLine: {
-                        show: false
-                    },
-                    data: [
-                        { value: 876, name: 'Papers', itemStyle: { color: 'rgba(87, 181, 231, 1)' } },
-                        { value: 542, name: 'Projects', itemStyle: { color: 'rgba(141, 211, 199, 1)' } },
-                        { value: 328, name: 'Blogs', itemStyle: { color: 'rgba(251, 191, 114, 1)' } }
-                    ]
-                }
-            ]
-        };
-        contentDistributionChart.setOption(contentDistributionOption);
-        // User Growth Chart
-        const userGrowthChart = echarts.init(document.getElementById('userGrowthChart'));
-        const userGrowthOption = {
-            animation: false,
-            tooltip: {
-                trigger: 'axis',
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                borderColor: '#e5e7eb',
-                borderWidth: 1,
-                textStyle: {
-                    color: '#1f2937'
-                }
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '10%',
-                top: '3%',
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                axisLine: {
-                    lineStyle: {
-                        color: '#e5e7eb'
-                    }
-                },
-                axisLabel: {
-                    color: '#1f2937'
-                }
-            },
-            yAxis: {
-                type: 'value',
-                axisLine: {
-                    show: false
-                },
-                axisTick: {
-                    show: false
-                },
-                splitLine: {
-                    lineStyle: {
-                        color: '#f3f4f6'
-                    }
-                },
-                axisLabel: {
-                    color: '#1f2937'
-                }
-            },
-            series: [
-                {
-                    name: 'User Growth',
-                    type: 'line',
-                    smooth: true,
-                    symbol: 'none',
-                    lineStyle: {
-                        width: 3,
-                        color: 'rgba(252, 141, 98, 1)'
-                    },
-                    areaStyle: {
-                        color: {
-                            type: 'linear',
-                            x: 0,
-                            y: 0,
-                            x2: 0,
-                            y2: 1,
-                            colorStops: [{
-                                offset: 0, color: 'rgba(252, 141, 98, 0.2)'
-                            }, {
-                                offset: 1, color: 'rgba(252, 141, 98, 0.01)'
-                            }]
-                        }
-                    },
-                    emphasis: {
-                        lineStyle: {
-                            width: 4
-                        }
-                    },
-                    data: [150, 230, 320, 480, 750, 1254]
-                }
-            ]
-        };
-        userGrowthChart.setOption(userGrowthOption);
-
-        // Handle window resize
-        window.addEventListener('resize', function () {
-            monthlyUploadsChart.resize();
-            contentDistributionChart.resize();
-            userGrowthChart.resize();
-        });
-    });
-</script> -->
+<!-- ECharts CDN -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <script id="chartsInit">
     const months = JSON.parse('{{ months|safe }}');
     const paperData = JSON.parse('{{ paper_data|safe }}');
@@ -809,65 +347,209 @@
     const contentDistribution = JSON.parse('{{ distribution_data|safe }}');
 
     document.addEventListener('DOMContentLoaded', function () {
-        // monthly charts
+        // Monthly Uploads Chart
         const monthlyUploadsChart = echarts.init(document.getElementById('monthlyUploadsChart'));
         monthlyUploadsChart.setOption({
-            tooltip: { trigger: 'axis' },
+            animation: false,
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                borderColor: '#e5e7eb',
+                borderWidth: 1,
+                textStyle: { color: '#1f2937' }
+            },
             legend: { data: ['Papers', 'Projects', 'Blogs'], bottom: 0 },
-            xAxis: { type: 'category', data: months },
-            yAxis: { type: 'value' },
+            grid: { left: '3%', right: '4%', bottom: '15%', top: '3%', containLabel: true },
+            xAxis: {
+                type: 'category',
+                data: months,
+                axisLine: { lineStyle: { color: '#e5e7eb' } },
+                axisLabel: { color: '#1f2937' }
+            },
+            yAxis: {
+                type: 'value',
+                axisLine: { show: false },
+                axisTick: { show: false },
+                splitLine: { lineStyle: { color: '#f3f4f6' } },
+                axisLabel: { color: '#1f2937' }
+            },
             series: [
-                { name: 'Papers', type: 'bar', data: paperData },
-                { name: 'Projects', type: 'bar', data: projectData },
-                { name: 'Blogs', type: 'bar', data: blogData }
+                {
+                    name: 'Papers',
+                    type: 'bar',
+                    barWidth: '20%',
+                    itemStyle: { color: 'rgba(87, 181, 231, 1)', borderRadius: [4, 4, 0, 0] },
+                    emphasis: { itemStyle: { color: 'rgba(87, 181, 231, 0.8)' } },
+                    data: paperData
+                },
+                {
+                    name: 'Projects',
+                    type: 'bar',
+                    barWidth: '20%',
+                    itemStyle: { color: 'rgba(141, 211, 199, 1)', borderRadius: [4, 4, 0, 0] },
+                    emphasis: { itemStyle: { color: 'rgba(141, 211, 199, 0.8)' } },
+                    data: projectData
+                },
+                {
+                    name: 'Blogs',
+                    type: 'bar',
+                    barWidth: '20%',
+                    itemStyle: { color: 'rgba(251, 191, 114, 1)', borderRadius: [4, 4, 0, 0] },
+                    emphasis: { itemStyle: { color: 'rgba(251, 191, 114, 0.8)' } },
+                    data: blogData
+                }
             ]
         });
 
-        // user growth and content distribution charts
-
-        const userGrowthChart = echarts.init(document.getElementById('userGrowthChart'));
-        userGrowthChart.setOption({
-            tooltip: { trigger: 'axis' },
-            xAxis: { type: 'category', data: months },
-            yAxis: { type: 'value' },
-            series: [{
-                name: 'User Growth',
-                type: 'line',
-                data: userData,
-                areaStyle: {}
-            }]
-        });
-
-        // content distribution chart
-
+        // Content Distribution Chart
         const contentDistributionChart = echarts.init(document.getElementById('contentDistributionChart'));
         contentDistributionChart.setOption({
-            tooltip: { trigger: 'item' },
-            legend: { bottom: 0, left: 'center' },
+            animation: false,
+            tooltip: {
+                trigger: 'item',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                borderColor: '#e5e7eb',
+                borderWidth: 1,
+                textStyle: { color: '#1f2937' }
+            },
+            legend: { bottom: 0, left: 'center', textStyle: { color: '#1f2937' } },
             series: [{
                 name: 'Content Distribution',
                 type: 'pie',
                 radius: ['40%', '70%'],
                 center: ['50%', '45%'],
+                avoidLabelOverlap: false,
+                itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 2 },
+                label: { show: false },
+                emphasis: { label: { show: true, fontSize: '14', fontWeight: 'bold' } },
+                labelLine: { show: false },
                 data: contentDistribution.map(item => ({
                     ...item,
                     itemStyle: {
                         color: item.name === 'Papers' ? 'rgba(87, 181, 231, 1)' :
-                            item.name === 'Projects' ? 'rgba(141, 211, 199, 1)' :
-                                'rgba(251, 191, 114, 1)'
+                               item.name === 'Projects' ? 'rgba(141, 211, 199, 1)' :
+                               'rgba(251, 191, 114, 1)'
                     }
                 }))
             }]
         });
 
-        // Handle window resize
+        // User Growth Chart
+        const userGrowthChart = echarts.init(document.getElementById('userGrowthChart'));
+        userGrowthChart.setOption({
+            animation: false,
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                borderColor: '#e5e7eb',
+                borderWidth: 1,
+                textStyle: { color: '#1f2937' }
+            },
+            grid: { left: '3%', right: '4%', bottom: '10%', top: '3%', containLabel: true },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: months,
+                axisLine: { lineStyle: { color: '#e5e7eb' } },
+                axisLabel: { color: '#1f2937' }
+            },
+            yAxis: {
+                type: 'value',
+                axisLine: { show: false },
+                axisTick: { show: false },
+                splitLine: { lineStyle: { color: '#f3f4f6' } },
+                axisLabel: { color: '#1f2937' }
+            },
+            series: [{
+                name: 'User Growth',
+                type: 'line',
+                smooth: true,
+                symbol: 'none',
+                lineStyle: { width: 3, color: 'rgba(252, 141, 98, 1)' },
+                areaStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [
+                            { offset: 0, color: 'rgba(252, 141, 98, 0.2)' },
+                            { offset: 1, color: 'rgba(252, 141, 98, 0.01)' }
+                        ]
+                    }
+                },
+                emphasis: { lineStyle: { width: 4 } },
+                data: userData
+            }]
+        });
 
+        // Hide loading indicators
+        document.getElementById('monthlyUploadsChart-loading').style.display = 'none';
+        document.getElementById('contentDistributionChart-loading').style.display = 'none';
+        document.getElementById('userGrowthChart-loading').style.display = 'none';
+
+        // Handle window resize
         window.addEventListener('resize', () => {
             monthlyUploadsChart.resize();
-            userGrowthChart.resize();
             contentDistributionChart.resize();
+            userGrowthChart.resize();
         });
+
+       
     });
+</script>
+
+<script>
+    // Quick Actions Dropdown
+        const quickActionsBtn = document.getElementById('quick-actions-btn');
+        const quickActionsDropdown = document.getElementById('quick-actions-dropdown');
+        quickActionsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = !quickActionsDropdown.classList.contains('hidden');
+            quickActionsDropdown.classList.toggle('hidden', isOpen);
+            quickActionsDropdown.classList.toggle('scale-95', isOpen);
+            quickActionsDropdown.classList.toggle('opacity-0', isOpen);
+            quickActionsDropdown.classList.toggle('scale-100', !isOpen);
+            quickActionsDropdown.classList.toggle('opacity-100', !isOpen);
+            quickActionsBtn.setAttribute('aria-expanded', !isOpen);
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!quickActionsBtn.contains(e.target) && !quickActionsDropdown.contains(e.target)) {
+                quickActionsDropdown.classList.add('hidden', 'scale-95', 'opacity-0');
+                quickActionsDropdown.classList.remove('scale-100', 'opacity-100');
+                quickActionsBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Handle keyboard accessibility for Quick Actions
+        quickActionsBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                quickActionsBtn.click();
+            }
+        });
+
+         // Chart Dropdowns
+        const menus = [
+            { btn: 'monthly-uploads-menu', dropdown: 'monthly-uploads-dropdown' },
+            { btn: 'content-distribution-menu', dropdown: 'content-distribution-dropdown' },
+            { btn: 'user-growth-menu', dropdown: 'user-growth-dropdown' }
+        ];
+        menus.forEach(menu => {
+            const btn = document.getElementById(menu.btn);
+            const dropdown = document.getElementById(menu.dropdown);
+            btn.addEventListener('click', () => {
+                dropdown.classList.toggle('hidden');
+            });
+            document.addEventListener('click', (e) => {
+                if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+        });
 </script>
 
 {% endblock %}

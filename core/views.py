@@ -14,24 +14,32 @@ from django.db.models import Q
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
 from django.urls import reverse_lazy
+from django.db import OperationalError
 
 def home(request):
-    # Prepare dynamic data
-    universities = OldPaper.objects.values_list('university', flat=True).distinct()
-    courses = OldPaper.objects.values_list('course', flat=True).distinct()
+    try:
+        from django.contrib.auth.models import User
+        # Prepare dynamic data
+        universities = OldPaper.objects.values_list('university', flat=True).distinct()
+        courses = OldPaper.objects.values_list('course', flat=True).distinct()
 
-    # Context for the template
-    context = {
-        'total_papers': OldPaper.objects.count(),
-        'total_projects': Project.objects.count(),
-        'total_blogs': Blog.objects.count(),
-        'total_users': User.objects.count(),
-        'papers': OldPaper.objects.order_by('-uploaded_at')[:9],
-        'universities': universities,
-        'courses': courses,
-    }
-    return render(request, 'core/home.html', context)
-
+        # Context for the template
+        context = {
+            'total_papers': OldPaper.objects.count(),
+            'total_projects': Project.objects.count(),
+            'total_blogs': Blog.objects.count(),
+            'total_users': User.objects.count(),
+            'papers': OldPaper.objects.order_by('-uploaded_at')[:9],
+            'universities': universities,
+            'courses': courses,
+        }
+        return render(request, 'core/home.html', context)
+    except OperationalError as e:
+        error = str(e)
+        return render(request, 'auth/error_page.html', {
+            'error': error,
+            'data': None,
+        })
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -203,51 +211,46 @@ def user_uploads_view(request):
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def admin_dashboard(request):
+    # Summary statistics
     total_users = User.objects.count()
     total_papers = OldPaper.objects.count()
     total_projects = Project.objects.count()
     total_blogs = Blog.objects.count()
-    recent_papers = OldPaper.objects.order_by('-uploaded_at')[:5]
-    recent_projects = Project.objects.order_by('-uploaded_at')[:5]
-    recent_blogs = Blog.objects.order_by('-created_at')[:5]
+    total_downloads = 12500  # Replace with actual logic if available
+
+    # Latest items (e.g., last 5 entries)
+    latest_papers = OldPaper.objects.order_by('-uploaded_at')[:5]
+    latest_projects = Project.objects.order_by('-uploaded_at')[:5]
+    latest_blogs = Blog.objects.order_by('-created_at')[:5]
+
+    # Chart data
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+    paper_data = [OldPaper.objects.filter(uploaded_at__month=i+1).count() for i in range(1, 7)]
+    project_data = [Project.objects.filter(uploaded_at__month=i+1).count() for i in range(1, 7)]
+    blog_data = [Blog.objects.filter(created_at__month=i+1).count() for i in range(1, 7)]
+    user_data = [User.objects.filter(date_joined__month=i+1).count() for i in range(1, 7)]
+    distribution_data = [
+        {'value': total_papers, 'name': 'Papers'},
+        {'value': total_projects, 'name': 'Projects'},
+        {'value': total_blogs, 'name': 'Blogs'}
+    ]
 
     context = {
         'total_users': total_users,
         'total_papers': total_papers,
         'total_projects': total_projects,
         'total_blogs': total_blogs,
-        'recent_papers': recent_papers,
-        'recent_projects': recent_projects,
-        'recent_blogs': recent_blogs,
-    }
-
-    # Chart data
-    def format_data(queryset):
-        return {entry['month'].strftime('%b'): entry['total'] for entry in queryset}
-
-    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
-
-    def get_values(data_map):
-        return [data_map.get(month, 0) for month in months]
-
-    papers_by_month = OldPaper.objects.annotate(month=TruncMonth('uploaded_at')).values('month').annotate(total=Count('id')).order_by('month')
-    projects_by_month = Project.objects.annotate(month=TruncMonth('uploaded_at')).values('month').annotate(total=Count('id')).order_by('month')
-    blogs_by_month = Blog.objects.annotate(month=TruncMonth('created_at')).values('month').annotate(total=Count('id')).order_by('month')
-    user_growth = User.objects.annotate(month=TruncMonth('date_joined')).values('month').annotate(total=Count('id')).order_by('month')
-
-    context.update({
+        'total_downloads': total_downloads,
+        'latest_papers': latest_papers,
+        'latest_projects': latest_projects,
+        'latest_blogs': latest_blogs,
         'months': json.dumps(months),
-        'paper_data': json.dumps(get_values(format_data(papers_by_month))),
-        'project_data': json.dumps(get_values(format_data(projects_by_month))),
-        'blog_data': json.dumps(get_values(format_data(blogs_by_month))),
-        'user_data': json.dumps(get_values(format_data(user_growth))),
-        'distribution_data': json.dumps([
-            {'value': total_papers, 'name': 'Papers'},
-            {'value': total_projects, 'name': 'Projects'},
-            {'value': total_blogs, 'name': 'Blogs'},
-        ])
-    })
-
+        'paper_data': json.dumps(paper_data),
+        'project_data': json.dumps(project_data),
+        'blog_data': json.dumps(blog_data),
+        'user_data': json.dumps(user_data),
+        'distribution_data': json.dumps(distribution_data),
+    }
     return render(request, 'admin/dashboard.html', context)
 
 @login_required
@@ -432,3 +435,36 @@ def activate_user(request, user_id):
     else:
         messages.info(request, f"{user.username} is already active.")
     return redirect('admin_users')  # Redirect to your user management page
+
+# error page view
+
+def some_view(request):
+    error = None
+    data = None
+    try:
+        # Some DB operation
+        from django.contrib.auth.models import User
+        data = User.objects.all()  # Example DB call
+    except OperationalError as e:
+        error = str(e)
+
+    return render(request, 'auth/error_page.html', {
+        'error': error,
+        'data': data,
+    })
+
+# admin side paper upload
+def upload_old_paper(request):
+    if request.method == 'POST':
+        form = OldPaperForm(request.POST, request.FILES)
+        if form.is_valid():
+            paper = form.save(commit=False)
+            paper.uploaded_by = request.user
+            paper.save()
+            messages.success(request, 'Paper uploaded successfully!')
+            return redirect('admin_papers')
+    else:
+        form = OldPaperForm()
+
+    return render(request, 'admin/papers_upload.html', {'form': form})
+
