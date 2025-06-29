@@ -20,18 +20,16 @@ def home(request):
     try:
         from django.contrib.auth.models import User
         # Prepare dynamic data
-        universities = OldPaper.objects.values_list('university', flat=True).distinct()
-        courses = OldPaper.objects.values_list('course', flat=True).distinct()
-
-        # Context for the template
         context = {
-            'total_papers': OldPaper.objects.count(),
-            'total_projects': Project.objects.count(),
-            'total_blogs': Blog.objects.count(),
-            'total_users': User.objects.count(),
-            'papers': OldPaper.objects.order_by('-uploaded_at')[:9],
-            'universities': universities,
-            'courses': courses,
+        'papers': OldPaper.objects.all()[:6],
+        'projects': Project.objects.all()[:4],
+        'blogs': Blog.objects.all()[:4],
+        'universities': OldPaper.objects.values_list('university', flat=True).distinct(),
+        'courses': OldPaper.objects.values_list('course', flat=True).distinct(),
+        'total_papers': OldPaper.objects.count(),
+        'total_users': User.objects.count(),
+        'total_projects': Project.objects.count(),
+        'total_contributions': OldPaper.objects.count() + Project.objects.count(),
         }
         return render(request, 'core/home.html', context)
     except OperationalError as e:
@@ -40,6 +38,7 @@ def home(request):
             'error': error,
             'data': None,
         })
+
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)

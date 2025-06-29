@@ -2,15 +2,13 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-
-
 <main>
     <!-- Welcome Message -->
-    {% if not messages and user.is_authenticated %}
+    {% if user.is_authenticated %}
     <div class="fixed top-4 right-4 z-50">
-        <div class="flex items-start max-w-xs w-full p-4 bg-white border-l-4 border-indigo-500 rounded-lg shadow-md">
+        <div class="flex items-start max-w-xs w-full p-4 bg-white border-l-4 border-indigo-500 rounded-lg shadow-md transition-opacity duration-500" id="welcome-message">
             <div class="mt-0.5 mr-3">
-                <i class="ri-user-smile-line text-indigo-500 text-xl"></i>
+                <i class="ri-user-smile-line text-indigo-500 text-xl" aria-hidden="true"></i>
             </div>
             <div class="text-sm text-gray-800">
                 Welcome back, {{ user.first_name|default:user.username }}!
@@ -89,7 +87,7 @@
                             </div>
                         </div>
                     </div>
-                    <img src="https://readdy.ai/api/search-image?query=Modern%2520educational%2520platform%2520interface%2520showing%2520a%2520collection%2520of%2520floating%2520academic%2520resources%252C%2520papers%252C%2520and%2520digital%2520content%2520arranged%2520in%2520an%2520artistic%2520composition.%2520The%2520design%2520should%2520be%2520clean%2520and%2520minimalist%2520with%2520soft%2520blue%2520and%2520teal%2520accents%252C%2520conveying%2520a%2520sense%2520of%2520organization%2520and%2520accessibility.%2520The%2520background%2520should%2520be%2520light%2520and%2520airy%2520with%2520subtle%2520geometric%2520patterns.&width=1000&height=400&seq=hero123&orientation=landscape"
+                    <img src="/static/img/banner-2.jpg"
                         alt="Academic resources visualization" class="w-full max-w-4xl h-auto rounded-2xl shadow-xl">
                 </div>
             </div>
@@ -184,7 +182,7 @@
                             </div>
                             {{ paper.views|default:"1" }} views
                         </div> -->
-                        <a href="{{ paper.file.url }}" download
+                        <a href="{{ paper.file.url }}" target="_blank"
                             class="text-primary hover:text-primary/80 transition-colors">
                             <div class="w-5 h-5 flex items-center justify-center">
                                 <i class="ri-download-line"></i>
@@ -208,352 +206,182 @@
 
     <!--New Projects Showcase -->
     <section class="py-24 relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5"></div>
+        <!-- <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-teal-500/5"></div> -->
         <div class="container mx-auto px-4 relative">
             <div class="text-center mb-16">
-                <span
-                    class="inline-block px-4 py-1.5 bg-secondary/10 text-secondary rounded-full text-sm font-medium mb-4">Featured
-                    Projects</span>
-                <h2
-                    class="text-4xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    Student Projects</h2>
-                <p class="text-lg text-gray-600 serif max-w-2xl mx-auto leading-relaxed">
-                    Discover groundbreaking projects and innovative solutions created by talented students from leading
-                    universities worldwide.
+                <span class="inline-block px-4 py-1.5 bg-teal-100 text-teal-600 rounded-full text-sm font-medium mb-4">
+                    Featured Projects
+                </span>
+                <h2 class="text-4xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-teal-600 bg-clip-text text-transparent">
+                    Student Projects
+                </h2>
+                <p class="text-lg text-gray-600 font-serif max-w-2xl mx-auto leading-relaxed">
+                    Discover groundbreaking projects and innovative solutions created by talented students from leading universities.
                 </p>
             </div>
-            <div class="mb-12 flex justify-center">
-                <div class="inline-flex bg-white/80 backdrop-blur-sm p-2 rounded-full shadow-lg">
-                    <button
-                        class="px-6 py-2.5 bg-gradient-to-r from-primary to-secondary text-white rounded-full text-sm font-medium whitespace-nowrap shadow-sm">All
-                        Projects</button>
-                    <button
-                        class="px-6 py-2.5 text-gray-700 hover:bg-gray-50 rounded-full text-sm font-medium whitespace-nowrap transition-colors">AI
-                        & ML</button>
-                    <button
-                        class="px-6 py-2.5 text-gray-700 hover:bg-gray-50 rounded-full text-sm font-medium whitespace-nowrap transition-colors">Web
-                        & Mobile</button>
-                    <button
-                        class="px-6 py-2.5 text-gray-700 hover:bg-gray-50 rounded-full text-sm font-medium whitespace-nowrap transition-colors">Research</button>
-                    <button
-                        class="px-6 py-2.5 text-gray-700 hover:bg-gray-50 rounded-full text-sm font-medium whitespace-nowrap transition-colors">Design</button>
+            <!-- <div class="mb-12 flex justify-center">
+                <div class="inline-flex bg-white/80 p-2 rounded-full shadow-lg">
+                    <button data-filter="all"
+                        class="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-teal-600 text-white rounded-full text-sm font-medium">
+                        All Projects
+                    </button>
+                    <button data-filter="ai-ml"
+                        class="px-6 py-2.5 text-gray-700 hover:bg-gray-50 rounded-full text-sm font-medium">
+                        AI & ML
+                    </button>
+                    <button data-filter="web-mobile"
+                        class="px-6 py-2.5 text-gray-700 hover:bg-gray-50 rounded-full text-sm font-medium">
+                        Web & Mobile
+                    </button>
+                    <button data-filter="research"
+                        class="px-6 py-2.5 text-gray-700 hover:bg-gray-50 rounded-full text-sm font-medium">
+                        Research
+                    </button>
+                    <button data-filter="design"
+                        class="px-6 py-2.5 text-gray-700 hover:bg-gray-50 rounded-full text-sm font-medium">
+                        Design
+                    </button>
                 </div>
-            </div>
-            <div class="masonry-grid">
-                <!-- Project Card 1 -->
-                <div class="masonry-item bg-white rounded-lg shadow-sm overflow-hidden card-hover">
-                    <img src="https://readdy.ai/api/search-image?query=Modern%2520computer%2520vision%2520system%2520interface%2520with%2520object%2520detection%2520highlights%2520and%2520bounding%2520boxes.%2520The%2520image%2520should%2520show%2520a%2520clean%252C%2520professional%2520user%2520interface%2520with%2520detected%2520objects%2520in%2520an%2520urban%2520scene.%2520The%2520UI%2520should%2520have%2520a%2520modern%2520aesthetic%2520with%2520blue%2520and%2520teal%2520accent%2520colors%2520on%2520a%2520dark%2520background.%2520The%2520interface%2520should%2520look%2520realistic%2520and%2520professional.&width=400&height=300&seq=project1&orientation=landscape"
-                        alt="Computer Vision Project" class="w-full h-auto object-cover object-top">
+            </div> -->
+        {% if projects %}
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
+            {% for project in projects %}
+            <div class="masonry-item bg-white rounded-lg shadow-sm overflow-hidden card-hover">
+                {% if project.image %}
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-auto object-cover object-top">
+                {% else %}
+                 <img src="/static/img/blog-default-img.png" alt="{{ project.title }}" class="w-full h-auto object-cover object-top">
+                {% endif %}
                     <div class="p-6">
                         <div class="flex flex-wrap gap-2 mb-3">
-                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Computer
-                                Vision</span>
-                            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Deep
-                                Learning</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{{ project.language }}</span>
+                            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Deep Learning</span>
                         </div>
-                        <h3 class="text-xl font-semibold mb-2">Real-time Object Detection System</h3>
+                        <h3 class="text-xl font-semibold mb-2">{{ project.title }}</h3>
                         <p class="text-gray-600 mb-4 text-sm">
-                            A computer vision system that can detect and track objects in real-time using YOLOv5
-                            architecture.
+                            {{ project.description }}
                         </p>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <div class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center">
-                                    <i class="ri-user-line"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium">Alexander Mitchell</p>
-                                    <p class="text-xs text-gray-500">Stanford University</p>
-                                </div>
+                            <div class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center">
+                                <i class="ri-user-line"></i>
                             </div>
+                            <div>
+                                <p class="text-sm font-medium">{{ project.uploaded_by }}</p>
+                                <p class="text-xs text-gray-500">{{ project.uploaded_at|date:"F d, Y" }}</p>
+                            </div>
+                        </div>
+                        <!-- download button  -->
                             <button class="text-primary hover:text-primary/80 transition-colors">
-                                <div class="w-5 h-5 flex items-center justify-center">
-                                    <i class="ri-arrow-right-line"></i>
-                                </div>
+                                <a href="{{ project.zip_file.url }}" class="bg-indigo-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-xs sm:text-sm hover:bg-indigo-700 transition duration-200 flex items-center shrink-0" download>
+                                    Download
+                                </a>
                             </button>
                         </div>
-                    </div>
                 </div>
-                <!-- Project Card 2 -->
-                <div class="masonry-item bg-white rounded-lg shadow-sm overflow-hidden card-hover">
-                    <img src="https://readdy.ai/api/search-image?query=Modern%2520blockchain%2520visualization%2520showing%2520a%2520decentralized%2520finance%2520system%2520with%2520connected%2520nodes%2520and%2520transactions.%2520The%2520image%2520should%2520have%2520a%2520futuristic%2520feel%2520with%2520blue%2520and%2520teal%2520glowing%2520connections%2520between%2520nodes.%2520The%2520visualization%2520should%2520look%2520professional%2520and%2520technically%2520sophisticated%252C%2520suitable%2520for%2520a%2520financial%2520technology%2520project.&width=400&height=250&seq=project3&orientation=landscape"
-                        alt="Blockchain Project" class="w-full h-auto object-cover object-top">
-                    <div class="p-6">
-                        <div class="flex flex-wrap gap-2 mb-3">
-                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Blockchain</span>
-                            <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">FinTech</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">Decentralized Finance Exchange Platform</h3>
-                        <p class="text-gray-600 mb-4 text-sm">
-                            A secure and efficient decentralized exchange platform built on Ethereum blockchain.
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center">
-                                    <i class="ri-user-line"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium">Ethan Williams</p>
-                                    <p class="text-xs text-gray-500">ETH Zurich</p>
-                                </div>
-                            </div>
-                            <button class="text-primary hover:text-primary/80 transition-colors">
-                                <div class="w-5 h-5 flex items-center justify-center">
-                                    <i class="ri-arrow-right-line"></i>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Project Card 3 -->
-                <div class="masonry-item bg-white rounded-lg shadow-sm overflow-hidden card-hover">
-                    <img src="https://readdy.ai/api/search-image?query=Sustainable%2520architecture%2520design%2520showing%2520a%2520modern%2520eco-friendly%2520building%2520with%2520green%2520roof%252C%2520solar%2520panels%252C%2520and%2520natural%2520integration%2520with%2520surrounding%2520environment.%2520The%2520building%2520should%2520have%2520a%2520contemporary%2520design%2520with%2520large%2520windows%2520and%2520sustainable%2520materials.%2520The%2520visualization%2520should%2520be%2520professional%2520and%2520architectural%2520in%2520style%252C%2520showing%2520both%2520the%2520exterior%2520and%2520some%2520indication%2520of%2520the%2520internal%2520systems.&width=400&height=300&seq=project4&orientation=landscape"
-                        alt="Sustainable Architecture Project" class="w-full h-auto object-cover object-top">
-                    <div class="p-6">
-                        <div class="flex flex-wrap gap-2 mb-3">
-                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Architecture</span>
-                            <span
-                                class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">Sustainability</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">Net-Zero Energy Campus Building Design</h3>
-                        <p class="text-gray-600 mb-4 text-sm">
-                            A comprehensive design for a sustainable university building that produces as much energy as
-                            it consumes.
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center">
-                                    <i class="ri-user-line"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium">Olivia Chen</p>
-                                    <p class="text-xs text-gray-500">Massachusetts Institute of Technology</p>
-                                </div>
-                            </div>
-                            <button class="text-primary hover:text-primary/80 transition-colors">
-                                <div class="w-5 h-5 flex items-center justify-center">
-                                    <i class="ri-arrow-right-line"></i>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Project Card 4 -->
-                <div class="masonry-item bg-white rounded-lg shadow-sm overflow-hidden card-hover">
-                    <img src="https://readdy.ai/api/search-image?query=Natural%2520language%2520processing%2520interface%2520showing%2520sentiment%2520analysis%2520and%2520text%2520classification%2520with%2520visualizations.%2520The%2520interface%2520should%2520display%2520text%2520being%2520processed%2520with%2520highlighted%2520keywords%252C%2520sentiment%2520scores%252C%2520and%2520classification%2520results.%2520The%2520design%2520should%2520be%2520clean%2520and%2520modern%2520with%2520data%2520visualizations%2520that%2520show%2520analysis%2520results.%2520The%2520color%2520scheme%2520should%2520use%2520blue%2520and%2520teal%2520accents.&width=400&height=350&seq=project5&orientation=landscape"
-                        alt="NLP Project" class="w-full h-auto object-cover object-top">
-                    <div class="p-6">
-                        <div class="flex flex-wrap gap-2 mb-3">
-                            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">NLP</span>
-                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">AI</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">Advanced Sentiment Analysis Tool</h3>
-                        <p class="text-gray-600 mb-4 text-sm">
-                            A natural language processing tool that analyzes sentiment in text with high accuracy across
-                            multiple languages.
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center">
-                                    <i class="ri-user-line"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-medium">Daniel Nakamura</p>
-                                    <p class="text-xs text-gray-500">University of Tokyo</p>
-                                </div>
-                            </div>
-                            <button class="text-primary hover:text-primary/80 transition-colors">
-                                <div class="w-5 h-5 flex items-center justify-center">
-                                    <i class="ri-arrow-right-line"></i>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="bg-white rounded-xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
+            <i class="ri-folder-open-line text-3xl sm:text-4xl text-gray-400 mb-4"></i>
+            <p class="text-base sm:text-lg text-gray-600">No projects available at the moment.</p>
+            <p class="text-xs sm:text-sm text-gray-500 mt-2">Contribute by sharing your own project!</p>
+            <a href="{% url 'upload_project' %}" class="inline-block mt-4 bg-indigo-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold text-xs sm:text-sm hover:bg-indigo-700 transition duration-200">Upload Project</a>
+        </div>
+  
+        {% endif %}
+        </div>
+         <!-- View All -->
+        <div class="flex justify-center">
+            <a href="{% url 'projects' %}"
+                class="px-6 py-3 bg-white text-primary border border-primary font-medium hover:bg-gray-50 transition-colors !rounded-button whitespace-nowrap flex items-center">
+                View All Projects
+            </a>
         </div>
     </section>
 
     <!--New Blog Section -->
+    <!-- Blog Section -->
     <section class="py-24 bg-gradient-to-b from-gray-50 to-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <span
-                    class="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">Latest
-                    Insights</span>
-                <h2
-                    class="text-4xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    Academic Blogs</h2>
-                <p class="text-lg text-gray-600 serif max-w-2xl mx-auto leading-relaxed">
-                    Explore cutting-edge research, insightful perspectives, and emerging trends from leading academics
-                    and researchers worldwide.
+                <span class="inline-block px-4 py-1.5 bg-indigo-100 text-indigo-600 rounded-full text-sm font-medium mb-4">
+                    Latest Insights
+                </span>
+                <h2 class="text-4xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-teal-600 bg-clip-text text-transparent">
+                    Academic Blogs
+                </h2>
+                <p class="text-lg text-gray-600 font-serif max-w-2xl mx-auto leading-relaxed">
+                    Explore cutting-edge research, insightful perspectives, and emerging trends from leading academics.
                 </p>
             </div>
             <div class="relative">
-                <div id="blog-carousel" class="carousel flex overflow-x-auto gap-6 pb-4 md:pb-0">
-                    <!-- Blog Card 1 -->
-                    <div class="flex-shrink-0 w-full md:w-1/3 lg:w-1/4">
-                        <div class="bg-white rounded-lg shadow-sm overflow-hidden card-hover h-full">
-                            <img src="https://readdy.ai/api/search-image?query=Modern%2520classroom%2520with%2520advanced%2520technology%2520integration%252C%2520showing%2520students%2520using%2520tablets%2520and%2520interactive%2520displays.%2520The%2520classroom%2520should%2520have%2520a%2520bright%252C%2520contemporary%2520design%2520with%2520flexible%2520seating%2520arrangements.%2520The%2520technology%2520should%2520appear%2520seamlessly%2520integrated%2520into%2520the%2520learning%2520environment.%2520The%2520image%2520should%2520convey%2520an%2520innovative%2520educational%2520approach.&width=400&height=200&seq=blog1&orientation=landscape"
-                                alt="Future of Education" class="w-full h-48 object-cover object-top">
+                <div id="blog-carousel" class="carousel flex overflow-x-auto gap-6 pb-4 snap-x snap-mandatory">
+                    {% for blog in blogs %}
+                    <div class="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 snap-start">
+                        <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow h-full">
+                        {% if blog.image %}
+                        <div class="aspect-video w-full overflow-hidden">
+                            <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="w-full h-48 object-cover object-top" loading="lazy">
+                        </div>
+                        {% else %}
+                        <!-- Default placeholder when no image -->
+                        <div class="aspect-video w-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
+                            <img src="/static/img/blog-default-img.png" alt="{{ blog.title }}" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                        </div>
+                        {% endif %}
                             <div class="p-6">
                                 <div class="flex items-center mb-3">
-                                    <span
-                                        class="px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full flex items-center">
+                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-600 text-xs rounded-full flex items-center">
                                         <div class="w-3 h-3 mr-1 flex items-center justify-center">
-                                            <i class="ri-book-open-line"></i>
+                                            <i class="ri-book-open-line" aria-hidden="true"></i>
                                         </div>
-                                        Education
+                                        {{ blog.category|default:"Education" }}
                                     </span>
                                 </div>
-                                <h3 class="text-xl font-semibold mb-2">The Future of Education: Technology Integration
-                                    in Classrooms</h3>
-                                <p class="text-gray-600 mb-4 text-sm serif line-clamp-3">
-                                    Exploring how emerging technologies are transforming traditional classroom
-                                    experiences and creating new opportunities for personalized learning.
+                                <h3 class="text-xl font-semibold mb-2">{{ blog.title|truncatechars:50 }}</h3>
+                                <p class="text-gray-600 mb-4 text-sm font-serif line-clamp-3">
+                                    {{ blog.content|truncatechars:100 }}
                                 </p>
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <div
-                                            class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center">
-                                            <i class="ri-user-line"></i>
+                                        <div class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center">
+                                            <i class="ri-user-line" aria-hidden="true"></i>
                                         </div>
                                         <div>
-                                            <p class="text-sm font-medium">Dr. Rebecca Johnson</p>
-                                            <p class="text-xs text-gray-500">June 20, 2025</p>
+                                            <p class="text-sm font-medium">{{ blog.author }}</p>
+                                            <p class="text-xs text-gray-500">{{ blog.created_at|date:"M d, Y"  }}</p>
                                         </div>
                                     </div>
-                                    <span class="text-xs text-gray-500">8 min read</span>
+                                    <span class="text-xs text-gray-500">{{ blog.created_at|timesince }}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Blog Card 2 -->
-                    <div class="flex-shrink-0 w-full md:w-1/3 lg:w-1/4">
-                        <div class="bg-white rounded-lg shadow-sm overflow-hidden card-hover h-full">
-                            <img src="https://readdy.ai/api/search-image?query=Artificial%2520intelligence%2520research%2520visualization%2520showing%2520neural%2520networks%2520and%2520machine%2520learning%2520algorithms%2520processing%2520data.%2520The%2520image%2520should%2520have%2520a%2520futuristic%2520feel%2520with%2520glowing%2520connections%2520between%2520nodes%2520in%2520blue%2520and%2520teal%2520colors.%2520The%2520visualization%2520should%2520look%2520professional%2520and%2520technically%2520sophisticated%252C%2520conveying%2520advanced%2520AI%2520concepts.&width=400&height=200&seq=blog2&orientation=landscape"
-                                alt="AI in Research" class="w-full h-48 object-cover object-top">
-                            <div class="p-6">
-                                <div class="flex items-center mb-3">
-                                    <span
-                                        class="px-3 py-1 bg-purple-100 text-purple-800 text-xs rounded-full flex items-center">
-                                        <div class="w-3 h-3 mr-1 flex items-center justify-center">
-                                            <i class="ri-robot-line"></i>
-                                        </div>
-                                        AI Research
-                                    </span>
-                                </div>
-                                <h3 class="text-xl font-semibold mb-2">How AI is Revolutionizing Academic Research
-                                    Methods</h3>
-                                <p class="text-gray-600 mb-4 text-sm serif line-clamp-3">
-                                    An in-depth look at how artificial intelligence tools are changing the way
-                                    researchers collect, analyze, and interpret data across various disciplines.
-                                </p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center">
-                                            <i class="ri-user-line"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium">Prof. Michael Zhang</p>
-                                            <p class="text-xs text-gray-500">June 18, 2025</p>
-                                        </div>
-                                    </div>
-                                    <span class="text-xs text-gray-500">12 min read</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Blog Card 3 -->
-                    <div class="flex-shrink-0 w-full md:w-1/3 lg:w-1/4">
-                        <div class="bg-white rounded-lg shadow-sm overflow-hidden card-hover h-full">
-                            <img src="https://readdy.ai/api/search-image?query=Students%2520collaborating%2520in%2520a%2520modern%2520study%2520space%2520with%2520diverse%2520group%2520of%2520international%2520students%2520working%2520together.%2520The%2520space%2520should%2520be%2520bright%2520and%2520contemporary%2520with%2520collaborative%2520workstations.%2520Students%2520should%2520be%2520engaged%2520in%2520discussion%2520and%2520teamwork.%2520The%2520atmosphere%2520should%2520convey%2520cross-cultural%2520academic%2520collaboration.&width=400&height=200&seq=blog3&orientation=landscape"
-                                alt="Global Education" class="w-full h-48 object-cover object-top">
-                            <div class="p-6">
-                                <div class="flex items-center mb-3">
-                                    <span
-                                        class="px-3 py-1 bg-green-100 text-green-800 text-xs rounded-full flex items-center">
-                                        <div class="w-3 h-3 mr-1 flex items-center justify-center">
-                                            <i class="ri-global-line"></i>
-                                        </div>
-                                        Global Education
-                                    </span>
-                                </div>
-                                <h3 class="text-xl font-semibold mb-2">Cross-Cultural Collaboration in Higher Education
-                                </h3>
-                                <p class="text-gray-600 mb-4 text-sm serif line-clamp-3">
-                                    Examining the benefits and challenges of international academic partnerships and how
-                                    they're shaping the future of global education.
-                                </p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center">
-                                            <i class="ri-user-line"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium">Dr. Amara Okafor</p>
-                                            <p class="text-xs text-gray-500">June 15, 2025</p>
-                                        </div>
-                                    </div>
-                                    <span class="text-xs text-gray-500">10 min read</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Blog Card 4 -->
-                    <div class="flex-shrink-0 w-full md:w-1/3 lg:w-1/4">
-                        <div class="bg-white rounded-lg shadow-sm overflow-hidden card-hover h-full">
-                            <img src="https://readdy.ai/api/search-image?query=Student%2520mental%2520health%2520support%2520visualization%2520showing%2520a%2520calming%252C%2520supportive%2520environment%2520with%2520subtle%2520representations%2520of%2520wellness%2520and%2520balance.%2520The%2520image%2520should%2520convey%2520emotional%2520wellbeing%2520in%2520an%2520academic%2520context%2520with%2520soft%2520colors%2520and%2520a%2520compassionate%2520atmosphere.%2520The%2520style%2520should%2520be%2520professional%2520and%2520appropriate%2520for%2520an%2520educational%2520blog.&width=400&height=200&seq=blog4&orientation=landscape"
-                                alt="Student Mental Health" class="w-full h-48 object-cover object-top">
-                            <div class="p-6">
-                                <div class="flex items-center mb-3">
-                                    <span
-                                        class="px-3 py-1 bg-red-100 text-red-800 text-xs rounded-full flex items-center">
-                                        <div class="w-3 h-3 mr-1 flex items-center justify-center">
-                                            <i class="ri-mental-health-line"></i>
-                                        </div>
-                                        Wellness
-                                    </span>
-                                </div>
-                                <h3 class="text-xl font-semibold mb-2">Supporting Student Mental Health in Higher
-                                    Education</h3>
-                                <p class="text-gray-600 mb-4 text-sm serif line-clamp-3">
-                                    A comprehensive guide to developing effective mental health support systems for
-                                    university students in today's high-pressure academic environment.
-                                </p>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center">
-                                        <div
-                                            class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center">
-                                            <i class="ri-user-line"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm font-medium">Dr. Sarah Patel</p>
-                                            <p class="text-xs text-gray-500">June 12, 2025</p>
-                                        </div>
-                                    </div>
-                                    <span class="text-xs text-gray-500">15 min read</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% empty %}
+                    <p class="text-center text-gray-500">No blogs found.</p>
+                    {% endfor %}
                 </div>
-                <!-- Navigation Arrows (Desktop Only) -->
+                <!-- Navigation Arrows -->
                 <button id="prev-btn"
-                    class="hidden md:block absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-5 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center text-gray-600 hover:text-primary transition-colors">
-                    <div class="w-6 h-6 flex items-center justify-center">
-                        <i class="ri-arrow-left-s-line ri-lg"></i>
-                    </div>
+                    class="absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-5 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center text-gray-600 hover:text-indigo-600 transition-colors hidden md:block"
+                    aria-label="Previous blog">
+                    <i class="ri-arrow-left-s-line ri-lg" aria-hidden="true"></i>
                 </button>
                 <button id="next-btn"
-                    class="hidden md:block absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-5 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center text-gray-600 hover:text-primary transition-colors">
-                    <div class="w-6 h-6 flex items-center justify-center">
-                        <i class="ri-arrow-right-s-line ri-lg"></i>
-                    </div>
+                    class="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-5 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center text-gray-600 hover:text-indigo-600 transition-colors hidden md:block"
+                    aria-label="Next blog">
+                    <i class="ri-arrow-right-s-line ri-lg" aria-hidden="true"></i>
                 </button>
             </div>
+        </div>
+        <!-- View All -->
+        <div class="flex justify-center">
+            <a href="{% url 'blogs' %}"
+                class="px-6 py-3 bg-white text-primary border border-primary font-medium hover:bg-gray-50 transition-colors !rounded-button whitespace-nowrap flex items-center">
+                View All Blogs
+            </a>
         </div>
     </section>
 
@@ -565,7 +393,7 @@
                 <div class="flex flex-col md:flex-row">
                     <div
                         class="w-full md:w-1/2 bg-gradient-to-br from-primary/10 to-secondary/10 p-8 md:p-12 flex items-center justify-center">
-                        <img src="https://readdy.ai/api/search-image?query=Modern%2520illustration%2520of%2520a%2520file%2520upload%2520process%2520with%2520documents%2520floating%2520from%2520a%2520laptop%2520to%2520a%2520cloud%2520storage.%2520The%2520style%2520should%2520be%2520clean%2520and%2520professional%2520with%2520blue%2520and%2520teal%2520accent%2520colors.%2520The%2520illustration%2520should%2520convey%2520the%2520concept%2520of%2520academic%2520contribution%2520and%2520knowledge%2520sharing%2520in%2520a%2520digital%2520environment.%2520The%2520background%2520should%2520be%2520light%2520and%2520minimal.&width=500&height=400&seq=cta123&orientation=landscape"
+                        <img src="/static/img/upload-img.jpg"
                             alt="Contribute your work" class="w-full max-w-md h-auto">
                     </div>
                     <div class="w-full md:w-1/2 p-8 md:p-12">
@@ -621,14 +449,45 @@
 <!-- msg popup js -->
 <script>
     // msg popup auto-hide
-    document.addEventListener('DOMContentLoaded', function () {
-        const messages = document.querySelectorAll('.fixed.top-4.right-4.z-50 > div');
+    document.addEventListener('DOMContentLoaded', () => {
+        const messages = document.querySelectorAll('#welcome-message');
         messages.forEach((message, index) => {
             setTimeout(() => {
-                message.style.display = 'none';
-            }, 2000 + (index * 2000)); // Each message hides after 5 seconds, with a staggered delay
+                message.style.opacity = '0';
+                setTimeout(() => message.remove(), 500);
+            }, 2000 + (index * 2000));
         });
     });
+
+    // Blog Carousel
+    const carousel = document.querySelector('#blog-carousel');
+    const prevBtn = document.querySelector('#prev-btn');
+    const nextBtn = document.querySelector('#next-btn');
+
+    if (carousel && prevBtn && nextBtn) {
+        let scrollAmount = 0;
+        const scrollStep = carousel.querySelector('.snap-start').offsetWidth + 24; // Card width + gap
+
+        nextBtn.addEventListener('click', () => {
+            scrollAmount += scrollStep;
+            if (scrollAmount >= carousel.scrollWidth - carousel.clientWidth) {
+                scrollAmount = carousel.scrollWidth - carousel.clientWidth;
+                nextBtn.disabled = true;
+            }
+            prevBtn.disabled = false;
+            carousel.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+        });
+
+        prevBtn.addEventListener('click', () => {
+            scrollAmount -= scrollStep;
+            if (scrollAmount <= 0) {
+                scrollAmount = 0;
+                prevBtn.disabled = true;
+            }
+            nextBtn.disabled = false;
+            carousel.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+        });
+    }
 </script>
 
 {% endblock %}

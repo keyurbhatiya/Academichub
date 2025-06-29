@@ -1,15 +1,15 @@
 {% extends 'admin/base.html' %}
+{% load static %}
 
 {% block title %}Papers | AcademicHub{% endblock %}
 
 {% block content %}
-
 <!-- Breadcrumb -->
 <div class="px-4 py-2 bg-gray-50 text-sm">
     <div class="flex items-center space-x-2">
-        <a href="{% url 'admin_dashboard' %}" class="text-gray-500 hover:text-primary">Home</a>
+        <a href="{% url 'admin_dashboard' %}" class="text-gray-500 hover:text-indigo-600">Home</a>
         <div class="w-4 h-4 flex items-center justify-center text-gray-400">
-            <i class="ri-arrow-right-s-line"></i>
+            <i class="ri-arrow-right-s-line" aria-hidden="true"></i>
         </div>
         <span class="text-gray-700">Papers</span>
     </div>
@@ -20,7 +20,7 @@
 <div class="mb-6 space-y-2">
     {% for message in messages %}
     <div class="p-4 rounded-lg flex items-center {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
-        <i class="ri-{% if message.tags == 'success' %}check-circle-line{% else %}error-warning-line{% endif %} mr-2 text-xl"></i>
+        <i class="ri-{% if message.tags == 'success' %}check-circle-line{% else %}error-warning-line{% endif %} mr-2 text-xl" aria-hidden="true"></i>
         <span>{{ message }}</span>
     </div>
     {% endfor %}
@@ -31,17 +31,18 @@
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Papers Management</h1>
 
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <a href="{% url 'upload_old_paper' %}" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg transition-colors">
-            <i class="ri-add-line mr-2"></i> Add New Paper
+        <a href="{% url 'upload_old_paper' %}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+            <i class="ri-add-line mr-2" aria-hidden="true"></i> Add New Paper
         </a>
         <div class="flex items-center gap-4">
-            <select id="filter-type" class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <select id="filter-type" class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none" aria-label="Filter by type">
                 <option value="title">Subject</option>
                 <option value="author">Author</option>
                 <option value="university">University</option>
                 <option value="course">Course</option>
             </select>
-            <input type="text" id="filter-input" placeholder="Enter search term..." class="border border-gray-300 rounded-lg p-2 w-full sm:w-64 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <input type="text" id="filter-input" placeholder="Enter search term..." class="border border-gray-300 rounded-lg p-2 w-full sm:w-64 focus:ring-2 focus:ring-indigo-500 focus:outline-none" aria-label="Search papers">
+            <button id="reset-filter" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">Reset</button>
         </div>
     </div>
 
@@ -62,17 +63,20 @@
                 {% for paper in papers %}
                 <tr class="hover:bg-gray-50 transition-colors">
                     <td class="px-6 py-4 text-sm text-gray-700">{{ forloop.counter }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ paper.title }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ paper.uploaded_by }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ paper.university }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ paper.course }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ paper.uploaded_at|date:"Y" }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ paper.title|truncatechars:50 }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ paper.uploaded_by|default:"Unknown" }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ paper.university|default:"Unknown" }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ paper.course|default:"Unknown" }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-700">{{ paper.uploaded_at|date:"Y-m-d" }}</td>
                     <td class="px-6 py-4 text-sm">
                         <div class="flex space-x-4">
-                            <a href="#" class="text-red-600 hover:text-red-800 transition-colors" title="Delete">
-                                <i class="ri-delete-bin-line text-lg"></i>
-                            </a>
-                            <a href="{{ paper.file.url }}" class="text-green-600 hover:text-green-800 transition-colors" title="View">
+                            <form action="#" method="POST" onsubmit="return confirm('Are you sure you want to delete this paper?');">
+                                {% csrf_token %}
+                                <button type="submit" class="text-red-600 hover:text-red-800 transition-colors" title="Delete paper" aria-label="Delete paper">
+                                    <i class="ri-delete-bin-line text-lg" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                           <a href="{{ paper.file.url }}" target="_blank" class="text-green-600 hover:text-green-800 transition-colors" title="View">
                                 <i class="ri-eye-line text-lg"></i>
                             </a>
                         </div>
@@ -88,28 +92,97 @@
     </div>
 </div>
 
+<!-- PDF Modal -->
+<div id="pdfModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center transition-opacity duration-300">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl sm:max-w-5xl p-4 relative mx-4">
+        <button onclick="closePdfModal()" class="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl" aria-label="Close PDF modal">×</button>
+        <div class="h-[60vh] sm:h-[80vh] overflow-hidden rounded">
+            <iframe id="pdfViewer" src="" class="w-full h-full" frameborder="0" title="PDF Viewer"></iframe>
+            <div id="pdfError" class="hidden text-center text-red-600 p-4">Failed to load PDF. Please try downloading the file instead.</div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const filterInput = document.getElementById('filter-input');
     const filterType = document.getElementById('filter-type');
+    const resetFilter = document.getElementById('reset-filter');
     const rows = document.querySelectorAll('tbody tr:not(.text-center)');
+    let debounceTimeout;
 
+    // Filter function with debouncing
     filterInput.addEventListener('input', () => {
-        const searchTerm = filterInput.value.toLowerCase();
-        const selectedType = filterType.value;
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const searchTerm = filterInput.value.toLowerCase().trim();
+            const selectedType = filterType.value;
 
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            let cellText;
-            if (selectedType === 'title') cellText = cells[1].textContent.toLowerCase();
-            else if (selectedType === 'author') cellText = cells[2].textContent.toLowerCase();
-            else if (selectedType === 'university') cellText = cells[3].textContent.toLowerCase();
-            else if (selectedType === 'course') cellText = cells[4].textContent.toLowerCase();
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                let cellText;
+                if (selectedType === 'title') cellText = cells[1].textContent.toLowerCase();
+                else if (selectedType === 'author') cellText = cells[2].textContent.toLowerCase();
+                else if (selectedType === 'university') cellText = cells[3].textContent.toLowerCase();
+                else if (selectedType === 'course') cellText = cells[4].textContent.toLowerCase();
 
-            row.style.display = cellText.includes(searchTerm) ? '' : 'none';
-        });
+                row.style.display = cellText.includes(searchTerm) ? '' : 'none';
+            });
+        }, 300); // 300ms debounce
+    });
+
+    // Reset filter
+    resetFilter.addEventListener('click', () => {
+        filterInput.value = '';
+        rows.forEach(row => row.style.display = '');
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closePdfModal();
     });
 });
+
+// PDF Modal Functions
+function openPdfModal(pdfUrl, title) {
+    if (!pdfUrl || pdfUrl === '#') {
+        showPdfError();
+        return;
+    }
+
+    const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
+    const pdfViewer = document.getElementById('pdfViewer');
+    const pdfError = document.getElementById('pdfError');
+    const modal = document.getElementById('pdfModal');
+
+    pdfViewer.src = viewerUrl;
+    pdfViewer.title = `Viewing ${title}`;
+    pdfError.classList.add('hidden');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    // Error handling for iframe load failure
+    pdfViewer.onerror = () => showPdfError();
+}
+
+function showPdfError() {
+    const pdfViewer = document.getElementById('pdfViewer');
+    const pdfError = document.getElementById('pdfError');
+    pdfViewer.classList.add('hidden');
+    pdfError.classList.remove('hidden');
+}
+
+function closePdfModal() {
+    const modal = document.getElementById('pdfModal');
+    const pdfViewer = document.getElementById('pdfViewer');
+    const pdfError = document.getElementById('pdfError');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    pdfViewer.src = '';
+    pdfViewer.classList.remove('hidden');
+    pdfError.classList.add('hidden');
+}
 </script>
 
 {% endblock %}
