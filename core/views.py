@@ -2,13 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import RegisterForm, OldPaperForm, ProjectForm, BlogForm
-from .models import OldPaper, Project, Blog
+from .models import OldPaper, Project, Blog, SiteSettings
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import ContentModerationForm
 from django.db.models.functions import TruncMonth
 from django.db.models import Count
 import json
+from datetime import datetime
+from django.utils import timezone
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.views import PasswordChangeView
@@ -467,3 +469,112 @@ def upload_old_paper(request):
 
     return render(request, 'admin/papers_upload.html', {'form': form})
 
+def analytics(request):
+    # Summary statistics
+    total_users = User.objects.count()
+    total_papers = OldPaper.objects.count()
+    total_projects = Project.objects.count()
+    total_blogs = Blog.objects.count()
+    
+    # Calculate active users this week (users who logged in within the last 7 days)
+    from django.utils import timezone
+    from datetime import timedelta
+    week_ago = timezone.now() - timedelta(days=7)
+    active_users_week = User.objects.filter(last_login__gte=week_ago).count()
+    
+    # Latest items (e.g., last 5 entries)
+    latest_papers = OldPaper.objects.order_by('-uploaded_at')[:5]
+    latest_projects = Project.objects.order_by('-uploaded_at')[:5]
+    latest_blogs = Blog.objects.order_by('-created_at')[:5]
+    
+    # Get current year for filtering
+    current_year = datetime.now().year
+    
+    # Chart data - Fixed to get data for the last 6 months
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    
+    # Get monthly data for papers
+    paper_monthly = OldPaper.objects.filter(
+        uploaded_at__year=current_year
+    ).extra({'month': "EXTRACT(month FROM uploaded_at)"}).values('month').annotate(count=Count('id')).order_by('month')
+    
+    # Get monthly data for projects
+    project_monthly = Project.objects.filter(
+        uploaded_at__year=current_year
+    ).extra({'month': "EXTRACT(month FROM uploaded_at)"}).values('month').annotate(count=Count('id')).order_by('month')
+    
+    # Get monthly data for blogs
+    blog_monthly = Blog.objects.filter(
+        created_at__year=current_year
+    ).extra({'month': "EXTRACT(month FROM created_at)"}).values('month').annotate(count=Count('id')).order_by('month')
+    
+    # Get monthly user registrations
+    user_monthly = User.objects.filter(
+        date_joined__year=current_year
+    ).extra({'month': "EXTRACT(month FROM date_joined)"}).values('month').annotate(count=Count('id')).order_by('month')
+    
+    # Initialize arrays with zeros for all 12 months
+    paper_data = [0] * 12
+    project_data = [0] * 12
+    blog_data = [0] * 12
+    user_data = [0] * 12
+    
+    # Fill in the actual data
+    for item in paper_monthly:
+        paper_data[int(item['month']) - 1] = item['count']
+    
+    for item in project_monthly:
+        project_data[int(item['month']) - 1] = item['count']
+    
+    for item in blog_monthly:
+        blog_data[int(item['month']) - 1] = item['count']
+    
+    for item in user_monthly:
+        user_data[int(item['month']) - 1] = item['count']
+    
+    # Distribution data
+    distribution_data = [
+        {'value': total_papers, 'name': 'Papers'},
+        {'value': total_projects, 'name': 'Projects'},
+        {'value': total_blogs, 'name': 'Blogs'}
+    ]
+    
+    # User roles data (you may need to adjust this based on your user model)
+    user_roles_data = [
+        {'value': User.objects.filter(is_staff=True, is_superuser=False).count(), 'name': 'Staff'},
+        {'value': User.objects.filter(is_superuser=True).count(), 'name': 'Admin'},
+        {'value': User.objects.filter(is_staff=False, is_superuser=False).count(), 'name': 'Regular Users'}
+    ]
+    
+    context = {
+        'total_users': total_users,
+        'total_papers': total_papers,
+        'total_projects': total_projects,
+        'total_blogs': total_blogs,
+        'active_users_week': active_users_week,
+        'latest_papers': latest_papers,
+        'latest_projects': latest_projects,
+        'latest_blogs': latest_blogs,
+        'months': json.dumps(months),
+        'paper_data': json.dumps(paper_data),
+        'project_data': json.dumps(project_data),
+        'blog_data': json.dumps(blog_data),
+        'user_data': json.dumps(user_data),
+        'distribution_data': json.dumps(distribution_data),
+        'user_roles_data': json.dumps(user_roles_data),
+    }
+    
+    return render(request, 'admin/analytics.html', context)
+
+def settings(request):
+    settings_obj, created = SiteSettings.objects.get_or_create()
+    if request.method == 'POST':
+        settings_obj.website_name = request.POST.get('website_name', settings_obj.website_name)
+        settings_obj.contact_email = request.POST.get('contact_email', settings_obj.contact_email)
+        settings_obj.allow_registrations = request.POST.get('allow_registrations') == 'on'
+        settings_obj.email_notifications = request.POST.get('email_notifications') == 'on'
+        settings_obj.save()
+        messages.success(request, 'Settings updated successfully.')
+        return redirect('settings')
+    context = {'settings': settings_obj}
+    return render(request, 'admin/settings.html', context)

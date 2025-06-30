@@ -16,6 +16,8 @@ urlpatterns = [
     path('admin/users/<int:user_id>/deactivate/', views.deactivate_user, name='deactivate_user'),
     path('admin/users/<int:user_id>/activate/', views.activate_user, name='activate_user'),
     path('admin/papers/upload/', views.upload_old_paper, name='upload_old_paper'),
+    path('admin/analytics/', views.analytics, name='analytics'),
+    path('admin/settings/', views.settings, name='settings'),
 
     # path('admin/', admin.site.urls),
     path('', include('core.urls')),

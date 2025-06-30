@@ -177,6 +177,7 @@
                 <div class="absolute inset-0 flex items-center justify-center text-gray-500" id="monthlyUploadsChart-loading">Loading...</div>
             </div>
         </div>
+        <!-- pie chart content distribution -->
         <div class="bg-white rounded-lg shadow p-4">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold text-gray-800">Content Distribution</h3>
@@ -195,6 +196,7 @@
                 <div class="absolute inset-0 flex items-center justify-center text-gray-500" id="contentDistributionChart-loading">Loading...</div>
             </div>
         </div>
+        <!-- line chart user growth -->
         <div class="bg-white rounded-lg shadow p-4">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold text-gray-800">User Growth</h3>
@@ -404,7 +406,6 @@
         // Content Distribution Chart
         const contentDistributionChart = echarts.init(document.getElementById('contentDistributionChart'));
         contentDistributionChart.setOption({
-            animation: false,
             tooltip: {
                 trigger: 'item',
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -437,7 +438,6 @@
         // User Growth Chart
         const userGrowthChart = echarts.init(document.getElementById('userGrowthChart'));
         userGrowthChart.setOption({
-            animation: false,
             tooltip: {
                 trigger: 'axis',
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',

@@ -66,15 +66,15 @@
                 </div>
                 <span>Blogs</span>
             </a>
-            <a href="#"
-                class="sidebar-item flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+            <a href="{% url 'analytics' %}"
+                class="sidebar-item {% if request.resolver_match.url_name == 'analytics' %}active{% endif %} flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
                 <div class="w-5 h-5 flex items-center justify-center mr-3">
                     <i class="ri-line-chart-line"></i>
                 </div>
                 <span>Analytics</span>
             </a>
-            <a href="#"
-                class="sidebar-item flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+            <a href="{% url 'settings' %}"
+                class="sidebar-item {% if request.resolver_match.url_name == 'settings' %}active{% endif %} flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
                 <div class="w-5 h-5 flex items-center justify-center mr-3">
                     <i class="ri-settings-3-line"></i>
                 </div>

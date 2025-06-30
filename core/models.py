@@ -117,8 +117,6 @@ class OldPaper(models.Model):
     def __str__(self):
         return self.title
 
-
-
 class Project(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -144,3 +142,12 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.title
+
+class SiteSettings(models.Model):
+    website_name = models.CharField(max_length=100, default='AcademicHub')
+    contact_email = models.EmailField(default='admin@academichub.com')
+    allow_registrations = models.BooleanField(default=True)
+    email_notifications = models.BooleanField(default=True)
+
+    def __str__(self):
+        return "Site Settings"  

@@ -1,0 +1,411 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}Analytics | AcademicHub{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-8">Analytics Overview</h1>
+    
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Users -->
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Total Users</p>
+                    <p class="text-3xl font-bold text-indigo-600">{{ total_users|default:0 }}</p>
+                </div>
+                <div class="text-indigo-500">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Total Papers -->
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Total Papers</p>
+                    <p class="text-3xl font-bold text-green-600">{{ total_papers|default:0 }}</p>
+                </div>
+                <div class="text-green-500">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Active Users This Week -->
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Active Users This Week</p>
+                    <p class="text-3xl font-bold text-yellow-600">{{ active_users_week|default:0 }}</p>
+                </div>
+                <div class="text-yellow-500">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Total Blog Posts -->
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">Total Blog Posts</p>
+                    <p class="text-3xl font-bold text-purple-600">{{ total_blogs|default:0 }}</p>
+                </div>
+                <div class="text-purple-500">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Charts -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Bar Chart: Monthly Uploads -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Monthly Uploads</h3>
+                <div class="relative">
+                    <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500" id="monthly-uploads-menu">
+                        <i class="ri-more-2-fill text-lg"></i>
+                    </button>
+                    <div class="hidden absolute right-0 mt-2 bg-white rounded-lg shadow-lg border w-48 z-10" id="monthly-uploads-dropdown">
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export as PNG</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export Data</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Full Report</a>
+                    </div>
+                </div>
+            </div>
+            <div id="monthlyUploadsChart" style="width: 100%; height: 300px;"></div>
+        </div>
+        
+        <!-- Pie Chart: User Roles -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">User Roles</h3>
+                <div class="relative">
+                    <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500" id="user-roles-menu">
+                        <i class="ri-more-2-fill text-lg"></i>
+                    </button>
+                    <div class="hidden absolute right-0 mt-2 bg-white rounded-lg shadow-lg border w-48 z-10" id="user-roles-dropdown">
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export as PNG</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export Data</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Full Report</a>
+                    </div>
+                </div>
+            </div>
+            <div id="userRolesChart" style="width: 100%; height: 300px;"></div>
+        </div>
+        
+        <!-- Pie Chart: Content Distribution -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Content Distribution</h3>
+                <div class="relative">
+                    <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500" id="content-distribution-menu">
+                        <i class="ri-more-2-fill text-lg"></i>
+                    </button>
+                    <div class="hidden absolute right-0 mt-2 bg-white rounded-lg shadow-lg border w-48 z-10" id="content-distribution-dropdown">
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export as PNG</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export Data</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Full Report</a>
+                    </div>
+                </div>
+            </div>
+            <div id="contentDistributionChart" style="width: 100%; height: 300px;"></div>
+        </div>
+        
+        <!-- Line Chart: User Growth -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">User Growth</h3>
+                <div class="relative">
+                    <button class="p-2 rounded-full hover:bg-gray-100 text-gray-500" id="user-growth-menu">
+                        <i class="ri-more-2-fill text-lg"></i>
+                    </button>
+                    <div class="hidden absolute right-0 mt-2 bg-white rounded-lg shadow-lg border w-48 z-10" id="user-growth-dropdown">
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export as PNG</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">Export Data</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-50">View Full Report</a>
+                    </div>
+                </div>
+            </div>
+            <div id="userGrowthChart" style="width: 100%; height: 300px;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Parse data from Django context
+    const months = JSON.parse('{{ months|safe }}');
+    const paperData = JSON.parse('{{ paper_data|safe }}');
+    const projectData = JSON.parse('{{ project_data|safe }}');
+    const blogData = JSON.parse('{{ blog_data|safe }}');
+    const userData = JSON.parse('{{ user_data|safe }}');
+    const contentDistribution = JSON.parse('{{ distribution_data|safe }}');
+    const userRolesData = JSON.parse('{{ user_roles_data|safe }}');
+
+    // Colors
+    const colors = {
+        primary: '#6366f1',
+        secondary: '#10b981',
+        tertiary: '#f59e0b',
+        quaternary: '#8b5cf6'
+    };
+
+    // Initialize Monthly Uploads Chart
+    const monthlyUploadsChart = echarts.init(document.getElementById('monthlyUploadsChart'));
+    const monthlyUploadsOption = {
+        tooltip: {
+            trigger: 'axis',
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderColor: '#e5e7eb',
+            borderWidth: 1,
+            textStyle: { color: '#1f2937' },
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        legend: {
+            data: ['Papers', 'Projects', 'Blogs'],
+            bottom: '5%',
+            textStyle: { color: '#374151' }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '15%',
+            top: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            data: months,
+            axisLine: { lineStyle: { color: '#e5e7eb' } },
+            axisLabel: { color: '#1f2937' }
+        },
+        yAxis: {
+            type: 'value',
+            axisLine: { show: false },
+            axisTick: { show: false },
+            splitLine: { lineStyle: { color: '#f3f4f6' } },
+            axisLabel: { color: '#1f2937' }
+        },
+        series: [
+            {
+                name: 'Papers',
+                type: 'bar',
+                barWidth: '20%',
+                itemStyle: {
+                    color: 'rgba(87, 181, 231, 1)',
+                    borderRadius: [4, 4, 0, 0]
+                },
+                emphasis: {
+                   itemStyle: { color: 'rgba(87, 181, 231, 0.8)' }
+                },
+                data: paperData
+            },
+            {
+                name: 'Projects',
+                type: 'bar',
+                barWidth: '20%',
+                itemStyle: { color: 'rgba(141, 211, 199, 1)', borderRadius: [4, 4, 0, 0] },
+                emphasis: { itemStyle: { color: 'rgba(141, 211, 199, 0.8)' } },
+                data: projectData
+            },
+            {
+                name: 'Blogs',
+                type: 'bar',
+                barWidth: '20%',
+                itemStyle: { color: 'rgba(251, 191, 114, 1)', borderRadius: [4, 4, 0, 0] },
+                emphasis: { itemStyle: { color: 'rgba(251, 191, 114, 0.8)' } },
+                data: blogData
+            }
+        ]
+    };
+    monthlyUploadsChart.setOption(monthlyUploadsOption);
+
+    // Initialize User Roles Chart
+    const userRolesChart = echarts.init(document.getElementById('userRolesChart'));
+    const userRolesOption = {
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b}: {c} ({d}%)',
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderColor: '#e5e7eb',
+            borderWidth: 1,
+            textStyle: { color: '#1f2937' }
+        },
+        legend: {
+            bottom: '5%',
+            left: 'center',
+            textStyle: { color: '#1f2937' }
+        },
+        series: [{
+            name: 'User Roles',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            center: ['50%', '45%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+                borderRadius: 8,
+                borderColor: '#fff',
+                borderWidth: 2
+            },
+            label: { show: false },
+            emphasis: {
+                label: {
+                    show: true,
+                    fontSize: '14',
+                    fontWeight: 'bold'
+                }
+            },
+            labelLine: { show: false },
+            data: userRolesData.map((item, index) => ({
+                ...item,
+                    itemStyle: {
+                        color: item.name === 'Papers' ? 'rgba(87, 181, 231, 1)' :
+                               item.name === 'Projects' ? 'rgba(141, 211, 199, 1)' :
+                               'rgba(251, 191, 114, 1)'
+                    }[index % 3]
+            }))
+        }]
+    };
+    userRolesChart.setOption(userRolesOption);
+
+    // Initialize Content Distribution Chart
+    const contentDistributionChart = echarts.init(document.getElementById('contentDistributionChart'));
+    const contentDistributionOption = {
+        tooltip: {
+            trigger: 'item',
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderColor: '#e5e7eb',
+            borderWidth: 1,
+            textStyle: { color: '#1f2937' }
+        },
+        legend: { bottom: 0, left: 'center', textStyle: { color: '#1f2937' } },
+        series: [{
+            name: 'Content Distribution',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            center: ['50%', '45%'],
+            avoidLabelOverlap: false,
+            itemStyle: { borderRadius: 8, borderColor: '#fff', borderWidth: 2 },
+            label: { show: false },
+            emphasis: { label: { show: true, fontSize: '14', fontWeight: 'bold' } },
+            labelLine: { show: false },
+            data: contentDistribution.map(item => ({
+                ...item,
+                itemStyle: {
+                    color: item.name === 'Papers' ? 'rgba(87, 181, 231, 1)' :
+                            item.name === 'Projects' ? 'rgba(141, 211, 199, 1)' :
+                           'rgba(251, 191, 114, 1)'
+                    }
+                }))
+            }]
+    };
+    contentDistributionChart.setOption(contentDistributionOption);
+
+    // Initialize User Growth Chart
+    const userGrowthChart = echarts.init(document.getElementById('userGrowthChart'));
+    const userGrowthOption = {
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                borderColor: '#e5e7eb',
+                borderWidth: 1,
+                textStyle: { color: '#1f2937' }
+            },
+            grid: { left: '3%', right: '4%', bottom: '10%', top: '3%', containLabel: true },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: months,
+                axisLine: { lineStyle: { color: '#e5e7eb' } },
+                axisLabel: { color: '#1f2937' }
+            },
+            yAxis: {
+                type: 'value',
+                axisLine: { show: false },
+                axisTick: { show: false },
+                splitLine: { lineStyle: { color: '#f3f4f6' } },
+                axisLabel: { color: '#1f2937' }
+            },
+            series: [{
+                name: 'User Growth',
+                type: 'line',
+                smooth: true,
+                symbol: 'none',
+                lineStyle: { width: 3, color: 'rgba(252, 141, 98, 1)' },
+                areaStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [
+                            { offset: 0, color: 'rgba(252, 141, 98, 0.2)' },
+                            { offset: 1, color: 'rgba(252, 141, 98, 0.01)' }
+                        ]
+                    }
+                },
+                emphasis: { lineStyle: { width: 4 } },
+                data: userData
+            }]
+    };
+    userGrowthChart.setOption(userGrowthOption);
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        monthlyUploadsChart.resize();
+        userRolesChart.resize();
+        contentDistributionChart.resize();
+        userGrowthChart.resize();
+    });
+
+    // Chart dropdown menus
+    const chartMenus = [
+        { btn: 'monthly-uploads-menu', dropdown: 'monthly-uploads-dropdown' },
+        { btn: 'user-roles-menu', dropdown: 'user-roles-dropdown' },
+        { btn: 'content-distribution-menu', dropdown: 'content-distribution-dropdown' },
+        { btn: 'user-growth-menu', dropdown: 'user-growth-dropdown' }
+    ];
+
+    chartMenus.forEach(menu => {
+        const btn = document.getElementById(menu.btn);
+        const dropdown = document.getElementById(menu.dropdown);
+        
+        if (btn && dropdown) {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdown.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

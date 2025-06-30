@@ -16,16 +16,30 @@
 </div>
 
 <!-- Messages -->
-{% if messages %}
-<div class="mb-6 space-y-2">
-    {% for message in messages %}
-    <div class="p-4 rounded-lg flex items-center {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
-        <i class="ri-{% if message.tags == 'success' %}check-circle-line{% else %}error-warning-line{% endif %} mr-2 text-xl" aria-hidden="true"></i>
-        <span>{{ message }}</span>
+    {% if messages %}
+    <div class="mb-6 space-y-3">
+        {% for message in messages %}
+        <div class="relative p-4 rounded-xl border-l-4 shadow-sm transition-all duration-300 hover:shadow-md {% if message.tags == 'success' %}bg-gradient-to-r from-green-50 to-emerald-50 border-green-500 text-green-800{% elif message.tags == 'error' %}bg-gradient-to-r from-red-50 to-rose-50 border-red-500 text-red-800{% elif message.tags == 'warning' %}bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-500 text-yellow-800{% else %}bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-500 text-blue-800{% endif %}">
+            <div class="flex items-start">
+                <div class="flex-shrink-0 mr-3">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center {% if message.tags == 'success' %}bg-green-100{% elif message.tags == 'error' %}bg-red-100{% elif message.tags == 'warning' %}bg-yellow-100{% else %}bg-blue-100{% endif %}">
+                        <i class="{% if message.tags == 'success' %}ri-check-circle-fill text-green-600{% elif message.tags == 'error' %}ri-error-warning-fill text-red-600{% elif message.tags == 'warning' %}ri-alert-fill text-yellow-600{% else %}ri-information-fill text-blue-600{% endif %} text-lg" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="font-medium leading-5">{{ message }}</p>
+                </div>
+                <div class="flex-shrink-0 ml-4">
+                    <button type="button" class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 {% if message.tags == 'success' %}text-green-500 hover:bg-green-100 focus:ring-green-500{% elif message.tags == 'error' %}text-red-500 hover:bg-red-100 focus:ring-red-500{% elif message.tags == 'warning' %}text-yellow-500 hover:bg-yellow-100 focus:ring-yellow-500{% else %}text-blue-500 hover:bg-blue-100 focus:ring-blue-500{% endif %} transition-colors duration-200" onclick="this.parentElement.parentElement.parentElement.remove()">
+                        <span class="sr-only">Dismiss</span>
+                        <i class="ri-close-line text-lg" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
-{% endif %}
+    {% endif %}
 
 <div class="container mx-auto p-6">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Papers Management</h1>
