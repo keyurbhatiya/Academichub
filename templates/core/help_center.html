@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+{% block title %}Help Center | AcademicHub{% endblock %}
+
+{% block content %}
+<main class="bg-gray-50 py-12">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-8">Help Center</h1>
+
+        <!-- Introduction -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-10">
+            <p class="text-gray-600 text-lg">Welcome to the AcademicHub Help Center! Here you’ll find answers to commonly asked questions and resources to help you navigate the platform smoothly. Still stuck? Reach out through our contact form below.</p>
+        </div>
+
+        <!-- FAQ Section -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <details class="bg-white p-4 rounded-lg shadow-sm">
+                    <summary class="font-medium text-indigo-700 cursor-pointer">How do I upload a question paper?</summary>
+                    <p class="mt-2 text-gray-600">Go to the Papers section, click on "Add New Paper", and fill out the upload form with your file.</p>
+                </details>
+                <details class="bg-white p-4 rounded-lg shadow-sm">
+                    <summary class="font-medium text-indigo-700 cursor-pointer">How do I create a blog post?</summary>
+                    <p class="mt-2 text-gray-600">Visit the Blogs section and click “Create Blog”. Use the rich text editor to write and submit your blog for review.</p>
+                </details>
+                <details class="bg-white p-4 rounded-lg shadow-sm">
+                    <summary class="font-medium text-indigo-700 cursor-pointer">Can I change my profile details?</summary>
+                    <p class="mt-2 text-gray-600">Yes, go to your profile and click “Edit Profile” to update your name, bio, and other details.</p>
+                </details>
+                <details class="bg-white p-4 rounded-lg shadow-sm">
+                    <summary class="font-medium text-indigo-700 cursor-pointer">Who can see my uploads?</summary>
+                    <p class="mt-2 text-gray-600">All uploaded materials are publicly viewable, unless marked private by the admin.</p>
+                </details>
+            </div>
+        </section>
+
+        <!-- Contact Support -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Still need help?</h2>
+            <p class="text-gray-600 mb-4">If you couldn’t find your answer, don’t hesitate to reach out.</p>
+            <a href="{% url 'contact' %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-lg shadow-sm">Contact Support</a>
+        </section>
+    </div>
+</main>
+{% endblock %}

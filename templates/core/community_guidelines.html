@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+{% block title %}Community Guidelines | AcademicHub{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-12">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Community Guidelines</h1>
+    <p class="mb-4 text-gray-600">Welcome to AcademicHub! To ensure a positive experience for everyone, please follow these guidelines:</p>
+
+    <ul class="list-disc pl-6 text-gray-700 space-y-3">
+        <li><strong>Be respectful</strong> – Treat all members with kindness. Discriminatory or offensive content is not allowed.</li>
+        <li><strong>No plagiarism</strong> – Share only original or properly credited academic work.</li>
+        <li><strong>Keep it academic</strong> – Post content relevant to education, research, and learning.</li>
+        <li><strong>Report issues</strong> – Use the <a href="{% url 'contact' %}" class="text-indigo-600 underline">Contact Us</a> page to report abuse or problems.</li>
+        <li><strong>Stay safe</strong> – Do not share private or sensitive information publicly.</li>
+    </ul>
+</div>
+{% endblock %}

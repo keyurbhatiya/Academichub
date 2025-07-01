@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import OldPaper, Project, Blog
+from .models import OldPaper, Project, Blog, Contact, SiteSettings
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -39,3 +39,14 @@ class ContentModerationForm(forms.Form):
     action = forms.ChoiceField(choices=[('approve', 'Approve'), ('reject', 'Reject')])
     reason = forms.CharField(widget=forms.Textarea, required=False)
 
+from django import forms
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['name', 'email', 'message']
+
+class FeedbackForm(forms.Form):
+    name = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    message = forms.CharField(widget=forms.Textarea)

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .forms import RegisterForm, OldPaperForm, ProjectForm, BlogForm
+from .forms import RegisterForm, OldPaperForm, ProjectForm, BlogForm, ContactForm, FeedbackForm
 from .models import OldPaper, Project, Blog, SiteSettings,  Comment
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -124,6 +124,37 @@ def projects(request):
 def blogs(request):
     blogs = Blog.objects.all().order_by('-created_at')
     return render(request, 'core/blogs.html', {'blogs': blogs})
+
+def help_center(request):
+    return render(request, 'core/help_center.html')
+
+def contact_us(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your message has been sent successfully!')
+            return redirect('contact')
+    else:
+        form = ContactForm()
+    return render(request, 'core/contact.html', {'form': form})
+
+
+def feedback_view(request):
+    form = FeedbackForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        # You could save to a model or send an email here
+        messages.success(request, "Thank you for your feedback!")
+        return redirect('feedback')
+    return render(request, 'core/feedback.html', {'form': form})
+
+def community_guidelines(request):
+    return render(request, 'core/community_guidelines.html')
+
+def faq_page(request):
+    return render(request, 'core/faq.html')
+
+
 
 @login_required
 def upload_paper(request):

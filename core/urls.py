@@ -23,6 +23,14 @@ urlpatterns = [
     path('comment/<int:comment_id>/like/', views.like_comment, name='like_comment'),
     path('reply/<int:reply_id>/like/', views.like_reply, name='like_reply'),
     path('user/', include('academichub.auth_urls')),
+    path('help-center/', views.help_center, name='help_center'),
+    path('contact/', views.contact_us, name='contact'),
+    path('feedback/', views.feedback_view, name='feedback'),
+    path('community-guidelines/', views.community_guidelines, name='community_guidelines'),
+    path('faq/', views.faq_page, name='faqs'),
+
+
+
    
     path('uploads/', views.user_uploads_view, name='user_uploads'),
 
