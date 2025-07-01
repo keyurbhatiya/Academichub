@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-
+from django.utils.text import slugify
 
 
 STATUS_CHOICES = [
@@ -131,8 +131,10 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
+
 class Blog(models.Model):
     title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, blank=True)  # new
     content = models.TextField()
     image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blogs')
@@ -140,8 +142,33 @@ class Blog(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     created_at = models.DateTimeField(default=timezone.now)
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.title)
+            unique_slug = base_slug
+            num = 1
+            while Blog.objects.filter(slug=unique_slug).exists():
+                unique_slug = f"{base_slug}-{num}"
+                num += 1
+            self.slug = unique_slug
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.title
+
+class Comment(models.Model):
+    blog = models.ForeignKey(Blog, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
+    likes = models.ManyToManyField(User, related_name='comment_likes', blank=True)
+
+    def __str__(self):
+        return f'Comment by {self.name} on {self.blog.title}'
+
 
 class SiteSettings(models.Model):
     website_name = models.CharField(max_length=100, default='AcademicHub')

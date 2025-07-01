@@ -17,6 +17,11 @@ urlpatterns = [
     path('projects/', views.projects, name='projects'),
     path('blogs/', views.blogs, name='blogs'),
     path('blogs/create/', views.blog_create, name='blog_create'),
+    path('blogs/<slug:slug>/', views.blog_detail, name='blog_detail'),
+    path('blog/<slug:slug>/comment/', views.add_comment, name='add_comment'),
+    path('blog/<slug:slug>/reply/', views.add_reply, name='add_reply'),
+    path('comment/<int:comment_id>/like/', views.like_comment, name='like_comment'),
+    path('reply/<int:reply_id>/like/', views.like_reply, name='like_reply'),
     path('user/', include('academichub.auth_urls')),
    
     path('uploads/', views.user_uploads_view, name='user_uploads'),

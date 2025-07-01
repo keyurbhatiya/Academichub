@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.AdminSessionTimeoutMiddleware',
 ]
 
 ROOT_URLCONF = 'academichub.urls'
@@ -141,3 +142,10 @@ LOGIN_URL = 'login'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_SECURE = True          # Only send session cookie over HTTPS
+CSRF_COOKIE_SECURE = True             # Same for CSRF cookie
+SESSION_COOKIE_HTTPONLY = True        # Prevent JavaScript access to cookies
+
+
+

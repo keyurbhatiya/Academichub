@@ -1,57 +1,52 @@
 {% extends 'core/base.html' %}
+{% load static %}
 {% block title %}Create Blog{% endblock %}
 {% block content %}
-<main class="py-12 sm:py-16 bg-gray-100">
-    <div class="container mx-auto px-4 sm:px-6">
-        <!-- Header Section -->
-        <div class="mb-8 sm:mb-12">
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Create a New Blog Post</h2>
-            <p class="text-base sm:text-lg text-gray-600 max-w-xl sm:max-w-2xl">Share your insights, research, or academic experiences with the AcademicHub community.</p>
+<main class="py-12 bg-gray-100">
+    <div class="container mx-auto px-4">
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Create a New Blog Post</h2>
+            <p class="text-base text-gray-600 max-w-2xl">Share your insights with the AcademicHub community.</p>
         </div>
 
-        <!-- Blog Creation Form -->
-        <div class="bg-white rounded-xl shadow-sm p-6 sm:p-8 border border-gray-100 max-w-4xl mx-auto">
-            <form method="post" enctype="multipart/form-data" class="space-y-4 sm:space-y-6" id="blog-form">
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 max-w-4xl mx-auto">
+            <form method="post" enctype="multipart/form-data" class="space-y-6" id="blog-form">
                 {% csrf_token %}
-                <!-- Form Fields -->
                 {% for field in form %}
                 <div class="flex flex-col">
                     <label for="{{ field.id_for_label }}" class="text-sm font-semibold text-gray-700 mb-2">
+                        
                         {{ field.label }}{% if field.field.required %} <span class="text-red-500">*</span>{% endif %}
                     </label>
                     {% if field.name == 'content' %}
-                        <!-- Editor Controls -->
-                        <div class="mb-2 flex justify-between items-center">
-                            <div class="flex gap-2">
-                                <button type="button" id="toggle-html-btn" class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <i class="ri-code-line mr-1"></i> HTML View
-                                </button>
-                                <button type="button" id="insert-code-btn" class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <i class="ri-code-box-line mr-1"></i> Insert Code Block
-                                </button>
+                        <div class="editor-container">
+                            <div class="editor-toolbar">
+                                <div class="editor-controls">
+                                    <button type="button" id="toggle-html-btn" class="editor-btn">
+                                        <i class="fas fa-code"></i> HTML View
+                                    </button>
+                                    <button type="button" id="insert-code-btn" class="editor-btn">
+                                        <i class="fas fa-terminal"></i> Insert Code
+                                    </button>
+                                </div>
+                                <span id="word-count" class="word-count">0 words</span>
                             </div>
-                            <div class="text-xs text-gray-500">
-                                <span id="word-count">0 words</span>
+                            <div id="quill-container" class="quill-container">
+                                <div id="blog-content-editor"></div>
                             </div>
-                        </div>
-
-                        <!-- Rich Text Editor -->
-                        <div id="blog-content-editor" class="min-h-[300px] border border-gray-300 rounded-lg"></div>
-                        
-                        <!-- HTML Code Editor (Hidden by default) -->
-                        <div id="html-editor-container" class="hidden">
-                            <textarea id="html-code-editor" class="w-full h-80 p-4 border border-gray-300 rounded-lg font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Enter HTML code here..."></textarea>
-                        </div>
-
-                        <!-- HTML Preview -->
-                        <div id="html-preview-container" class="hidden mt-4">
-                            <h4 class="text-sm font-semibold text-gray-700 mb-2">Preview:</h4>
-                            <div id="html-preview" class="p-4 border border-gray-200 rounded-lg bg-gray-50 min-h-[100px]"></div>
-                        </div>
-
-                        <input type="hidden" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default_if_none:'' }}">
-                        <div id="content-error" class="mt-2 text-xs sm:text-sm text-red-600 hidden">
-                            <p>Please enter blog content.</p>
+                            <div id="html-editor-container" class="hidden">
+                                <textarea id="html-code-editor" class="html-editor" placeholder="Enter HTML..."></textarea>
+                            </div>
+                            <div id="html-preview-container" class="hidden">
+                                <h4><i class="fas fa-eye"></i> Preview</h4>
+                                <div id="html-preview" class="html-preview">
+                                    <p style="color: #9ca3af; font-style: italic;">Preview will appear here...</p>
+                                </div>
+                            </div>
+                            <input type="hidden" id="content" name="content" value="">
+                            <div id="content-error" class="error-message hidden">
+                                <i class="fas fa-exclamation-triangle"></i> Please enter blog content.
+                            </div>
                         </div>
                     {% else %}
                         <input
@@ -59,13 +54,13 @@
                             id="{{ field.id_for_label }}"
                             name="{{ field.name }}"
                             value="{{ field.value|default_if_none:'' }}"
-                            class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 placeholder-gray-400 text-sm sm:text-base"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-base"
                             placeholder="{{ field.help_text|default:field.label }}"
                             {% if field.field.required %}required{% endif %}
                         />
                     {% endif %}
                     {% if field.errors %}
-                        <div class="mt-2 text-xs sm:text-sm text-red-600">
+                        <div class="mt-2 text-sm text-red-600">
                             {% for error in field.errors %}
                                 <p>{{ error }}</p>
                             {% endfor %}
@@ -73,320 +68,268 @@
                     {% endif %}
                 </div>
                 {% endfor %}
-
-                <!-- Submit Button -->
-                <div class="flex justify-end">
-                    <button type="submit" class="bg-indigo-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-xs sm:text-sm hover:bg-indigo-700 transition duration-200 flex items-center">
-                        <i class="ri-edit-2-line mr-2"></i> Create Blog
-                    </button>
-                </div>
-                <!-- Back Button -->
-                <div class="flex justify-start mt-4">
-                    <a href="{% url 'blogs' %}" class="text-indigo-600 hover:text-indigo-800 text-sm sm:text-base">
-                        <i class="ri-arrow-left-line mr-2"></i> Back to Blogs
+                <div class="form-actions flex justify-between">
+                    <a href="{% url 'blogs' %}" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Blogs
                     </a>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-paper-plane"></i> Publish Blog
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </main>
 
-<!-- Load Quill CSS and JS -->
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
-<!-- Custom Styles -->
+
+<!-- Tailwind CSS -->
 <style>
-.ql-editor {
-    min-height: 280px;
-    font-size: 14px;
-    line-height: 1.6;
-}
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        min-height: 100vh;
+    }
 
-.ql-editor pre {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 4px;
-    padding: 12px;
-    margin: 8px 0;
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    overflow-x: auto;
-}
+    .form-wrapper {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 16px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        max-width: 900px;
+        margin: 0 auto;
+    }
 
-.ql-editor code {
-    background-color: #f1f3f4;
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-}
+    .editor-toolbar {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+    }
 
-#html-code-editor {
-    font-family: 'Courier New', Consolas, Monaco, monospace;
-    line-height: 1.4;
-    tab-size: 2;
-}
+    .editor-btn {
+        padding: 0.5rem 1rem;
+        background: white;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
 
-#html-preview {
-    max-height: 400px;
-    overflow-y: auto;
-}
+    .editor-btn:hover {
+        background: #f3f4f6;
+        transform: translateY(-1px);
+    }
 
-#html-preview img {
-    max-width: 100%;
-    height: auto;
-}
+    .editor-btn.active {
+        background: #4f46e5;
+        color: white;
+        border-color: #4f46e5;
+    }
 
-#html-preview pre {
-    background-color: #f8f9fa;
-    padding: 12px;
-    border-radius: 4px;
-    overflow-x: auto;
-    font-size: 13px;
-}
+    .word-count {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
 
-.html-mode-active {
-    background-color: #e0e7ff !important;
-    color: #3730a3 !important;
-    border-color: #a5b4fc !important;
-}
+    .quill-container {
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+    }
+
+    .ql-editor {
+        min-height: 300px;
+        font-size: 1rem;
+        padding: 1rem;
+        background: white;
+    }
+
+    .html-editor {
+        width: 100%;
+        min-height: 300px;
+        padding: 1rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9rem;
+        background: #1e293b;
+        color: #e2e8f0;
+        resize: vertical;
+    }
+
+    .html-preview {
+        margin-top: 1rem;
+        padding: 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #f8fafc;
+        min-height: 150px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(79, 70, 229, 0.5);
+    }
+
+    .btn-secondary {
+        color: #4f46e5;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+        background: #f0f9ff;
+    }
+
+    .error-message {
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        background: #fef2f2;
+        border-radius: 8px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .editor-toolbar {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .ql-editor {
+            min-height: 200px;
+        }
+    }
 </style>
 
+<!-- quill editor js -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    let quill;
-    let isHtmlMode = false;
-    
-    // Initialize Quill editor with extended toolbar
-    quill = new Quill('#blog-content-editor', {
-        theme: 'snow',
-        modules: {
-            toolbar: [
-                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'font': [] }],
-                [{ 'align': [] }],
-                ['link', 'image', 'video'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                [{ 'indent': '-1' }, { 'indent': '+1' }],
-                ['code-block'],
-                ['blockquote'],
-                ['clean']
-            ]
-        },
-        placeholder: 'Start writing your blog content here...',
-        formats: [
-            'header', 'bold', 'italic', 'underline', 'strike',
-            'color', 'background', 'font', 'align',
-            'link', 'image', 'video',
-            'list', 'bullet', 'indent',
-            'code-block', 'code', 'blockquote'
-        ]
-    });
+    document.addEventListener('DOMContentLoaded', () => {
+        const quill = new Quill('#blog-content-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    ['link', 'image', 'code-block']
+                ]
+            },
+            placeholder: 'Start writing...',
+        });
 
-    // Get DOM elements
-    const contentInput = document.querySelector('input[name="content"]');
-    const contentError = document.getElementById('content-error');
-    const toggleHtmlBtn = document.getElementById('toggle-html-btn');
-    const insertCodeBtn = document.getElementById('insert-code-btn');
-    const htmlEditor = document.getElementById('html-code-editor');
-    const htmlEditorContainer = document.getElementById('html-editor-container');
-    const htmlPreviewContainer = document.getElementById('html-preview-container');
-    const htmlPreview = document.getElementById('html-preview');
-    const wordCountSpan = document.getElementById('word-count');
-    const quillContainer = document.getElementById('blog-content-editor');
-    
-    // Set initial content if available
-    if (contentInput && contentInput.value) {
-        quill.root.innerHTML = contentInput.value;
-    }
+        const contentInput = document.getElementById('content');
+        const contentError = document.getElementById('content-error');
+        const toggleHtmlBtn = document.getElementById('toggle-html-btn');
+        const insertCodeBtn = document.getElementById('insert-code-btn');
+        const htmlEditor = document.getElementById('html-code-editor');
+        const htmlEditorContainer = document.getElementById('html-editor-container');
+        const htmlPreviewContainer = document.getElementById('html-preview-container');
+        const htmlPreview = document.getElementById('html-preview');
+        const wordCountSpan = document.getElementById('word-count');
+        const quillContainer = document.getElementById('quill-container');
+        let isHtmlMode = false;
 
-    // Word count function
-    function updateWordCount() {
-        const text = quill.getText().trim();
-        const words = text === '' ? 0 : text.split(/\s+/).length;
-        wordCountSpan.textContent = `${words} words`;
-    }
+        const updateWordCount = () => {
+            const words = quill.getText().trim().split(/\s+/).length || 0;
+            wordCountSpan.textContent = `${words} word${words === 1 ? '' : 's'}`;
+        };
 
-    // Sync Quill content with hidden input
-    function syncContent() {
-        if (contentInput) {
-            const htmlContent = quill.root.innerHTML;
-            contentInput.value = htmlContent;
+        const syncContent = () => {
+            contentInput.value = isHtmlMode ? htmlEditor.value : quill.root.innerHTML;
             updateWordCount();
-            
-            // Hide error if content exists
-            const textContent = quill.getText().trim();
-            if (textContent.length > 0 && contentError) {
-                contentError.classList.add('hidden');
-            }
-        }
-    }
+            if (quill.getText().trim().length > 0) contentError.classList.add('hidden');
+        };
 
-    // Toggle HTML view
-    toggleHtmlBtn.addEventListener('click', function() {
-        isHtmlMode = !isHtmlMode;
-        
-        if (isHtmlMode) {
-            // Switch to HTML mode
-            const currentHtml = quill.root.innerHTML;
-            htmlEditor.value = formatHtml(currentHtml);
-            
-            quillContainer.style.display = 'none';
-            htmlEditorContainer.classList.remove('hidden');
-            htmlPreviewContainer.classList.remove('hidden');
-            
-            toggleHtmlBtn.textContent = '📝 Visual Editor';
-            toggleHtmlBtn.classList.add('html-mode-active');
-            
-            // Update preview
-            updateHtmlPreview();
-        } else {
-            // Switch back to visual mode
-            const htmlContent = htmlEditor.value;
-            quill.root.innerHTML = htmlContent;
-            
-            htmlEditorContainer.classList.add('hidden');
-            htmlPreviewContainer.classList.add('hidden');
-            quillContainer.style.display = 'block';
-            
-            toggleHtmlBtn.innerHTML = '<i class="ri-code-line mr-1"></i> HTML View';
-            toggleHtmlBtn.classList.remove('html-mode-active');
-            
-            syncContent();
-        }
-    });
+        const updateHtmlPreview = () => {
+            htmlPreview.innerHTML = htmlEditor.value || '<p style="color: #9ca3af; font-style: italic;">Preview will appear here...</p>';
+        };
 
-    // Insert code block
-    insertCodeBtn.addEventListener('click', function() {
-        const code = prompt('Enter your code:');
-        if (code) {
+        toggleHtmlBtn.addEventListener('click', () => {
+            isHtmlMode = !isHtmlMode;
             if (isHtmlMode) {
-                // Insert as HTML
-                const codeHtml = `<pre><code>${escapeHtml(code)}</code></pre>`;
-                insertAtCursor(htmlEditor, codeHtml);
+                htmlEditor.value = quill.root.innerHTML;
+                quillContainer.classList.add('hidden');
+                htmlEditorContainer.classList.remove('hidden');
+                htmlPreviewContainer.classList.remove('hidden');
+                toggleHtmlBtn.innerHTML = '<i class="fas fa-edit"></i> Visual Editor';
+                toggleHtmlBtn.classList.add('active');
                 updateHtmlPreview();
             } else {
-                // Insert using Quill
-                const range = quill.getSelection();
-                if (range) {
-                    quill.insertText(range.index, code, 'code-block', true);
+                quill.root.innerHTML = htmlEditor.value;
+                htmlEditorContainer.classList.add('hidden');
+                htmlPreviewContainer.classList.add('hidden');
+                quillContainer.classList.remove('hidden');
+                toggleHtmlBtn.innerHTML = '<i class="fas fa-code"></i> HTML View';
+                toggleHtmlBtn.classList.remove('active');
+                syncContent();
+            }
+        });
+
+        insertCodeBtn.addEventListener('click', () => {
+            const code = prompt('Enter your code:');
+            if (code) {
+                if (isHtmlMode) {
+                    htmlEditor.value += `<pre><code>${code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>`;
+                    updateHtmlPreview();
                 } else {
-                    quill.insertText(quill.getLength(), '\n' + code, 'code-block', true);
+                    const range = quill.getSelection() || { index: quill.getLength() };
+                    quill.insertText(range.index, `\n${code}`, 'code-block', true);
                 }
                 syncContent();
             }
-        }
-    });
+        });
 
-    // HTML editor input event
-    htmlEditor.addEventListener('input', function() {
-        updateHtmlPreview();
-        // Update hidden input directly when in HTML mode
-        if (contentInput && isHtmlMode) {
-            contentInput.value = htmlEditor.value;
-        }
-    });
-
-    // Update HTML preview
-    function updateHtmlPreview() {
-        const htmlContent = htmlEditor.value;
-        htmlPreview.innerHTML = htmlContent || '<p class="text-gray-400 italic">Preview will appear here...</p>';
-    }
-
-    // Format HTML for better readability
-    function formatHtml(html) {
-        // Simple HTML formatting (you can enhance this)
-        return html
-            .replace(/></g, '>\n<')
-            .replace(/^\s*\n/gm, '')
-            .split('\n')
-            .map(line => line.trim())
-            .filter(line => line.length > 0)
-            .join('\n');
-    }
-
-    // Escape HTML entities
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    // Insert text at cursor position
-    function insertAtCursor(textarea, text) {
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const beforeText = textarea.value.substring(0, start);
-        const afterText = textarea.value.substring(end);
-        
-        textarea.value = beforeText + text + afterText;
-        textarea.selectionStart = textarea.selectionEnd = start + text.length;
-        textarea.focus();
-    }
-
-    // Quill event listeners
-    quill.on('text-change', syncContent);
-    quill.on('selection-change', function(range) {
-        if (!range && contentInput) {
-            contentInput.value = quill.root.innerHTML;
-        }
-    });
-
-    // Initial word count
-    updateWordCount();
-
-    // Form submission validation
-    const form = document.getElementById('blog-form');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            // Ensure content is synced before submission
+        htmlEditor.addEventListener('input', () => {
             if (isHtmlMode) {
                 contentInput.value = htmlEditor.value;
-            } else {
-                contentInput.value = quill.root.innerHTML;
-            }
-            
-            // Check if content exists
-            const textContent = isHtmlMode ? 
-                htmlEditor.value.replace(/<[^>]*>/g, '').trim() : 
-                quill.getText().trim();
-            
-            if (textContent.length === 0) {
-                e.preventDefault();
-                if (contentError) {
-                    contentError.classList.remove('hidden');
-                }
-                
-                // Scroll to editor
-                const editorElement = isHtmlMode ? htmlEditorContainer : quillContainer;
-                editorElement.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'center' 
-                });
-                return false;
+                updateHtmlPreview();
             }
         });
-    }
 
-    // Keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-        // Ctrl/Cmd + Shift + H to toggle HTML view
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'H') {
-            e.preventDefault();
-            toggleHtmlBtn.click();
-        }
-        
-        // Ctrl/Cmd + Shift + C to insert code block
-        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'C') {
-            e.preventDefault();
-            insertCodeBtn.click();
-        }
+        quill.on('text-change', syncContent);
+        updateWordCount();
     });
+</script>
 
-    console.log('Enhanced Quill editor with HTML support initialized successfully');
+<!-- form submit js -->
+<script>
+    document.getElementById('blog-form').addEventListener('submit', (e) => {
+    const textContent = isHtmlMode ? htmlEditor.value.replace(/<[^>]*>/g, '').trim() : quill.getText().trim();
+    if (!textContent) {
+        e.preventDefault();
+        contentError.classList.remove('hidden');
+        (isHtmlMode ? htmlEditorContainer : quillContainer).scrollIntoView({ behavior: 'smooth' });
+        return;
+    }
+    const submitBtn = document.querySelector('.btn-primary');
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publishing...';
+    submitBtn.disabled = true;
+    // Remove simulation and let the form submit naturally
+    contentInput.value = isHtmlMode ? htmlEditor.value : quill.root.innerHTML;
+    form.submit(); // Trigger actual form submission
 });
 </script>
 {% endblock %}

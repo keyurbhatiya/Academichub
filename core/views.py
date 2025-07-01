@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import RegisterForm, OldPaperForm, ProjectForm, BlogForm
-from .models import OldPaper, Project, Blog, SiteSettings
+from .models import OldPaper, Project, Blog, SiteSettings,  Comment
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import ContentModerationForm
 from django.db.models.functions import TruncMonth
 from django.db.models import Count
 import json
+from django.http import JsonResponse
 from datetime import datetime
 from django.utils import timezone
 from django.core.paginator import Paginator
@@ -69,6 +70,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
+    messages.success(request, 'You have been logged out successfully.')
     return redirect('home')
 
 def papers(request):
@@ -154,6 +156,7 @@ def upload_project(request):
 
     return render(request, 'core/upload_project.html', {'form': form})
 
+# Create a new blog post view
 
 @login_required
 def blog_create(request):
@@ -171,6 +174,95 @@ def blog_create(request):
     else:
         form = BlogForm()
     return render(request, 'core/blog_create.html', {'form': form})
+
+# blog slug view
+def blog_detail(request, slug):
+    blog = get_object_or_404(Blog, slug=slug)
+    
+    # Show limited or all comments
+    show_all = request.GET.get('show_all_comments') == 'true'
+    comments = blog.comments.filter(parent__isnull=True).order_by('-created_at')
+    if not show_all:
+        comments = comments[:2]
+
+    # Related posts logic (based on similar title words or any other criteria)
+    related_posts = Blog.objects.filter(
+        Q(title__icontains=blog.title.split()[0]) | Q(status='Published'),
+        ~Q(id=blog.id)
+    ).distinct()[:3]
+
+    # Fallback: show recent posts if no related ones found
+    if not related_posts.exists():
+        related_posts =blogs = Blog.objects.all().order_by('-created_at')[:3]
+
+    return render(request, 'core/blog_detail.html', {
+        'blog': blog,
+        'comments': comments,
+        'show_all_comments': show_all,
+        'related_posts': related_posts,
+    })
+
+
+# Add comment to blog view
+def add_comment(request, slug):
+    if request.method == 'POST':
+        blog = Blog.objects.get(slug=slug)
+        Comment.objects.create(
+            blog=blog,
+            user=request.user if request.user.is_authenticated else None,
+            name=request.POST['name'],
+            email=request.POST['email'],
+            content=request.POST['content'],
+        )
+        messages.success(request, 'Comment posted successfully!')
+        return redirect('blog_detail', slug=slug)
+    return redirect('blog_detail', slug=slug)
+
+
+
+@login_required
+def like_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    user = request.user
+    if user in comment.likes.all():
+        comment.likes.remove(user)
+        liked = False
+    else:
+        comment.likes.add(user)
+        liked = True
+    return JsonResponse({
+        'likes_count': comment.likes.count(),
+        'liked': liked
+    })
+
+
+@login_required
+def like_reply(request, reply_id):
+    pass
+    # reply = get_object_or_404(Reply, id=reply_id)
+    # user = request.user
+    # if user in reply.likes.all():
+    #     reply.likes.remove(user)
+    #     liked = False
+    # else:
+    #     reply.likes.add(user)
+    #     liked = True
+    # return JsonResponse({
+    #     'likes_count': reply.likes.count(),
+    #     'liked': liked
+    # })
+
+
+@login_required
+def add_reply(request, slug):
+    pass
+def dislike_blog(request, slug):
+    if request.method == 'POST':
+        blog = get_object_or_404(Blog, slug=slug)
+        blog.dislikes += 1
+        blog.save()
+        messages.success(request, 'You disliked this blog post.')
+    return redirect('blog_detail', slug=slug)
 
 # user profile view
 @login_required
@@ -578,3 +670,49 @@ def settings(request):
         return redirect('settings')
     context = {'settings': settings_obj}
     return render(request, 'admin/settings.html', context)
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def delete_blog(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+
+    if request.method == 'POST':
+        if blog.uploaded_by == request.user or request.user.is_superuser:
+            blog.delete()
+            messages.success(request, "Blog deleted successfully.")
+            return redirect('admin_blogs')  # Change this to your blog listing URL name
+        else:
+            messages.error(request, "You are not authorized to delete this blog.")
+            return redirect('blog_detail', slug=blog.slug)
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def edit_blog(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES, instance=blog)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Blog updated successfully.')
+            return redirect('admin_blogs')
+    else:
+        form = BlogForm(instance=blog)
+    return render(request, 'admin/edit_blog.html', {'form': form, 'blog': blog})
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def create_blog(request):
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            blog = form.save(commit=False)
+            blog.uploaded_by = request.user
+            blog.author = request.user
+            blog.save()
+            messages.success(request, 'Blog created successfully.')
+            return redirect('admin_blogs')
+    else:
+        form = BlogForm()
+    return render(request, 'admin/create_blog.html', {'form': form})
+
+
