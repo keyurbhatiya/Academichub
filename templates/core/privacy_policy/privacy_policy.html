@@ -1,0 +1,72 @@
+{% extends 'core/base.html' %}
+{% block title %}Privacy Policy | AcademicHub{% endblock %}
+
+{% block content %}
+<main class="py-12 sm:py-16 bg-gray-100">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header Section -->
+            <div class="mb-8 sm:mb-12 text-center">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Privacy Policy</h1>
+                <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">At AcademicHub, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information.</p>
+            </div>
+
+            <!-- Policy Sections -->
+            <div class="space-y-4">
+                <!-- Section 1: Information We Collect -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-information-line mr-2 text-indigo-600"></i> Information We Collect
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">We collect information you provide when registering, uploading papers/projects, or submitting feedback, including your name, email, and uploaded content. We also collect usage data, such as browsing activity and IP addresses.</p>
+                </div>
+
+                <!-- Section 2: How We Use Your Information -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-file-user-line mr-2 text-indigo-600"></i> How We Use Your Information
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Your information is used to provide and improve AcademicHub services, such as processing uploads, personalizing content, and responding to feedback. We may also use anonymized data for analytics.</p>
+                </div>
+
+                <!-- Section 3: Data Sharing -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-share-line mr-2 text-indigo-600"></i> Data Sharing
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">We do not sell or share your personal information with third parties, except as required by law or to protect the platform (e.g., responding to legal requests).</p>
+                </div>
+
+                <!-- Section 4: Data Security -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-shield-line mr-2 text-indigo-600"></i> Data Security
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">We use industry-standard measures to protect your data, but no system is completely secure. You are responsible for keeping your account credentials safe.</p>
+                </div>
+
+                <!-- Section 5: Your Rights -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-user-settings-line mr-2 text-indigo-600"></i> Your Rights
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">You can access, update, or delete your account information via your profile settings or by contacting us at <a href="{% url 'contact' %}" class="text-indigo-600 hover:underline">Contact Us</a>.</p>
+                </div>
+
+                <!-- Section 6: Cookies -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-cookie-line mr-2 text-indigo-600"></i> Cookies
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">We use cookies to enhance your experience. See our <a href="{% url 'cookie_policy' %}" class="text-indigo-600 hover:underline">Cookie Policy</a> for details.</p>
+                </div>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="mt-8 text-center">
+                <p class="text-gray-600 text-sm sm:text-base">Questions about our Privacy Policy? <a href="{% url 'contact' %}" class="text-indigo-600 hover:underline font-semibold">Contact Us</a> for assistance.</p>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'core/base.html' %}
+{% block title %}Cookie Policy | AcademicHub{% endblock %}
+
+{% block content %}
+<main class="py-12 sm:py-16 bg-gray-100">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header Section -->
+            <div class="mb-8 sm:mb-12 text-center">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Cookie Policy</h1>
+                <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">This Cookie Policy explains how AcademicHub uses cookies and similar technologies to enhance your experience on our platform.</p>
+            </div>
+
+            <!-- Policy Sections -->
+            <div class="space-y-4">
+                <!-- Section 1: What Are Cookies -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-cookie-line mr-2 text-indigo-600"></i> What Are Cookies
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Cookies are small text files stored on your device to remember your preferences and improve site functionality.</p>
+                </div>
+
+                <!-- Section 2: Types of Cookies We Use -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-list-check mr-2 text-indigo-600"></i> Types of Cookies We Use
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">We use essential cookies for login sessions, analytics cookies to track usage, and preference cookies to personalize your experience.</p>
+                </div>
+
+                <!-- Section 3: How We Use Cookies -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-settings-3-line mr-2 text-indigo-600"></i> How We Use Cookies
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Cookies help us maintain your session, analyze site performance, and customize content based on your interactions.</p>
+                </div>
+
+                <!-- Section 4: Managing Cookies -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-toggle-line mr-2 text-indigo-600"></i> Managing Cookies
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">You can disable cookies in your browser settings, but this may affect your ability to use some AcademicHub features.</p>
+                </div>
+
+                <!-- Section 5: Third-Party Cookies -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-global-line mr-2 text-indigo-600"></i> Third-Party Cookies
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">We may use third-party analytics tools that set cookies to collect anonymized data about site usage.</p>
+                </div>
+
+                <!-- Section 6: Updates to This Policy -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-refresh-line mr-2 text-indigo-600"></i> Updates to This Policy
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm piec
+                    :text-base">We may update this Cookie Policy periodically. Changes will be posted on this page with an updated effective date.</p>
+                </div>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="mt-8 text-center">
+                <p class="text-gray-600 text-sm sm:text-base">Questions about our Cookie Policy? <a href="{% url 'contact' %}" class="text-indigo-600 hover:underline font-semibold">Contact Us</a> for assistance.</p>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

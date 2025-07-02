@@ -70,11 +70,11 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    messages.success(request, 'You have been logged out successfully.')
     return redirect('home')
 
-def papers(request):
 
+
+def papers(request):
     papers = OldPaper.objects.all().order_by('-uploaded_at')
     
     universities = OldPaper.objects.values_list('university', flat=True).distinct()
@@ -82,17 +82,29 @@ def papers(request):
 
     university = request.GET.get('university')
     course = request.GET.get('course')
+    semester = request.GET.get('semester')
     
     if university:
         papers = papers.filter(university=university)
     if course:
         papers = papers.filter(course=course)
+    if semester:
+        papers = papers.filter(semester__icontains=semester)
     
-    return render(request, 'core/papers.html', {
+    context = {
         'papers': papers,
         'universities': universities,
-        'courses': courses
-    })
+        'courses': courses,
+        'selected_university': university or '',
+        'selected_course': course or '',
+        'selected_semester': semester or ''
+    }
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Render only the papers list for AJAX requests
+        return render(request, 'core/papers_list.html', context)
+    
+    return render(request, 'core/papers.html', context)
 
 def projects(request):
     selected_language = request.GET.get('language', '')
@@ -107,7 +119,7 @@ def projects(request):
         projects = projects.filter(
             Q(title__icontains=search_query) |
             Q(description__icontains=search_query) |
-            Q(uploaded_by__username__icontains=search_query)  # 👈 fix here
+            Q(uploaded_by__username__icontains=search_query)
         )
 
     languages = Project.objects.values_list('language', flat=True).distinct()
@@ -119,7 +131,11 @@ def projects(request):
         'languages': languages
     }
 
-    return render(request, 'core/projects.html', context)
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Render only the projects list for AJAX requests
+        return render(request, 'core/projects/projects_list.html', context)
+    
+    return render(request, 'core/projects/projects.html', context)
 
 def blogs(request):
     blogs = Blog.objects.all().order_by('-created_at')
@@ -146,14 +162,22 @@ def feedback_view(request):
         # You could save to a model or send an email here
         messages.success(request, "Thank you for your feedback!")
         return redirect('feedback')
-    return render(request, 'core/feedback.html', {'form': form})
+    return render(request, 'core/feedback/feedback.html', {'form': form})
 
 def community_guidelines(request):
-    return render(request, 'core/community_guidelines.html')
+    return render(request, 'core/community_guidelines/community_guidelines.html')
 
 def faq_page(request):
-    return render(request, 'core/faq.html')
+    return render(request, 'core/faqs/faq.html')
 
+def privacy_policy(request):
+    return render(request, 'core/privacy_policy/privacy_policy.html')
+
+def terms_of_service(request):
+    return render(request, 'core/terms_of_service/terms_of_service.html')
+
+def cookie_policy(request):
+    return render(request, 'core/cookie_policy/cookie_policy.html')
 
 
 @login_required
@@ -747,3 +771,11 @@ def create_blog(request):
     return render(request, 'admin/create_blog.html', {'form': form})
 
 
+# admin contact us view
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def admin_ontact_us(request):
+    return render(request, 'admin/contact_us.html', {
+        'contact_form': ContactForm(),
+        'feedback_form': FeedbackForm(),
+    })

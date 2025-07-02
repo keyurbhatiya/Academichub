@@ -113,55 +113,15 @@
                     learning journey and academic success.
                 </p>
             </div>
-            <!-- Filter -->
-            <!-- <div class="bg-white p-8 rounded-2xl shadow-lg mb-10 backdrop-blur-sm bg-white/80 iteam-center">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- University Dropdown -->
-                    <!-- <div>
-                        <label for="university" class="block text-sm font-medium text-gray-700 mb-2">University</label>
-                        <div class="relative">
-                            <select id="university" name="university"
-                                class="w-full py-2 pl-10 pr-4 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                                <option value="" disabled selected>Select a university</option>
-                                {% for uni in universities %}
-                                <option value="{{ uni }}">{{ uni }}</option>
-                                {% endfor %}
-                            </select>
-                            <div
-                                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 flex items-center justify-center text-gray-400">
-                                <i class="ri-building-4-line"></i>
-                            </div>
-                        </div>
-                    </div> -->
-
-                    <!-- Course Dropdown -->
-                    <!-- <div>
-                        <label for="course" class="block text-sm font-medium text-gray-700 mb-2">Course</label>
-                        <div class="relative">
-                            <select id="course" name="course"
-                                class="w-full py-2 pl-10 pr-4 border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                                <option value="" disabled selected>Select a course</option>
-                                {% for course in courses %}
-                                <option value="{{ course }}">{{ course }}</option>
-                                {% endfor %}
-                            </select>
-                            <div
-                                class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 flex items-center justify-center text-gray-400">
-                                <i class="ri-book-open-line"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>  -->
-
             <!-- Papers Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
                 {% for paper in papers %}
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden card-hover">
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-4">
-                            <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Semester -
-                                {{ paper.semester|default:"N/A" }}
+                            <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                {{ paper.course|default:"Unknown Course" }}  
+                                Sem - {{ paper.semester|default:"N/A" }}
                             </span>
                             <span class="text-sm text-gray-500">{{ paper.uploaded_at|date:"Y" }}</span>
                         </div>
@@ -184,7 +144,7 @@
                         <a href="{{ paper.file.url }}" target="_blank"
                             class="text-primary hover:text-primary/80 transition-colors">
                             <div class="w-5 h-5 flex items-center justify-center">
-                                <i class="ri-download-line"></i>
+                                <i class="ri-eye-line"></i>
                             </div>
                         </a>
                     </div>
@@ -273,8 +233,9 @@
                         <!-- download button  -->
                             <button class="text-primary bg-blue-100 hover:text-primary/80 transition-colors">
                                 <a href="{{ project.zip_file.url }}" class="bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-xs sm:text-sm hover:bg-blue-700 transition duration-200 flex items-center shrink-0" download>
-                                    Download
+                                   <i class="ri-download-2-line"> Download</i> 
                                 </a>
+                                
                             </button>
                         </div>
                 </div>
@@ -352,7 +313,7 @@
                                             <time class="text-xs text-gray-500" datetime="{{ blog.created_at|date:'c' }}">{{ blog.created_at|date:"M d, Y" }}</time>
                                         </div>
                                     </div>
-                                    <a href="{% url 'blog_detail' blog.slug %}" class="text-indigo-600 hover:text-indigo-800 text-xs sm:text-sm font-semibold flex items-center" aria-label="Read more about {{ blog.title }}">
+                                    <a href="{% url 'blog_detail' blog.slug %}" class="text-primary hover:text-primary-600 hover:text-primary-800 text-xs sm:text-sm font-semibold flex items-center" aria-label="Read more about {{ blog.title }}">
                                         Read More <i class="ri-arrow-right-line ml-1" aria-hidden="true"></i>
                                     </a>
                                 </div>

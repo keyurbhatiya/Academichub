@@ -21,6 +21,8 @@ urlpatterns = [
     path('admin/papers/upload/', views.upload_old_paper, name='upload_old_paper'),
     path('admin/analytics/', views.analytics, name='analytics'),
     path('admin/settings/', views.settings, name='settings'),
+    path('admin/contact-us/', views.admin_ontact_us, name='contact_us'),
+    
 
     # path('admin/', admin.site.urls),
     path('', include('core.urls')),

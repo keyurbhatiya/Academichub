@@ -1,0 +1,31 @@
+<div id="papers-list">
+    {% if papers %}
+    <div class="grid grid-cols-1 gap-4 sm:gap-6">
+        {% for paper in papers %}
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 p-4 sm:p-6 border border-gray-100">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:items-center sm:justify-between">
+                <!-- Paper Details -->
+                <div class="mb-4 sm:mb-0">
+                    <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">{{ paper.title }}</h3>
+                    <p class="text-gray-600 text-xs sm:text-sm mb-1">{{ paper.university }} (sem: {{ paper.semester }})</p>
+                    <p class="text-gray-500 text-xs sm:text-sm">Uploaded by <span class="font-medium">{{ paper.uploaded_by }}</span> on {{ paper.uploaded_at|date:"F d, Y" }}</p>
+                </div>
+                <!-- Download Button -->
+                <a href="{{ paper.file.url }}" 
+                        target="_blank"
+                        class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition duration-200 flex items-center shrink-0">
+                    <i class="ri-eye-line mr-2"></i> View PDF
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="bg-white rounded-xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
+        <i class="ri-file-warning-line text-3xl sm:text-4xl text-gray-400 mb-4"></i>
+        <p class="text-base sm:text-lg text-gray-600">No papers available at the moment.</p>
+        <p class="text-xs sm:text-sm text-gray-500 mt-2">Check back later or contribute by uploading a paper!</p>
+        <a href="{% url 'upload_paper' %}" class="inline-block mt-4 bg-indigo-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold text-xs sm:text-sm hover:bg-indigo-700 transition duration-200">Upload Paper</a>
+    </div>
+    {% endif %}
+</div>

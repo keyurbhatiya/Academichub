@@ -28,6 +28,9 @@ urlpatterns = [
     path('feedback/', views.feedback_view, name='feedback'),
     path('community-guidelines/', views.community_guidelines, name='community_guidelines'),
     path('faq/', views.faq_page, name='faqs'),
+    path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+    path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
+    path('cookie-policy/', views.cookie_policy, name='cookie_policy'),
 
 
 

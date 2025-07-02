@@ -1,0 +1,265 @@
+{% extends 'core/base.html' %}
+{% block title %}FAQs | AcademicHub{% endblock %}
+
+{% block content %}
+<main class="py-12 sm:py-16 bg-gray-100">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header Section -->
+            <div class="mb-8 sm:mb-12 text-center">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h1>
+                <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">Find answers to common questions about using AcademicHub, from uploading papers and projects to managing your account and more.</p>
+            </div>
+
+            <!-- FAQ List -->
+            <div class="space-y-4">
+                <!-- FAQ 1 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> How do I upload a question paper?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Navigate to the “Papers” section, click “Upload Paper,” fill out the form with details like university, course, and semester, and upload your PDF file.</p>
+                </details>
+
+                <!-- FAQ 2 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> What file formats are supported for paper uploads?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Currently, only PDF files are supported for question paper uploads to ensure compatibility and security.</p>
+                </details>
+
+                <!-- FAQ 3 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Can I edit or delete a paper I uploaded?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Yes, go to your profile, select “My Papers,” and use the edit or delete options for your uploaded papers.</p>
+                </details>
+
+                <!-- FAQ 4 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> How do I search for specific question papers?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Use the filter options in the “Papers” section to select a university, course, or semester to narrow down your search.</p>
+                </details>
+
+                <!-- FAQ 5 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Who can upload question papers?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Any registered user, including students, teachers, or researchers, can upload question papers.</p>
+                </details>
+
+                <!-- FAQ 6 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> How do I upload an academic project?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Go to the “Projects” section, click “Upload Project,” fill out the form with project details, and upload a ZIP file and optional image.</p>
+                </details>
+
+                <!-- FAQ 7 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> What types of projects can I share?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">You can share academic projects in any programming language or discipline, such as coding projects, research papers, or presentations.</p>
+                </details>
+
+                <!-- FAQ 8 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Can I download projects shared by others?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Yes, registered users can download project ZIP files from the “Projects” section by clicking the “Download” button.</p>
+                </details>
+
+                <!-- FAQ 9 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> How do I filter projects by programming language?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">In the “Projects” section, use the language dropdown in the filter form to select a specific programming language.</p>
+                </details>
+
+                <!-- FAQ 10 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Can I edit or delete a project I uploaded?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Yes, visit your profile, go to “My Projects,” and use the edit or delete options for your uploaded projects.</p>
+                </details>
+
+                <!-- FAQ 11 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Who can register on AcademicHub?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Anyone interested in academics, including students, teachers, researchers, or enthusiasts, can register.</p>
+                </details>
+
+                <!-- FAQ 12 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> How do I create an account?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Click the “Sign Up” button on the homepage, fill out the registration form, and verify your email to activate your account.</p>
+                </details>
+
+                <!-- FAQ 13 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Is registration free?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Yes, registering on AcademicHub is completely free for all users.</p>
+                </details>
+
+                <!-- FAQ 14 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> How do I reset my password?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Click “Forgot Password” on the login page, enter your email, and follow the instructions in the reset email.</p>
+                </details>
+
+                <!-- FAQ 15 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Can I update my profile information?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Yes, go to your profile settings to update your name, email, or other personal information.</p>
+                </details>
+
+                <!-- FAQ 16 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold işaret
+                    text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> How do I report inappropriate content?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Use the <a href="{% url 'contact' %}" class="text-indigo-600 hover:underline">Contact Us</a> form, provide the link to the content, and describe the issue.</p>
+                </details>
+
+                <!-- FAQ 17 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Can I share blog posts on AcademicHub?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Yes, registered users can create and share blog posts via the “Blogs” section in their profile.</p>
+                </details>
+
+                <!-- FAQ 18 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Can I edit or delete my blog post?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Yes, visit your profile, go to “My Blogs,” and use the edit or delete options provided.</p>
+                </details>
+
+                <!-- FAQ 19 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> How do I provide feedback about the platform?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Go to the <a href="{% url 'feedback' %}" class="text-indigo-600 hover:underline">Feedback</a> page, fill out the form with your name, email, and message, and submit it.</p>
+                </details>
+
+                <!-- FAQ 20 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Is my feedback anonymous?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Feedback is not anonymous, as you need to provide your name and email, but your information is kept confidential.</p>
+                </details>
+
+                <!-- FAQ 21 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> How do I contact support?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Use the <a href="{% url 'contact' %}" class="text-indigo-600 hover:underline">Contact Us</a> form to reach our support team with any issues or questions.</p>
+                </details>
+
+                <!-- FAQ 22 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Are there file size limits for uploads?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Yes, paper uploads are limited to 10MB, and project ZIP files are limited to 50MB to ensure efficient processing.</p>
+                </details>
+
+                <!-- FAQ 23 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Can I download papers without registering?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">No, you must be a registered user to download papers and projects for security and tracking purposes.</p>
+                </details>
+
+                <!-- FAQ 24 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> How are uploaded files moderated?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">All uploads are reviewed by our moderation team to ensure they meet AcademicHub’s content guidelines.</p>
+                </details>
+
+                <!-- FAQ 25 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Can I share my AcademicHub profile publicly?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Yes, you can share your public profile URL, which displays your uploaded papers, projects, and blogs.</p>
+                </details>
+
+                <!-- FAQ 26 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> How do I search for content by keyword?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Use the search bar in the “Projects” section to search by title, description, or uploader’s username.</p>
+                </details>
+
+                <!-- FAQ 27 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Can I collaborate with others on AcademicHub?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Currently, AcademicHub does not support direct collaboration, but you can share project details and connect via external platforms.</p>
+                </details>
+
+                <!-- FAQ 28 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> How do I delete my account?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Contact support via the <a href="{% url 'contact' %}" class="text-indigo-600 hover:underline">Contact Us</a> form to request account deletion.</p>
+                </details>
+
+                <!-- FAQ 29 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> Are there premium features on AcademicHub?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Currently, all features are free, but premium features may be introduced in the future. Check our updates for details.</p>
+                </details>
+
+                <!-- FAQ 30 -->
+                <details class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <summary class="text-lg font-semibold text-gray-900 cursor-pointer flex items-center">
+                        <i class="ri-question-line mr-2 text-indigo-600"></i> How can I stay updated on new features?
+                    </summary>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Follow our blog or subscribe to our newsletter via your profile settings to stay informed about new features and updates.</p>
+                </details>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="mt-8 text-center">
+                <p class="text-gray-600 text-sm sm:text-base">Didn’t find your answer? <a href="{% url 'contact' %}" class="text-indigo-600 hover:underline font-semibold">Contact Us</a> for further assistance.</p>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

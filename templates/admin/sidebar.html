@@ -73,6 +73,18 @@
                 </div>
                 <span>Analytics</span>
             </a>
+            <a href="{% url 'feedback' %}" class="sidebar-item {% if request.resolver_match.url_name == 'feedback' %}active{% endif %} flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-feedback-line"></i>
+                </div>
+                <span>Feedback</span>
+            </a>
+            <a href="{% url 'contact_us'%}" class="sidebar-item {% if request.resolver_match.url_name == 'contact-us' %}active{% endif %} flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
+                <div class="w-5 h-5 flex items-center justify-center mr-3">
+                    <i class="ri-mail-line"></i>
+                </div>
+                <span>Contact Us</span>
+            </a>
             <a href="{% url 'settings' %}"
                 class="sidebar-item {% if request.resolver_match.url_name == 'settings' %}active{% endif %} flex items-center px-3 py-2 text-sm font-medium rounded-button hover:bg-gray-100">
                 <div class="w-5 h-5 flex items-center justify-center mr-3">

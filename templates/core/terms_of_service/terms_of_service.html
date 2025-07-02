@@ -1,0 +1,72 @@
+{% extends 'core/base.html' %}
+{% block title %}Terms of Service | AcademicHub{% endblock %}
+
+{% block content %}
+<main class="py-12 sm:py-16 bg-gray-100">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header Section -->
+            <div class="mb-8 sm:mb-12 text-center">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Terms of Service</h1>
+                <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">By using AcademicHub, you agree to these Terms of Service, which govern your use of our platform and services.</p>
+            </div>
+
+            <!-- Terms Sections -->
+            <div class="space-y-4">
+                <!-- Section 1: Acceptance of Terms -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-checkbox-circle-line mr-2 text-indigo-600"></i> Acceptance of Terms
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">By accessing or using AcademicHub, you agree to be bound by these Terms of Service and our <a href="{% url 'privacy_policy' %}" class="text-indigo-600 hover:underline">Privacy Policy</a>.</p>
+                </div>
+
+                <!-- Section 2: User Responsibilities -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-user-line mr-2 text-indigo-600"></i> User Responsibilities
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">You are responsible for the content you upload (papers, projects, blogs) and must comply with our <a href="{% url 'community_guidelines' %}" class="text-indigo-600 hover:underline">Community Guidelines</a>.</p>
+                </div>
+
+                <!-- Section 3: Content Ownership -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-copyright-line mr-2 text-indigo-600"></i> Content Ownership
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">You retain ownership of your uploaded content but grant AcademicHub a non-exclusive license to display and distribute it on the platform.</p>
+                </div>
+
+                <!-- Section 4: Prohibited Activities -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-forbid-line mr-2 text-indigo-600"></i> Prohibited Activities
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">You may not upload malicious content, engage in unauthorized access, or violate intellectual property rights. See our <a href="{% url 'community_guidelines' %}" class="text-indigo-600 hover:underline">Community Guidelines</a> for details.</p>
+                </div>
+
+                <!-- Section 5: Account Termination -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-close-circle-line mr-2 text-indigo-600"></i> Account Termination
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">We reserve the right to suspend or terminate accounts for violations of these Terms or Community Guidelines.</p>
+                </div>
+
+                <!-- Section 6: Limitation of Liability -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-alert-line mr-2 text-indigo-600"></i> Limitation of Liability
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">AcademicHub is not liable for damages arising from your use of the platform or reliance on uploaded content.</p>
+                </div>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="mt-8 text-center">
+                <p class="text-gray-600 text-sm sm:text-base">Questions about our Terms of Service? <a href="{% url 'contact' %}" class="text-indigo-600 hover:underline font-semibold">Contact Us</a> for assistance.</p>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

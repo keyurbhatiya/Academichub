@@ -1,0 +1,144 @@
+{% extends 'core/base.html' %}
+{% block title %}Community Guidelines | AcademicHub{% endblock %}
+
+{% block content %}
+<main class="py-12 sm:py-16 bg-gray-100">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header Section -->
+            <div class="mb-8 sm:mb-12 text-center">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Community Guidelines</h1>
+                <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">Welcome to AcademicHub! Our community thrives on collaboration and respect. Follow these guidelines to ensure a positive and productive experience for everyone.</p>
+            </div>
+
+            <!-- Guidelines List -->
+            <div class="space-y-4">
+                <!-- Guideline 1: Be Respectful -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-heart-line mr-2 text-indigo-600"></i> Be Respectful
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Treat all members with kindness and respect. Discriminatory, offensive, or harassing content, including hate speech, bullying, or personal attacks, is strictly prohibited.</p>
+                </div>
+
+                <!-- Guideline 2: No Plagiarism -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-file-copy-line mr-2 text-indigo-600"></i> No Plagiarism
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Share only original work or properly credited content. Plagiarism or unauthorized use of others’ work, including papers, projects, or blogs, is not allowed.</p>
+                </div>
+
+                <!-- Guideline 3: Keep It Academic -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-book-open-line mr-2 text-indigo-600"></i> Keep It Academic
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Post content relevant to education, research, or learning. Non-academic or promotional content, such as advertisements or spam, is not permitted.</p>
+                </div>
+
+                <!-- Guideline 4: Report Issues -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-flag-line mr-2 text-indigo-600"></i> Report Issues
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">If you encounter inappropriate content or behavior, report it using the <a href="{% url 'contact' %}" class="text-indigo-600 hover:underline">Contact Us</a> form, including a link or description of the issue.</p>
+                </div>
+
+                <!-- Guideline 5: Stay Safe -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-shield-line mr-2 text-indigo-600"></i> Stay Safe
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Do not share private or sensitive information publicly, such as personal contact details, passwords, or financial information.</p>
+                </div>
+
+                <!-- Guideline 6: Follow Upload Guidelines -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-upload-line mr-2 text-indigo-600"></i> Follow Upload Guidelines
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Upload question papers in PDF format (max 10MB) and projects in ZIP format (max 50MB). Ensure files are relevant, accurate, and free of malicious content.</p>
+                </div>
+
+                <!-- Guideline 7: Respect Content Ownership -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-copyright-line mr-2 text-indigo-600"></i> Respect Content Ownership
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Only upload content you have the right to share. Respect the intellectual property of others when using downloaded papers or projects.</p>
+                </div>
+
+                <!-- Guideline 8: Engage Constructively -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-chat-3-line mr-2 text-indigo-600"></i> Engage Constructively
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">If commenting or providing feedback, keep discussions constructive and relevant. Avoid off-topic or inflammatory remarks.</p>
+                </div>
+
+                <!-- Guideline 9: Use Accurate Metadata -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-information-line mr-2 text-indigo-600"></i> Use Accurate Metadata
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">When uploading papers or projects, provide accurate details (e.g., university, course, semester, or language) to help others find relevant content.</p>
+                </div>
+
+                <!-- Guideline 10: Comply with Moderation -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-user-voice-line mr-2 text-indigo-600"></i> Comply with Moderation
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">All uploads are subject to moderation. Content violating guidelines may be removed, and repeated violations may lead to account suspension.</p>
+                </div>
+
+                <!-- Guideline 11: Keep Profiles Appropriate -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-profile-line mr-2 text-indigo-600"></i> Keep Profiles Appropriate
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Use appropriate usernames and profile information. Avoid offensive or misleading details in your public profile.</p>
+                </div>
+
+                <!-- Guideline 12: Respect Download Limits -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-download-line mr-2 text-indigo-600"></i> Respect Download Limits
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Adhere to any download restrictions or quotas. Excessive downloading or automated scraping is prohibited.</p>
+                </div>
+
+                <!-- Guideline 13: Provide Constructive Feedback -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-feedback-line mr-2 text-indigo-600"></i> Provide Constructive Feedback
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">When using the <a href="{% url 'feedback' %}" class="text-indigo-600 hover:underline">Feedback</a> form, provide clear, constructive, and respectful suggestions to help improve the platform.</p>
+                </div>
+
+                <!-- Guideline 14: No Unauthorized Access -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-lock-line mr-2 text-indigo-600"></i> No Unauthorized Access
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Do not attempt to access accounts, data, or features you are not authorized to use. Hacking or exploiting the platform is strictly prohibited.</p>
+                </div>
+
+                <!-- Guideline 15: Respect Privacy -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-200 backdrop-blur-sm bg-white/80">
+                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="ri-eye-off-line mr-2 text-indigo-600"></i> Respect Privacy
+                    </h2>
+                    <p class="mt-2 text-gray-600 text-sm sm:text-base">Do not share or misuse personal information of other users obtained through AcademicHub, such as emails or usernames.</p>
+                </div>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="mt-8 text-center">
+                <p class="text-gray-600 text-sm sm:text-base">Questions or concerns about our guidelines? <a href="{% url 'contact' %}" class="text-indigo-600 hover:underline font-semibold">Contact Us</a> for assistance.</p>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
