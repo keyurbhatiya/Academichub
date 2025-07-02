@@ -16,6 +16,7 @@ urlpatterns = [
     path('admin/blogs/create/', views.create_blog, name='create_blog'),
     path('admin/content-moderation/', views.Content_Moderation, name='content_moderation'),
     path('admin/users/<int:user_id>/profile/', views.view_user_profile, name='view_user_profile'),
+    path('admin/users/create-user/', views.add_user, name='admin_add_user'),
     path('admin/users/<int:user_id>/deactivate/', views.deactivate_user, name='deactivate_user'),
     path('admin/users/<int:user_id>/activate/', views.activate_user, name='activate_user'),
     path('admin/papers/upload/', views.upload_old_paper, name='upload_old_paper'),

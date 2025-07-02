@@ -9,6 +9,7 @@ from .forms import ContentModerationForm
 from django.db.models.functions import TruncMonth
 from django.db.models import Count
 import json
+from django.db import IntegrityError
 from django.http import JsonResponse
 from datetime import datetime
 from django.utils import timezone
@@ -71,8 +72,6 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
-
-
 
 def papers(request):
     papers = OldPaper.objects.all().order_by('-uploaded_at')
@@ -354,6 +353,8 @@ def user_uploads_view(request):
     }
     return render(request, 'core/user_uploads.html', context)
 
+############################################################# admin views #############################################################
+
 # admin_dashboard view 
 
 @login_required
@@ -452,7 +453,31 @@ def admin_users(request):
         'sort_by': sort_by
     }
 
-    return render(request, 'admin/users.html', context)
+    return render(request, 'admin/user_managment/users.html', context)
+
+
+@login_required
+def add_user(request):
+    if not request.user.is_superuser:
+        messages.error(request, "You do not have permission to access this page.")
+        return redirect('admin_dashboard')
+
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password1'])  # use password1
+            user.save()
+            messages.success(request, f"User {user.username} created successfully.")
+            return redirect('admin_users')
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = RegisterForm()
+
+    return render(request, 'admin/user_managment/add_user.html', {'form': form})
+
+
 
 @login_required
 def admin_papers(request):
@@ -559,7 +584,7 @@ def Content_Moderation(request):
 @user_passes_test(lambda u: u.is_superuser)
 def view_user_profile(request, user_id):
     user_profile = get_object_or_404(User, id=user_id)
-    return render(request, 'admin/user_profile.html', {'user_profile': user_profile})
+    return render(request, 'admin/user_managment/user_profile.html')
 
 # Deactivate user view
 @login_required

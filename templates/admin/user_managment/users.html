@@ -6,7 +6,7 @@
 <!-- Breadcrumb -->
 <div class="px-4 py-2 bg-gray-50 text-sm">
     <div class="flex items-center space-x-2">
-        <a href="{% url 'admin_dashboard' %}" class="text-gray-500 hover:text-primary">Home</a>
+        <a href="{% url 'admin_dashboard' %}" class="text-gray-500 hover:text-blue-600">Home</a>
         <div class="w-4 h-4 flex items-center justify-center text-gray-400">
             <i class="ri-arrow-right-s-line"></i>
         </div>
@@ -15,47 +15,64 @@
 </div>
 
 <!-- Messages -->
-    {% if messages %}
-    <div class="mb-6 space-y-3">
-        {% for message in messages %}
-        <div class="relative p-4 rounded-xl border-l-4 shadow-sm transition-all duration-300 hover:shadow-md {% if message.tags == 'success' %}bg-gradient-to-r from-green-50 to-emerald-50 border-green-500 text-green-800{% elif message.tags == 'error' %}bg-gradient-to-r from-red-50 to-rose-50 border-red-500 text-red-800{% elif message.tags == 'warning' %}bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-500 text-yellow-800{% else %}bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-500 text-blue-800{% endif %}">
-            <div class="flex items-start">
-                <div class="flex-shrink-0 mr-3">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center {% if message.tags == 'success' %}bg-green-100{% elif message.tags == 'error' %}bg-red-100{% elif message.tags == 'warning' %}bg-yellow-100{% else %}bg-blue-100{% endif %}">
-                        <i class="{% if message.tags == 'success' %}ri-check-circle-fill text-green-600{% elif message.tags == 'error' %}ri-error-warning-fill text-red-600{% elif message.tags == 'warning' %}ri-alert-fill text-yellow-600{% else %}ri-information-fill text-blue-600{% endif %} text-lg" aria-hidden="true"></i>
-                    </div>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="font-medium leading-5">{{ message }}</p>
-                </div>
-                <div class="flex-shrink-0 ml-4">
-                    <button type="button" class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 {% if message.tags == 'success' %}text-green-500 hover:bg-green-100 focus:ring-green-500{% elif message.tags == 'error' %}text-red-500 hover:bg-red-100 focus:ring-red-500{% elif message.tags == 'warning' %}text-yellow-500 hover:bg-yellow-100 focus:ring-yellow-500{% else %}text-blue-500 hover:bg-blue-100 focus:ring-blue-500{% endif %} transition-colors duration-200" onclick="this.parentElement.parentElement.parentElement.remove()">
-                        <span class="sr-only">Dismiss</span>
-                        <i class="ri-close-line text-lg" aria-hidden="true"></i>
-                    </button>
+{% if messages %}
+<div class="mx-4 my-6 space-y-3">
+    {% for message in messages %}
+    <div class="relative p-4 rounded-xl border-l-4 shadow-sm transition-all duration-300 hover:shadow-md 
+        {% if message.tags == 'success' %}bg-gradient-to-r from-green-50 to-emerald-50 border-green-500 text-green-800
+        {% elif message.tags == 'error' %}bg-gradient-to-r from-red-50 to-rose-50 border-red-500 text-red-800
+        {% elif message.tags == 'warning' %}bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-500 text-yellow-800
+        {% else %}bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-500 text-blue-800{% endif %}">
+        <div class="flex items-start">
+            <div class="flex-shrink-0 mr-3">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center 
+                    {% if message.tags == 'success' %}bg-green-100
+                    {% elif message.tags == 'error' %}bg-red-100
+                    {% elif message.tags == 'warning' %}bg-yellow-100
+                    {% else %}bg-blue-100{% endif %}">
+                    <i class="{% if message.tags == 'success' %}ri-check-circle-fill text-green-600
+                        {% elif message.tags == 'error' %}ri-error-warning-fill text-red-600
+                        {% elif message.tags == 'warning' %}ri-alert-fill text-yellow-600
+                        {% else %}ri-information-fill text-blue-600{% endif %} text-lg" aria-hidden="true"></i>
                 </div>
             </div>
+            <div class="flex-1 min-w-0">
+                <p class="font-medium leading-5">{{ message }}</p>
+            </div>
+            <div class="flex-shrink-0 ml-4">
+                <button type="button" class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                    {% if message.tags == 'success' %}text-green-500 hover:bg-green-100 focus:ring-green-500
+                    {% elif message.tags == 'error' %}text-red-500 hover:bg-red-100 focus:ring-red-500
+                    {% elif message.tags == 'warning' %}text-yellow-500 hover:bg-yellow-100 focus:ring-yellow-500
+                    {% else %}text-blue-500 hover:bg-blue-100 focus:ring-blue-500{% endif %} transition-colors duration-200" 
+                    onclick="this.closest('.relative').remove()">
+                    <span class="sr-only">Dismiss</span>
+                    <i class="ri-close-line text-lg" aria-hidden="true"></i>
+                </button>
+            </div>
         </div>
-        {% endfor %}
     </div>
-    {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
 
 <!-- User Management Section -->
-<div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">User Management</h1>
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">User Management</h1>
 
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <a href="#" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg transition-colors">
+        <a href="{% url 'admin_add_user' %}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto justify-center sm:justify-start">
             <i class="ri-add-line mr-2"></i> Add New User
         </a>
-        <div class="flex items-center gap-4">
-            <select id="filter-type" class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+            <select id="filter-type" class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none w-full sm:w-auto">
                 <option value="username">Username</option>
                 <option value="email">Email</option>
                 <option value="role">Role</option>
                 <option value="status">Status</option>
             </select>
-            <input type="text" id="filter-input" placeholder="Enter search term..." class="border border-gray-300 rounded-lg p-2 w-full sm:w-64 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <input type="text" id="filter-input" placeholder="Enter search term..." 
+                class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none w-full sm:w-64">
         </div>
     </div>
 
@@ -63,43 +80,45 @@
         <table class="min-w-full bg-white border border-gray-200">
             <thead class="bg-gray-100">
                 <tr>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">No</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Username</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Email</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Role</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Created At</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">No</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">Username</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">Email</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">Role</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">Created At</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
                 {% for user in users %}
                 {% if not user.is_superuser %}
                 <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ forloop.counter }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ user.get_full_name|default:user.username }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ user.email }}</td>
-                    <td class="px-6 py-4 text-sm">
-                        <span class="inline-flex px-2 text-xs font-semibold leading-5 rounded-full {% if user.is_superuser %}text-green-800 bg-green-100{% else %}text-blue-800 bg-blue-100{% endif %}">
+                    <td class="px-4 py-3 text-sm text-gray-700">{{ forloop.counter }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">{{ user.get_full_name|default:user.username }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700 truncate max-w-xs">{{ user.email }}</td>
+                    <td class="px-4 py-3 text-sm">
+                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                            {% if user.is_superuser %}text-green-800 bg-green-100{% else %}text-blue-800 bg-blue-100{% endif %}">
                             {{ user.is_superuser|yesno:"Admin,User" }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-sm">
-                        <span class="inline-flex px-3 py-1 text-xs font-semibold leading-5 rounded-full {% if user.is_active %}text-green-800 bg-green-100{% else %}text-red-800 bg-red-100{% endif %}">
+                    <td class="px-4 py-3 text-sm">
+                        <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full 
+                            {% if user.is_active %}text-green-800 bg-green-100{% else %}text-red-800 bg-red-100{% endif %}">
                             {{ user.is_active|yesno:"Active,Inactive" }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ user.date_joined|date:"M d, Y" }}</td>
-                    <td class="px-6 py-4 text-sm">
+                    <td class="px-4 py-3 text-sm text-gray-700">{{ user.date_joined|date:"M d, Y" }}</td>
+                    <td class="px-4 py-3 text-sm">
                         <button data-dialog-target="animated-modal" onclick='openUserModal({
                             "id": "{{ user.id }}",
                             "username": "{{ user.username|escapejs }}",
                             "email": "{{ user.email|escapejs }}",
                             "date_joined": "{{ user.date_joined|date:"M d, Y" }}",
-                            "last_login": "{{ user.last_login|date:"M d, Y H:i" }}",
+                            "last_login": "{{ user.last_login|date:"M d, Y H:i"|default:"Never" }}",
                             "is_active": {{ user.is_active|yesno:"true,false" }}
                         })' 
-                            class="px-4 py-2 text-blue-600 border border-blue-600 rounded hover:bg-blue-600 hover:text-white transition-colors">
+                            class="px-3 py-1 text-blue-600 border border-blue-600 rounded hover:bg-blue-600 hover:text-white transition-colors">
                             View Details
                         </button>
                     </td>
@@ -107,7 +126,7 @@
                 {% endif %}
                 {% empty %}
                 <tr>
-                    <td colspan="7" class="text-center px-6 py-4 text-gray-500">No users found.</td>
+                    <td colspan="7" class="text-center px-4 py-4 text-gray-500">No users found.</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -116,7 +135,7 @@
 
     <!-- Pagination -->
     {% if page_obj.paginator.num_pages > 1 %}
-    <div class="mt-4 flex items-center justify-between">
+    <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
             <p class="text-sm text-gray-700">
                 Showing <span class="font-medium">{{ page_obj.start_index }}</span> to
@@ -128,7 +147,7 @@
             <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                 {% if page_obj.has_previous %}
                 <a href="?page={{ page_obj.previous_page_number }}&search={{ request.GET.search|default:'' }}" 
-                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:text-gray-400">
+                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
                     </svg>
@@ -152,7 +171,7 @@
 
                 {% if page_obj.has_next %}
                 <a href="?page={{ page_obj.next_page_number }}&search={{ request.GET.search|default:'' }}"
-                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:text-gray-400">
+                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                     </svg>
@@ -171,8 +190,8 @@
 </div>
 
 <!-- Modal -->
-<div id="userModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative mx-auto">
+<div id="userModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50 px-4">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
         <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl">×</button>
         <h2 class="text-lg font-semibold mb-4">User Details</h2>
 
@@ -201,7 +220,7 @@ function openUserModal(user) {
     document.getElementById('modalUsername').innerText = user.username;
     document.getElementById('modalEmail').innerText = user.email;
     document.getElementById('modalJoinDate').innerText = user.date_joined;
-    document.getElementById('modalLastLogin').innerText = user.last_login || 'Never';
+    document.getElementById('modalLastLogin').innerText = user.last_login;
     document.getElementById('modalUserId').value = user.id;
 
     const statusSpan = document.getElementById('modalStatus');
@@ -234,13 +253,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterType = document.getElementById('filter-type');
     const rows = document.querySelectorAll('tbody tr:not(.text-center)');
 
-    filterInput.addEventListener('input', () => {
-        const searchTerm = filterInput.value.toLowerCase();
+    function filterRows() {
+        const searchTerm = filterInput.value.toLowerCase().trim();
         const selectedType = filterType.value;
 
         rows.forEach(row => {
             const cells = row.querySelectorAll('td');
-            let cellText;
+            let cellText = '';
             if (selectedType === 'username') cellText = cells[1].textContent.toLowerCase();
             else if (selectedType === 'email') cellText = cells[2].textContent.toLowerCase();
             else if (selectedType === 'role') cellText = cells[3].textContent.toLowerCase();
@@ -248,7 +267,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             row.style.display = cellText.includes(searchTerm) ? '' : 'none';
         });
-    });
+    }
+
+    filterInput.addEventListener('input', filterRows);
+    filterType.addEventListener('change', filterRows);
 });
 </script>
 {% endblock %}
