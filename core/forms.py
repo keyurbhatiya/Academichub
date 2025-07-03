@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import OldPaper, Project, Blog, Contact, SiteSettings
+from .models import OldPaper, Project, Blog, Contact, SiteSettings, Feedback
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -46,9 +46,12 @@ class ContactForm(forms.ModelForm):
         model = Contact
         fields = ['name', 'email', 'message']
 
-class FeedbackForm(forms.Form):
-    name = forms.CharField(max_length=100)
-    email = forms.EmailField()
-    message = forms.CharField(widget=forms.Textarea)
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ['message']
+        widgets = {
+            'message': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter your feedback'})
+        }
 
 

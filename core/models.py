@@ -180,10 +180,28 @@ class SiteSettings(models.Model):
         return "Site Settings"  
 
 class Contact(models.Model):
-    name = models.CharField(max_length=100)
+    STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Reviewed', 'Reviewed'),
+    )
+    name = models.CharField(max_length=255)
     email = models.EmailField()
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
 
     def __str__(self):
-        return f'Contact from {self.name} ({self.email})'
+        return f"Contact {self.id} from {self.name}"
+
+class Feedback(models.Model):
+    STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Reviewed', 'Reviewed'),
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+
+    def __str__(self):
+        return f"Feedback {self.id} by {self.user.username if self.user else 'Anonymous'}"

@@ -22,7 +22,10 @@ urlpatterns = [
     path('admin/papers/upload/', views.upload_old_paper, name='admin_upload_old_paper'),
     path('admin/analytics/', views.analytics, name='analytics'),
     path('admin/settings/', views.settings, name='settings'),
-    path('admin/contact-us/', views.admin_ontact_us, name='contact_us'),
+    path('admin/contact-us/', views.admin_contact_us, name='admin_contact_us'),
+    path('admin/contact-us/delete/<int:contact_id>/', views.admin_delete_contact, name='admin_delete_contact'),
+    path('admin/feedback/', views.admin_feedback, name='admin_feedback'),
+    path('admin/feedback/delete/<int:feedback_id>/', views.admin_delete_feedback, name='admin_delete_feedback'),
     path('admin/projects/upload/', views.upload_project, name='admin_upload_project'),
     path('admin/projects/delete/<int:project_id>/', views.admin_delete_project, name='admin_delete_project'),
 

@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .forms import RegisterForm, OldPaperForm, ProjectForm, BlogForm, ContactForm, FeedbackForm
-from .models import OldPaper, Project, Blog, SiteSettings,  Comment
+from .forms import RegisterForm, OldPaperForm, ProjectForm, BlogForm, ContactForm, FeedbackForm, Feedback
+from .models import OldPaper, Project, Blog, SiteSettings,  Comment,Contact
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import ContentModerationForm
@@ -148,7 +148,7 @@ def contact_us(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Your message has been sent successfully!')
+            messages.success(request, 'Thank you for your message! We will get back to you soon.')
             return redirect('contact')
     else:
         form = ContactForm()
@@ -156,11 +156,16 @@ def contact_us(request):
 
 
 def feedback_view(request):
-    form = FeedbackForm(request.POST or None)
-    if request.method == 'POST' and form.is_valid():
-        # You could save to a model or send an email here
-        messages.success(request, "Thank you for your feedback!")
-        return redirect('feedback')
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            feedback.user = request.user if request.user.is_authenticated else None
+            feedback.save()
+            messages.success(request, 'Thank you for your feedback!')
+            return redirect('feedback')
+    else:
+        form = FeedbackForm()
     return render(request, 'core/feedback/feedback.html', {'form': form})
 
 def community_guidelines(request):
@@ -400,7 +405,7 @@ def admin_dashboard(request):
         'user_data': json.dumps(user_data),
         'distribution_data': json.dumps(distribution_data),
     }
-    return render(request, 'admin/dashboard.html', context)
+    return render(request, 'admin/dashboard/dashboard.html', context)
 
 @login_required
 def admin_users(request):
@@ -704,7 +709,7 @@ def Content_Moderation(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    return render(request, 'admin/content_moderation.html', {
+    return render(request, 'admin/content_moderation/content_moderation.html', {
         'form': form,
         'contents': page_obj,
         'page_obj': page_obj,
@@ -858,7 +863,7 @@ def analytics(request):
         'user_roles_data': json.dumps(user_roles_data),
     }
     
-    return render(request, 'admin/analytics.html', context)
+    return render(request, 'admin/analytics/analytics.html', context)
 
 def settings(request):
     settings_obj, created = SiteSettings.objects.get_or_create()
@@ -871,16 +876,101 @@ def settings(request):
         messages.success(request, 'Settings updated successfully.')
         return redirect('settings')
     context = {'settings': settings_obj}
-    return render(request, 'admin/settings.html', context)
-
-
+    return render(request, 'admin/settings/settings.html', context)
 
 
 # admin contact us view
+
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
-def admin_ontact_us(request):
-    return render(request, 'admin/contact_us.html', {
-        'contact_form': ContactForm(),
-        'feedback_form': FeedbackForm(),
-    })
+def admin_contact_us(request):
+    if request.method == 'POST':
+        contact_id = request.POST.get('contact_id')
+        action = request.POST.get('action')
+        contact = get_object_or_404(Contact, id=contact_id)
+        
+        if action == 'review':
+            try:
+                contact.status = 'Reviewed'
+                contact.save()
+                messages.success(request, f'Contact message ID {contact.id} marked as Reviewed.')
+            except Exception as e:
+                messages.error(request, f'Error updating contact message: {str(e)}')
+            return redirect('admin_contact_us')
+
+    contact_list = Contact.objects.all().order_by('-created_at')
+    contact_count = contact_list.count()
+    pending_count = contact_list.filter(status='Pending').count()
+    reviewed_count = contact_list.filter(status='Reviewed').count()
+
+    context = {
+        'contact_list': contact_list,
+        'contact_count': contact_count,
+        'pending_count': pending_count,
+        'reviewed_count': reviewed_count,
+    }
+    return render(request, 'admin/contact_us/contact_us.html', context)
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def admin_delete_contact(request, contact_id):
+    if request.method == 'POST':
+        contact = get_object_or_404(Contact, id=contact_id)
+        try:
+            contact_id = contact.id
+            contact.delete()
+            messages.success(request, f'Contact message ID {contact_id} deleted successfully.')
+        except Exception as e:
+            messages.error(request, f'Error deleting contact message: {str(e)}')
+        return redirect('admin_contact_us')
+    else:
+        messages.error(request, 'Invalid request method.')
+        return redirect('admin_contact_us')
+
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def admin_feedback(request):
+    if request.method == 'POST':
+        feedback_id = request.POST.get('feedback_id')
+        action = request.POST.get('action')
+        feedback = get_object_or_404(Feedback, id=feedback_id)
+        
+        if action == 'review':
+            try:
+                feedback.status = 'Reviewed'
+                feedback.save()
+                messages.success(request, f'Feedback ID {feedback.id} marked as Reviewed.')
+            except Exception as e:
+                messages.error(request, f'Error updating feedback: {str(e)}')
+            return redirect('admin_feedback')
+
+    feedback_list = Feedback.objects.all().order_by('-created_at')
+    feedback_count = feedback_list.count()
+    pending_count = feedback_list.filter(status='Pending').count()
+    reviewed_count = feedback_list.filter(status='Reviewed').count()
+
+    context = {
+        'feedback_list': feedback_list,
+        'feedback_count': feedback_count,
+        'pending_count': pending_count,
+        'reviewed_count': reviewed_count,
+    }
+    return render(request, 'admin/feedback/feedback.html', context)
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def admin_delete_feedback(request, feedback_id):
+    if request.method == 'POST':
+        feedback = get_object_or_404(Feedback, id=feedback_id)
+        try:
+            feedback_id = feedback.id
+            feedback.delete()
+            messages.success(request, f'Feedback ID {feedback_id} deleted successfully.')
+        except Exception as e:
+            messages.error(request, f'Error deleting feedback: {str(e)}')
+        return redirect('admin_feedback')
+    else:
+        messages.error(request, 'Invalid request method.')
+        return redirect('admin_feedback')
+    
