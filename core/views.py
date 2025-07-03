@@ -35,10 +35,10 @@ def home(request):
         'total_projects': Project.objects.count(),
         'total_contributions': OldPaper.objects.count() + Project.objects.count(),
         }
-        return render(request, 'core/home.html', context)
+        return render(request, 'core/home/home.html', context)
     except OperationalError as e:
         error = str(e)
-        return render(request, 'auth/error_page.html', {
+        return render(request, 'auth/error_page/error_page.html', {
             'error': error,
             'data': None,
         })
@@ -101,9 +101,9 @@ def papers(request):
     
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         # Render only the papers list for AJAX requests
-        return render(request, 'core/papers_list.html', context)
+        return render(request, 'core/papers/papers_list.html', context)
     
-    return render(request, 'core/papers.html', context)
+    return render(request, 'core/papers/papers.html', context)
 
 def projects(request):
     selected_language = request.GET.get('language', '')
@@ -136,12 +136,16 @@ def projects(request):
     
     return render(request, 'core/projects/projects.html', context)
 
+def project_detail(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    return render(request, 'core/projects/project_detail.html', {'project': project})
+
 def blogs(request):
     blogs = Blog.objects.all().order_by('-created_at')
-    return render(request, 'core/blogs.html', {'blogs': blogs})
+    return render(request, 'core/blogs/blogs.html', {'blogs': blogs})
 
 def help_center(request):
-    return render(request, 'core/help_center.html')
+    return render(request, 'core/help-center/help_center.html')
 
 def contact_us(request):
     if request.method == 'POST':
@@ -152,8 +156,7 @@ def contact_us(request):
             return redirect('contact')
     else:
         form = ContactForm()
-    return render(request, 'core/contact.html', {'form': form})
-
+    return render(request, 'core/contact-us/contact.html', {'form': form})
 
 def feedback_view(request):
     if request.method == 'POST':
@@ -183,7 +186,6 @@ def terms_of_service(request):
 def cookie_policy(request):
     return render(request, 'core/cookie_policy/cookie_policy.html')
 
-
 @login_required
 def upload_paper(request):
     if request.method == 'POST':
@@ -196,7 +198,7 @@ def upload_paper(request):
             return redirect('papers')
     else:
         form = OldPaperForm()
-    return render(request, 'core/upload_paper.html', {'form': form})
+    return render(request, 'core/papers/upload_paper.html', {'form': form})
 
 @login_required
 def upload_project(request):
@@ -213,7 +215,7 @@ def upload_project(request):
     else:
         form = ProjectForm()
 
-    return render(request, 'core/upload_project.html', {'form': form})
+    return render(request, 'core/projects/upload_project.html', {'form': form})
 
 # Create a new blog post view
 
@@ -232,7 +234,7 @@ def blog_create(request):
             messages.error(request, "Please correct the errors below.")
     else:
         form = BlogForm()
-    return render(request, 'core/blog_create.html', {'form': form})
+    return render(request, 'core/blogs/blog_create.html', {'form': form})
 
 # blog slug view
 def blog_detail(request, slug):
@@ -254,15 +256,15 @@ def blog_detail(request, slug):
     if not related_posts.exists():
         related_posts =blogs = Blog.objects.all().order_by('-created_at')[:3]
 
-    return render(request, 'core/blog_detail.html', {
+    return render(request, 'core/blogs/blog_detail.html', {
         'blog': blog,
         'comments': comments,
         'show_all_comments': show_all,
         'related_posts': related_posts,
     })
 
-
 # Add comment to blog view
+@login_required
 def add_comment(request, slug):
     if request.method == 'POST':
         blog = Blog.objects.get(slug=slug)
@@ -276,8 +278,6 @@ def add_comment(request, slug):
         messages.success(request, 'Comment posted successfully!')
         return redirect('blog_detail', slug=slug)
     return redirect('blog_detail', slug=slug)
-
-
 
 @login_required
 def like_comment(request, comment_id):
@@ -293,7 +293,6 @@ def like_comment(request, comment_id):
         'likes_count': comment.likes.count(),
         'liked': liked
     })
-
 
 @login_required
 def like_reply(request, reply_id):
@@ -311,10 +310,10 @@ def like_reply(request, reply_id):
     #     'liked': liked
     # })
 
-
 @login_required
 def add_reply(request, slug):
     pass
+
 def dislike_blog(request, slug):
     if request.method == 'POST':
         blog = get_object_or_404(Blog, slug=slug)
@@ -326,10 +325,10 @@ def dislike_blog(request, slug):
 # user profile view
 @login_required
 def profile_view(request):
-    return render(request, 'auth/profile.html')
+    return render(request, 'auth/profile/profile.html')
 
 class CustomPasswordChangeView(PasswordChangeView):
-    template_name = 'auth/password_change.html'
+    template_name = 'auth/profile/password_change.html'
     success_url = reverse_lazy('profile')  # Redirect to profile page after success
 
     def form_valid(self, form):
@@ -341,7 +340,6 @@ class CustomPasswordChangeView(PasswordChangeView):
         response = super().form_invalid(form)
         messages.error(self.request, "Please correct the errors below.")
         return response
-
 
 # user_uploads data view
 @login_required
@@ -356,7 +354,7 @@ def user_uploads_view(request):
         'projects': projects,
         'blogs': blogs,
     }
-    return render(request, 'core/user_uploads.html', context)
+    return render(request, 'core/my-upload/user_uploads.html', context)
 
 ############################################################# admin views #############################################################
 
@@ -460,7 +458,6 @@ def admin_users(request):
 
     return render(request, 'admin/user_managment/users.html', context)
 
-
 @login_required
 def add_user(request):
     if not request.user.is_superuser:
@@ -481,7 +478,6 @@ def add_user(request):
         form = RegisterForm()
 
     return render(request, 'admin/user_managment/add_user.html', {'form': form})
-
 
 # admin side papers view
 @login_required
@@ -553,7 +549,6 @@ def admin_delete_project(request, project_id):
     else:
         messages.error(request, 'Invalid request method.')
         return redirect('admin_projects')
-
 
 @login_required
 def admin_blogs(request):
@@ -767,7 +762,6 @@ def some_view(request):
     })
 
 
-
 def analytics(request):
     # Summary statistics
     total_users = User.objects.count()
@@ -878,9 +872,7 @@ def settings(request):
     context = {'settings': settings_obj}
     return render(request, 'admin/settings/settings.html', context)
 
-
 # admin contact us view
-
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def admin_contact_us(request):
@@ -926,7 +918,6 @@ def admin_delete_contact(request, contact_id):
     else:
         messages.error(request, 'Invalid request method.')
         return redirect('admin_contact_us')
-
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)

@@ -4,27 +4,27 @@
 {% block title %}Settings | AcademicHub{% endblock %}
 
 {% block content %}
-<div class="container mx-auto">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Website Settings</h1>
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Website Settings</h1>
     
     <!-- Messages -->
     {% if messages %}
-    <div class="mb-6 space-y-3">
+    <div class="mb-8 space-y-4">
         {% for message in messages %}
-        <div class="relative p-4 rounded-xl border-l-4 shadow-sm transition-all duration-300 hover:shadow-md {% if message.tags == 'success' %}bg-gradient-to-r from-green-50 to-emerald-50 border-green-500 text-green-800{% elif message.tags == 'error' %}bg-gradient-to-r from-red-50 to-rose-50 border-red-500 text-red-800{% elif message.tags == 'warning' %}bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-500 text-yellow-800{% else %}bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-500 text-blue-800{% endif %}">
-            <div class="flex items-start">
+        <div class="relative p-4 rounded-lg border-l-4 shadow-lg transition-all duration-300 {% if message.tags == 'success' %}bg-green-50 border-green-600 text-green-900{% elif message.tags == 'error' %}bg-red-50 border-red-600 text-red-900{% elif message.tags == 'warning' %}bg-yellow-50 border-yellow-600 text-yellow-900{% else %}bg-blue-50 border-blue-600 text-blue-900{% endif %}">
+            <div class="flex items-center">
                 <div class="flex-shrink-0 mr-3">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center {% if message.tags == 'success' %}bg-green-100{% elif message.tags == 'error' %}bg-red-100{% elif message.tags == 'warning' %}bg-yellow-100{% else %}bg-blue-100{% endif %}">
-                        <i class="{% if message.tags == 'success' %}ri-check-circle-fill text-green-600{% elif message.tags == 'error' %}ri-error-warning-fill text-red-600{% elif message.tags == 'warning' %}ri-alert-fill text-yellow-600{% else %}ri-information-fill text-blue-600{% endif %} text-lg" aria-hidden="true"></i>
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center {% if message.tags == 'success' %}bg-green-100{% elif message.tags == 'error' %}bg-red-100{% elif message.tags == 'warning' %}bg-yellow-100{% else %}bg-blue-100{% endif %}">
+                        <i class="{% if message.tags == 'success' %}ri-check-circle-fill text-green-700{% elif message.tags == 'error' %}ri-error-warning-fill text-red-700{% elif message.tags == 'warning' %}ri-alert-fill text-yellow-700{% else %}ri-information-fill text-blue-700{% endif %} text-xl" aria-hidden="true"></i>
                     </div>
                 </div>
                 <div class="flex-1 min-w-0">
-                    <p class="font-medium leading-5">{{ message }}</p>
+                    <p class="font-semibold text-base">{{ message }}</p>
                 </div>
                 <div class="flex-shrink-0 ml-4">
-                    <button type="button" class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 {% if message.tags == 'success' %}text-green-500 hover:bg-green-100 focus:ring-green-500{% elif message.tags == 'error' %}text-red-500 hover:bg-red-100 focus:ring-red-500{% elif message.tags == 'warning' %}text-yellow-500 hover:bg-yellow-100 focus:ring-yellow-500{% else %}text-blue-500 hover:bg-blue-100 focus:ring-blue-500{% endif %} transition-colors duration-200" onclick="this.parentElement.parentElement.parentElement.remove()">
+                    <button type="button" class="inline-flex rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-offset-2 {% if message.tags == 'success' %}text-green-600 hover:bg-green-200 focus:ring-green-600{% elif message.tags == 'error' %}text-red-600 hover:bg-red-200 focus:ring-red-600{% elif message.tags == 'warning' %}text-yellow-600 hover:bg-yellow-200 focus:ring-yellow-600{% else %}text-blue-600 hover:bg-blue-200 focus:ring-blue-600{% endif %} transition-colors duration-200" onclick="this.parentElement.parentElement.parentElement.remove()">
                         <span class="sr-only">Dismiss</span>
-                        <i class="ri-close-line text-lg" aria-hidden="true"></i>
+                        <i class="ri-close-line text-xl" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
@@ -33,40 +33,44 @@
     </div>
     {% endif %}
 
-    <form action="{% url 'settings' %}" method="POST" class="bg-white p-6 rounded-lg shadow-md">
+    <form action="{% url 'settings' %}" method="POST" class="bg-white p-8 rounded-xl shadow-lg">
         {% csrf_token %}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Website Name -->
             <div>
-                <label for="website_name" class="block text-sm font-medium text-gray-700 mb-2">Website Name</label>
-                <input type="text" id="website_name" name="website_name" value="{{ settings.website_name|default:'AcademicHub' }}" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" aria-describedby="website_name_help">
-                <p id="website_name_help" class="mt-1 text-sm text-gray-500">The name displayed across the website.</p>
+                <label for="website_name" class="block text-sm font-semibold text-gray-800 mb-2">Website Name</label>
+                <input type="text" id="website_name" name="website_name" value="{{ settings.website_name|default:'AcademicHub' }}" class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors" aria-describedby="website_name_help">
+                <p id="website_name_help" class="mt-2 text-sm text-gray-600">The name displayed across the website.</p>
             </div>
 
             <!-- Contact Email -->
             <div>
-                <label for="contact_email" class="block text-sm font-medium text-gray-700 mb-2">Contact Email</label>
-                <input type="email" id="contact_email" name="contact_email" value="{{ settings.contact_email|default:'admin@academichub.com' }}" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" aria-describedby="contact_email_help">
-                <p id="contact_email_help" class="mt-1 text-sm text-gray-500">Email for user inquiries and notifications.</p>
+                <label for="contact_email" class="block text-sm font-semibold text-gray-800 mb-2">Contact Email</label>
+                <input type="email" id="contact_email" name="contact_email" value="{{ settings.contact_email|default:'admin@academichub.com' }}" class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors" aria-describedby="contact_email_help">
+                <p id="contact_email_help" class="mt-2 text-sm text-gray-600">Email for user inquiries and notifications.</p>
             </div>
 
             <!-- Allow New User Registrations -->
             <div>
-                <label for="allow_registrations" class="block text-sm font-medium text-gray-700 mb-2">Allow New User Registrations</label>
-                <input type="checkbox" id="allow_registrations" name="allow_registrations" {% if settings.allow_registrations|default:True %}checked{% endif %} class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" aria-describedby="allow_registrations_help">
-                <p id="allow_registrations_help" class="mt-1 text-sm text-gray-500">Enable or disable new user registrations.</p>
+                <label for="allow_registrations" class="block text-sm font-semibold text-gray-800 mb-2">Allow New User Registrations</label>
+                <div class="relative flex items-center">
+                    <input type="checkbox" id="allow_registrations" name="allow_registrations" {% if settings.allow_registrations|default:True %}checked{% endif %} class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer">
+                    <span class="ml-3 text-sm text-gray-600">Enable or disable new user registrations.</span>
+                </div>
             </div>
 
             <!-- Email Notifications -->
             <div>
-                <label for="email_notifications" class="block text-sm font-medium text-gray-700 mb-2">Email Notifications</label>
-                <input type="checkbox" id="email_notifications" name="email_notifications" {% if settings.email_notifications|default:True %}checked{% endif %} class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" aria-describedby="email_notifications_help">
-                <p id="email_notifications_help" class="mt-1 text-sm text-gray-500">Enable or disable email notifications for users.</p>
+                <label for="email_notifications" class="block text-sm font-semibold text-gray-800 mb-2">Email Notifications</label>
+                <div class="relative flex items-center">
+                    <input type="checkbox" id="email_notifications" name="email_notifications" {% if settings.email_notifications|default:True %}checked{% endif %} class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer">
+                    <span class="ml-3 text-sm text-gray-600">Enable or disable email notifications for users.</span>
+                </div>
             </div>
         </div>
 
-        <div class="mt-6">
-            <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">Save Settings</button>
+        <div class="mt-8 flex justify-end">
+            <button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg  focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200">Save Settings</button>
         </div>
     </form>
 </div>

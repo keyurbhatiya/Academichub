@@ -54,12 +54,24 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Stay Updated</h4>
                     <p class="text-gray-400 mb-4">Subscribe to our newsletter for the latest updates and resources.</p>
-                    <form class="flex">
-                        <input type="email" placeholder="Your email"
-                            class="bg-gray-800 text-white px-4 py-2 rounded-l-button border-none focus:outline-none focus:ring-2 focus:ring-primary w-full">
-                        <button type="submit"
-                            class="bg-primary text-white px-4 py-2 rounded-r-button whitespace-nowrap">Subscribe</button>
+                    <form id="subscriptionForm" class="flex max-w-md mx-auto" onsubmit="handleSubmit(event)">
+                        <input 
+                            type="email" 
+                            placeholder="Enter your email" 
+                            class="flex-1 bg-gray-900 text-gray-200 px-5 py-3 rounded-l-lg border-none focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500 transition-all duration-200" 
+                            aria-label="Email address for subscription"
+                            required
+                        >
+                        <button 
+                            type="submit" 
+                            class="bg-blue-600 text-white px-5 py-3 rounded-r-lg font-semibold hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-200 whitespace-nowrap"
+                        >
+                            Subscribe
+                        </button>
                     </form>
+                    <div id="successMessage" class="hidden mt-4 p-4 bg-green-50 text-green-900 rounded-lg shadow-lg text-center max-w-md mx-auto transition-all duration-300">
+                        <p class="font-semibold">Thank you for subscribing!</p>
+                    </div>
                 </div>
             </div>
 
@@ -73,3 +85,23 @@
             </div>
         </div>
     </footer>
+
+    
+<script>
+    function handleSubmit(event) {
+        event.preventDefault();
+        const form = document.getElementById('subscriptionForm');
+        const successMessage = document.getElementById('successMessage');
+        const emailInput = form.querySelector('input[type="email"]');
+        
+        // Basic validation (HTML5 'required' already ensures non-empty)
+        if (emailInput.value) {
+            successMessage.classList.remove('hidden');
+            form.reset();
+            // Optionally hide the message after 3 seconds
+            setTimeout(() => {
+                successMessage.classList.add('hidden');
+            }, 3000);
+        }
+    }
+</script>

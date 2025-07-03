@@ -22,11 +22,9 @@
                 <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Community Blogs</h2>
                 <p class="text-base sm:text-lg text-gray-600 max-w-xl sm:max-w-2xl">Explore insights, experiences, and ideas shared by our academic community.</p>
             </div>
-            {% if user.is_authenticated %}
             <a href="{% url 'blog_create' %}" class="bg-indigo-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-xs sm:text-sm hover:bg-indigo-700 transition duration-200 flex items-center shrink-0">
                 <i class="ri-edit-2-line mr-2"></i> Create Blog
             </a>
-            {% endif %}
         </div>
 
         <!-- Blogs List -->
