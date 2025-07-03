@@ -3,7 +3,6 @@
 {% block title %}Content Moderation | AcademicHub{% endblock %}
 
 {% block content %}
-
 <!-- Breadcrumb -->
 <div class="px-4 py-2 bg-gray-50 text-sm">
     <div class="flex items-center space-x-2">
@@ -16,50 +15,87 @@
 </div>
 
 <!-- Messages -->
-    {% if messages %}
-    <div class="mb-6 space-y-3">
-        {% for message in messages %}
-        <div class="relative p-4 rounded-xl border-l-4 shadow-sm transition-all duration-300 hover:shadow-md {% if message.tags == 'success' %}bg-gradient-to-r from-green-50 to-emerald-50 border-green-500 text-green-800{% elif message.tags == 'error' %}bg-gradient-to-r from-red-50 to-rose-50 border-red-500 text-red-800{% elif message.tags == 'warning' %}bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-500 text-yellow-800{% else %}bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-500 text-blue-800{% endif %}">
-            <div class="flex items-start">
-                <div class="flex-shrink-0 mr-3">
-                    <div class="w-8 h-8 rounded-full flex items-center justify-center {% if message.tags == 'success' %}bg-green-100{% elif message.tags == 'error' %}bg-red-100{% elif message.tags == 'warning' %}bg-yellow-100{% else %}bg-blue-100{% endif %}">
-                        <i class="{% if message.tags == 'success' %}ri-check-circle-fill text-green-600{% elif message.tags == 'error' %}ri-error-warning-fill text-red-600{% elif message.tags == 'warning' %}ri-alert-fill text-yellow-600{% else %}ri-information-fill text-blue-600{% endif %} text-lg" aria-hidden="true"></i>
-                    </div>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="font-medium leading-5">{{ message }}</p>
-                </div>
-                <div class="flex-shrink-0 ml-4">
-                    <button type="button" class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 {% if message.tags == 'success' %}text-green-500 hover:bg-green-100 focus:ring-green-500{% elif message.tags == 'error' %}text-red-500 hover:bg-red-100 focus:ring-red-500{% elif message.tags == 'warning' %}text-yellow-500 hover:bg-yellow-100 focus:ring-yellow-500{% else %}text-blue-500 hover:bg-blue-100 focus:ring-blue-500{% endif %} transition-colors duration-200" onclick="this.parentElement.parentElement.parentElement.remove()">
-                        <span class="sr-only">Dismiss</span>
-                        <i class="ri-close-line text-lg" aria-hidden="true"></i>
-                    </button>
+{% if messages %}
+<div class="mx-4 my-6 space-y-3">
+    {% for message in messages %}
+    <div class="relative p-4 rounded-xl border-l-4 shadow-sm transition-all duration-300 hover:shadow-md 
+        {% if message.tags == 'success' %}bg-gradient-to-r from-green-50 to-emerald-50 border-green-500 text-green-800
+        {% elif message.tags == 'error' %}bg-gradient-to-r from-red-50 to-rose-50 border-red-500 text-red-800
+        {% elif message.tags == 'warning' %}bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-500 text-yellow-800
+        {% else %}bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-500 text-blue-800{% endif %}">
+        <div class="flex items-start">
+            <div class="flex-shrink-0 mr-3">
+                <div class="w-8 h-8 rounded-full flex items-center justify-center 
+                    {% if message.tags == 'success' %}bg-green-100
+                    {% elif message.tags == 'error' %}bg-red-100
+                    {% elif message.tags == 'warning' %}bg-yellow-100
+                    {% else %}bg-blue-100{% endif %}">
+                    <i class="{% if message.tags == 'success' %}ri-check-circle-fill text-green-600
+                        {% elif message.tags == 'error' %}ri-error-warning-fill text-red-600
+                        {% elif message.tags == 'warning' %}ri-alert-fill text-yellow-600
+                        {% else %}ri-information-fill text-blue-600{% endif %} text-lg" aria-hidden="true"></i>
                 </div>
             </div>
+            <div class="flex-1 min-w-0">
+                <p class="font-medium leading-5">{{ message }}</p>
+            </div>
+            <div class="flex-shrink-0 ml-4">
+                <button type="button" class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                    {% if message.tags == 'success' %}text-green-500 hover:bg-green-100 focus:ring-green-500
+                    {% elif message.tags == 'error' %}text-red-500 hover:bg-red-100 focus:ring-red-500
+                    {% elif message.tags == 'warning' %}text-yellow-500 hover:bg-yellow-100 focus:ring-yellow-500
+                    {% else %}text-blue-500 hover:bg-blue-100 focus:ring-blue-500{% endif %} transition-colors duration-200" 
+                    onclick="this.closest('.relative').remove()">
+                    <span class="sr-only">Dismiss</span>
+                    <i class="ri-close-line text-lg" aria-hidden="true"></i>
+                </button>
+            </div>
         </div>
-        {% endfor %}
     </div>
-    {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
 
 <!-- Content Moderation Section -->
-<div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">Content Moderation</h1>
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">Content Moderation</h1>
 
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div class="flex space-x-2">
-            <button class="px-4 py-2 text-sm font-medium border-b-2 border-blue-600 text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors" onclick="filterByStatus('pending')">Pending ({{ pending_count|default:8 }})</button>
-            <button class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors" onclick="filterByStatus('approved')">Approved ({{ approved_count|default:42 }})</button>
-            <button class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors" onclick="filterByStatus('rejected')">Rejected ({{ rejected_count|default:5 }})</button>
-            <button class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors" onclick="filterByStatus('flagged')">Flagged ({{ flagged_count|default:3 }})</button>
+        <div class="flex flex-wrap gap-2">
+            <a href="?status=approved" class="status-filter px-4 py-2 text-sm font-medium border-b-2 
+                {% if current_status == 'approved' %}border-blue-600 text-blue-600 bg-blue-50
+                {% else %}border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50{% endif %} 
+                transition-colors">
+                Approved ({{ approved_count }})
+            </a>
+            <a href="?status=pending" class="status-filter px-4 py-2 text-sm font-medium border-b-2 
+                {% if current_status == 'pending' %}border-blue-600 text-blue-600 bg-blue-50
+                {% else %}border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50{% endif %} 
+                transition-colors">
+                Pending ({{ pending_count }})
+            </a>
+            <a href="?status=rejected" class="status-filter px-4 py-2 text-sm font-medium border-b-2 
+                {% if current_status == 'rejected' %}border-blue-600 text-blue-600 bg-blue-50
+                {% else %}border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50{% endif %} 
+                transition-colors">
+                Rejected ({{ rejected_count }})
+            </a>
+            <a href="?status=flagged" class="status-filter px-4 py-2 text-sm font-medium border-b-2 
+                {% if current_status == 'flagged' %}border-blue-600 text-blue-600 bg-blue-50
+                {% else %}border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50{% endif %} 
+                transition-colors">
+                Flagged ({{ flagged_count }})
+            </a>
         </div>
-        <div class="flex items-center gap-4">
-            <select id="filter-type" class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+            <select id="filter-type" class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none w-full sm:w-auto">
                 <option value="title">Title</option>
                 <option value="type">Type</option>
                 <option value="uploader">Uploader</option>
                 <option value="status">Status</option>
             </select>
-            <input type="text" id="filter-input" placeholder="Enter search term..." class="border border-gray-300 rounded-lg p-2 w-full sm:w-64 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <input type="text" id="filter-input" placeholder="Enter search term..." 
+                class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none w-full sm:w-64">
         </div>
     </div>
 
@@ -67,38 +103,38 @@
         <table class="min-w-full bg-white border border-gray-200">
             <thead class="bg-gray-100">
                 <tr>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">
                         <label class="inline-flex items-center">
                             <input type="checkbox" id="select-all" class="hidden peer">
                             <div class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-blue-600 peer-checked:border-blue-600">
-                                <div class="w-3 h-3 text-white scale-0 peer-checked:scale-100">
+                                <div class="w-3 h-3 text-white scale-0 peer-checked:scale-100 transition-transform">
                                     <i class="ri-check-line"></i>
                                 </div>
                             </div>
                         </label>
                     </th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Title</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Type</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Uploader</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Submitted</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">Title</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">Uploader</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">Submitted</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                    <th class="px-4 py-3 text-left text-xs sm:text-sm font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
                 {% for content in contents %}
                 <tr class="hover:bg-gray-50 transition-colors">
-                    <td class="px-6 py-4">
+                    <td class="px-4 py-3">
                         <label class="inline-flex items-center">
-                            <input type="checkbox" class="content-checkbox hidden peer" value="{{ content.id }}">
+                            <input type="checkbox" class="content-checkbox hidden peer" value="{{ content.id }}-{{ content.type|lower }}">
                             <div class="w-5 h-5 border-2 border-gray-300 rounded flex items-center justify-center peer-checked:bg-blue-600 peer-checked:border-blue-600">
-                                <div class="w-3 h-3 text-white scale-0 peer-checked:scale-100">
+                                <div class="w-3 h-3 text-white scale-0 peer-checked:scale-100 transition-transform">
                                     <i class="ri-check-line"></i>
                                 </div>
                             </div>
                         </label>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-700">
+                    <td class="px-4 py-3 text-sm text-gray-700 truncate max-w-xs">
                         <div class="flex items-center">
                             <div class="w-8 h-8 flex items-center justify-center rounded bg-blue-100 text-blue-600 mr-3">
                                 <i class="ri-file-paper-2-line"></i>
@@ -106,13 +142,13 @@
                             {{ content.title }}
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-sm">
-                        <span class="inline-flex px-2 text-xs font-semibold leading-5 text-blue-800 bg-blue-100 rounded-full">{{ content.type }}</span>
+                    <td class="px-4 py-3 text-sm">
+                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full text-blue-800 bg-blue-100">{{ content.type }}</span>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ content.uploader }}</td>
-                    <td class="px-6 py-4 text-sm text-gray-700">{{ content.submitted|date:"M d, Y" }}</td>
-                    <td class="px-6 py-4 text-sm">
-                        <span class="inline-flex px-3 py-1 text-xs font-semibold leading-5 rounded-full 
+                    <td class="px-4 py-3 text-sm text-gray-700 truncate max-w-xs">{{ content.uploader }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-700">{{ content.submitted|date:"M d, Y" }}</td>
+                    <td class="px-4 py-3 text-sm">
+                        <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full 
                             {% if content.status == 'Pending' %}text-yellow-800 bg-yellow-100
                             {% elif content.status == 'Approved' %}text-green-800 bg-green-100
                             {% elif content.status == 'Rejected' %}text-red-800 bg-red-100
@@ -120,32 +156,61 @@
                             {{ content.status }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-sm">
-                        <form method="post" class="flex space-x-2">
-                            {% csrf_token %}
-                            <input type="hidden" name="content_type" value="{{ content.type|lower }}">
-                            <input type="hidden" name="content_id" value="{{ content.id }}">
-                            <button name="action" value="approve" class="p-2 text-green-600 bg-green-50 rounded hover:bg-green-100 transition-colors" title="Approve">
-                                <i class="ri-check-line text-lg"></i>
-                            </button>
-                            <button name="action" value="reject" class="p-2 text-red-600 bg-red-50 rounded hover:bg-red-100 transition-colors" title="Reject">
+                    <td class="px-4 py-3 text-sm">
+                        <div class="flex space-x-2">
+                            <form method="post" action="{% url 'content_moderation' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="content_type" value="{{ content.type|lower }}">
+                                <input type="hidden" name="content_id" value="{{ content.id }}">
+                                <input type="hidden" name="action" value="approve">
+                                <button type="submit" class="p-2 text-green-600 bg-green-50 rounded hover:bg-green-100 transition-colors" title="Approve">
+                                    <i class="ri-check-line text-lg"></i>
+                                </button>
+                            </form>
+                            <button onclick="openRejectModal('{{ content.id }}', '{{ content.type|lower }}', '{{ content.title|escapejs }}')" 
+                                    class="p-2 text-red-600 bg-red-50 rounded hover:bg-red-100 transition-colors" title="Reject">
                                 <i class="ri-close-line text-lg"></i>
                             </button>
-                        </form>
+                        </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="7" class="text-center px-6 py-4 text-gray-500">No content found.</td>
+                    <td colspan="7" class="text-center px-4 py-3 text-gray-500">No content found.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 
+    <!-- Rejection Modal -->
+    <div id="rejectModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50 px-4">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+            <button onclick="closeRejectModal()" class="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl">×</button>
+            <h2 class="text-lg font-semibold mb-4">Reject Content</h2>
+            <p class="mb-4">You are rejecting: <span id="modalContentTitle" class="font-medium"></span></p>
+            <form id="rejectForm" method="POST" action="{% url 'content_moderation' %}">
+                {% csrf_token %}
+                <input type="hidden" name="content_type" id="modalContentType">
+                <input type="hidden" name="content_id" id="modalContentId">
+                <input type="hidden" name="action" value="reject">
+                <div class="mb-4">
+                    <label for="reason" class="block text-sm font-medium text-gray-700">Reason for Rejection</label>
+                    <textarea name="reason" id="reason" required
+                        class="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        placeholder="Enter reason for rejection" rows="4"></textarea>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closeRejectModal()" class="px-4 py-2 rounded bg-gray-200 text-gray-800 hover:bg-gray-300">Cancel</button>
+                    <button type="submit" class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700">Reject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Pagination -->
     {% if page_obj.paginator.num_pages > 1 %}
-    <div class="mt-4 flex items-center justify-between">
+    <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
             <p class="text-sm text-gray-700">
                 Showing <span class="font-medium">{{ page_obj.start_index }}</span> to
@@ -156,8 +221,8 @@
         <div>
             <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                 {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}&search={{ request.GET.search|default:'' }}" 
-                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:text-gray-400">
+                <a href="?page={{ page_obj.previous_page_number }}&status={{ current_status }}" 
+                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
                     </svg>
@@ -174,14 +239,14 @@
                 {% if num == page_obj.number %}
                 <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-blue-50 text-sm font-medium text-blue-700">{{ num }}</span>
                 {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                <a href="?page={{ num }}&search={{ request.GET.search|default:'' }}"
+                <a href="?page={{ num }}&status={{ current_status }}"
                     class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-blue-600 hover:bg-blue-50">{{ num }}</a>
                 {% endif %}
                 {% endfor %}
 
                 {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}&search={{ request.GET.search|default:'' }}"
-                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:text-gray-400">
+                <a href="?page={{ page_obj.next_page_number }}&status={{ current_status }}"
+                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                     </svg>
@@ -201,58 +266,42 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Filter by input and type
     const filterInput = document.getElementById('filter-input');
     const filterType = document.getElementById('filter-type');
     const rows = document.querySelectorAll('tbody tr:not(.text-center)');
 
-    let activeStatusFilter = '';
-
-    function applyFilters() {
-        const searchTerm = filterInput.value.toLowerCase();
+    function applySearchFilter() {
+        const searchTerm = filterInput.value.toLowerCase().trim();
         const selectedType = filterType.value;
 
         rows.forEach(row => {
             const cells = row.querySelectorAll('td');
-            let cellText;
+            let cellText = '';
             if (selectedType === 'title') cellText = cells[1].textContent.toLowerCase();
             else if (selectedType === 'type') cellText = cells[2].textContent.toLowerCase();
             else if (selectedType === 'uploader') cellText = cells[3].textContent.toLowerCase();
             else if (selectedType === 'status') cellText = cells[5].textContent.toLowerCase();
 
-            const matchesSearch = cellText.includes(searchTerm);
-            const matchesStatus = activeStatusFilter ? cells[5].textContent.toLowerCase() === activeStatusFilter : true;
-
-            row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+            const matchesSearch = searchTerm === '' || cellText.includes(searchTerm);
+            row.style.display = matchesSearch ? '' : 'none';
         });
     }
 
-    filterInput.addEventListener('input', applyFilters);
-    filterType.addEventListener('change', applyFilters);
-
-    // Filter by status buttons
-    window.filterByStatus = function(status) {
-        activeStatusFilter = status.toLowerCase();
-        document.querySelectorAll('.flex.space-x-2 button').forEach(btn => {
-            btn.classList.remove('border-blue-600', 'text-blue-600', 'bg-blue-50');
-            btn.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:bg-gray-50');
-            if (btn.textContent.toLowerCase().includes(status)) {
-                btn.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:bg-gray-50');
-                btn.classList.add('border-blue-600', 'text-blue-600', 'bg-blue-50', 'hover:bg-blue-100');
-            }
-        });
-        applyFilters();
-    };
+    // Search input and filter type handling
+    filterInput.addEventListener('input', applySearchFilter);
+    filterType.addEventListener('change', applySearchFilter);
 
     // Select all checkboxes
     const selectAllCheckbox = document.getElementById('select-all');
     const contentCheckboxes = document.querySelectorAll('.content-checkbox');
 
     selectAllCheckbox.addEventListener('change', () => {
+        const isChecked = selectAllCheckbox.checked;
         contentCheckboxes.forEach(checkbox => {
-            checkbox.checked = selectAllCheckbox.checked;
-            checkbox.nextElementSibling.querySelector('div').classList.toggle('scale-100', selectAllCheckbox.checked);
-            checkbox.nextElementSibling.querySelector('div').classList.toggle('scale-0', !selectAllCheckbox.checked);
+            checkbox.checked = isChecked;
+            const checkmark = checkbox.nextElementSibling.querySelector('div');
+            checkmark.classList.toggle('scale-100', isChecked);
+            checkmark.classList.toggle('scale-0', !isChecked);
         });
     });
 
@@ -260,11 +309,35 @@ document.addEventListener('DOMContentLoaded', () => {
         checkbox.addEventListener('change', () => {
             const allChecked = Array.from(contentCheckboxes).every(cb => cb.checked);
             selectAllCheckbox.checked = allChecked;
-            selectAllCheckbox.nextElementSibling.querySelector('div').classList.toggle('scale-100', allChecked);
-            selectAllCheckbox.nextElementSibling.querySelector('div').classList.toggle('scale-0', !allChecked);
+            const selectAllCheckmark = selectAllCheckbox.nextElementSibling.querySelector('div');
+            selectAllCheckmark.classList.toggle('scale-100', allChecked);
+            selectAllCheckmark.classList.toggle('scale-0', !allChecked);
         });
     });
+
+    // Modal handling for rejection
+    window.openRejectModal = function(contentId, contentType, contentTitle) {
+        document.getElementById('modalContentId').value = contentId;
+        document.getElementById('modalContentType').value = contentType;
+        document.getElementById('modalContentTitle').innerText = contentTitle;
+        document.getElementById('reason').value = '';
+        document.getElementById('rejectModal').classList.remove('hidden');
+    };
+
+    window.closeRejectModal = function() {
+        document.getElementById('rejectModal').classList.add('hidden');
+    };
 });
 </script>
 
+<style>
+/* Fallback for checkboxes when JavaScript is disabled */
+input[type="checkbox"]:checked + div {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+input[type="checkbox"]:checked + div > div {
+    transform: scale(1);
+}
+</style>
 {% endblock %}

@@ -478,22 +478,77 @@ def add_user(request):
     return render(request, 'admin/user_managment/add_user.html', {'form': form})
 
 
-
+# admin side papers view
 @login_required
 def admin_papers(request):
     if not request.user.is_superuser:
         return redirect('home')
     
     papers = OldPaper.objects.all().order_by('-uploaded_at')
-    return render(request, 'admin/papers.html', {'papers': papers})
+    return render(request, 'admin/papers/papers.html', {'papers': papers})
 
+# admin side paper upload
+@login_required
+def upload_old_paper(request):
+    if request.method == 'POST':
+        form = OldPaperForm(request.POST, request.FILES)
+        if form.is_valid():
+            paper = form.save(commit=False)
+            paper.uploaded_by = request.user
+            paper.save()
+            messages.success(request, 'Paper uploaded successfully!')
+            return redirect('admin_papers')
+    else:
+        form = OldPaperForm()
+
+    return render(request, 'admin/papers/papers_upload.html', {'form': form})
+
+# admin side projects view
 @login_required
 def admin_projects(request):
     if not request.user.is_superuser:
         return redirect('home')
     
     projects = Project.objects.all().order_by('-uploaded_at')
-    return render(request, 'admin/projects.html', {'projects': projects})
+    return render(request, 'admin/projects/projects.html', {'projects': projects})
+
+# admin side project upload
+
+@login_required
+def upload_project(request):
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.uploaded_by = request.user
+            project.status = 'approved'  
+            project.save()
+            messages.success(request, 'Project uploaded successfully and is pending moderation.')
+            return redirect('admin_projects')
+        else:
+            messages.error(request, 'Please correct the errors below: ' + '; '.join(
+                f"{field}: {', '.join(errors)}" for field, errors in form.errors.items()
+            ))
+    else:
+        form = ProjectForm()
+
+    return render(request, 'admin/projects/projects_upload.html', {'form': form})
+
+# admin side project delete
+def admin_delete_project(request, project_id):
+    if request.method == 'POST':
+        project = get_object_or_404(Project, id=project_id)
+        try:
+            project_title = project.title
+            project.delete()
+            messages.success(request, f'Project "{project_title}" deleted successfully.')
+        except Exception as e:
+            messages.error(request, f'Error deleting project: {str(e)}')
+        return redirect('admin_projects')
+    else:
+        messages.error(request, 'Invalid request method.')
+        return redirect('admin_projects')
+
 
 @login_required
 def admin_blogs(request):
@@ -501,13 +556,58 @@ def admin_blogs(request):
         return redirect('home')
     
     blogs = Blog.objects.all().order_by('-created_at')
-    return render(request, 'admin/blogs.html', {'blogs': blogs})
+    return render(request, 'admin/blogs/blogs.html', {'blogs': blogs})
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def delete_blog(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+
+    if request.method == 'POST':
+        if blog.uploaded_by == request.user or request.user.is_superuser:
+            blog.delete()
+            messages.success(request, "Blog deleted successfully.")
+            return redirect('admin_blogs')  # Change this to your blog listing URL name
+        else:
+            messages.error(request, "You are not authorized to delete this blog.")
+            return redirect('blog_detail', slug=blog.slug)
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def edit_blog(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES, instance=blog)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Blog updated successfully.')
+            return redirect('admin_blogs')
+    else:
+        form = BlogForm(instance=blog)
+    return render(request, 'admin/blogs/edit_blog.html', {'form': form, 'blog': blog})
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def create_blog(request):
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            blog = form.save(commit=False)
+            blog.uploaded_by = request.user
+            blog.author = request.user
+            blog.save()
+            messages.success(request, 'Blog created successfully.')
+            return redirect('admin_blogs')
+    else:
+        form = BlogForm()
+    return render(request, 'admin/create_blog.html', {'form': form})
 
 @login_required
 def Content_Moderation(request):
     if not request.user.is_superuser:
+        messages.error(request, "You do not have permission to access this page.")
         return redirect('home')
-
+    
     if request.method == 'POST':
         form = ContentModerationForm(request.POST)
         if form.is_valid():
@@ -515,35 +615,39 @@ def Content_Moderation(request):
             content_id = form.cleaned_data['content_id']
             action = form.cleaned_data['action']
             reason = form.cleaned_data['reason']
-
+            
             model_map = {
                 'paper': OldPaper,
                 'project': Project,
                 'blog': Blog,
             }
-
+            
             model = model_map.get(content_type)
             if not model:
                 messages.error(request, 'Invalid content type.')
                 return redirect('content_moderation')
-
+            
             obj = get_object_or_404(model, id=content_id)
             obj.status = 'Approved' if action == 'approve' else 'Rejected'
+            if action == 'reject' and reason:
+                obj.rejection_reason = reason  # Assuming models have a rejection_reason field
             obj.save()
-
+            
             messages.success(request, f'{content_type.title()} has been {action}d.')
             return redirect('content_moderation')
-
     else:
         form = ContentModerationForm()
-
-    # Merge and annotate all pending content
-    papers = OldPaper.objects.filter(status='Pending').select_related('uploaded_by')
-    projects = Project.objects.filter(status='Pending').select_related('uploaded_by')
-    blogs = Blog.objects.filter(status='Pending').select_related('author')
-
+    
+    # Get status filter from GET parameters
+    status_filter = request.GET.get('status', 'approved')
+    
+    # Fetch all content
+    papers = OldPaper.objects.all().select_related('uploaded_by')
+    projects = Project.objects.all().select_related('uploaded_by')
+    blogs = Blog.objects.all().select_related('author')
+    
     contents = []
-
+    
     for paper in papers:
         contents.append({
             'id': paper.id,
@@ -553,7 +657,7 @@ def Content_Moderation(request):
             'submitted': paper.uploaded_at,
             'status': paper.status,
         })
-
+    
     for project in projects:
         contents.append({
             'id': project.id,
@@ -563,7 +667,7 @@ def Content_Moderation(request):
             'submitted': project.uploaded_at,
             'status': project.status,
         })
-
+    
     for blog in blogs:
         contents.append({
             'id': blog.id,
@@ -573,12 +677,43 @@ def Content_Moderation(request):
             'submitted': blog.created_at,
             'status': blog.status,
         })
-
+    
+    # Calculate counts for each status
+    pending_count = sum(1 for c in contents if c['status'] == 'Pending')
+    approved_count = sum(1 for c in contents if c['status'] == 'Approved')
+    rejected_count = sum(1 for c in contents if c['status'] == 'Rejected')
+    flagged_count = sum(1 for c in contents if c['status'] == 'Flagged')
+    
+    # Filter contents based on status
+    if status_filter and status_filter != 'all':
+        status_map = {
+            'pending': 'Pending',
+            'approved': 'Approved',
+            'rejected': 'Rejected',
+            'flagged': 'Flagged'
+        }
+        filter_status = status_map.get(status_filter.lower())
+        if filter_status:
+            contents = [c for c in contents if c['status'] == filter_status]
+    
+    # Sort contents by submitted date (newest first)
+    contents.sort(key=lambda x: x['submitted'], reverse=True)
+    
+    # Pagination
+    paginator = Paginator(contents, 10)  # 10 items per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
     return render(request, 'admin/content_moderation.html', {
         'form': form,
-        'contents': contents
+        'contents': page_obj,
+        'page_obj': page_obj,
+        'pending_count': pending_count,
+        'approved_count': approved_count,
+        'rejected_count': rejected_count,
+        'flagged_count': flagged_count,
+        'current_status': status_filter,
     })
-
 
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
@@ -626,20 +761,7 @@ def some_view(request):
         'data': data,
     })
 
-# admin side paper upload
-def upload_old_paper(request):
-    if request.method == 'POST':
-        form = OldPaperForm(request.POST, request.FILES)
-        if form.is_valid():
-            paper = form.save(commit=False)
-            paper.uploaded_by = request.user
-            paper.save()
-            messages.success(request, 'Paper uploaded successfully!')
-            return redirect('admin_papers')
-    else:
-        form = OldPaperForm()
 
-    return render(request, 'admin/papers_upload.html', {'form': form})
 
 def analytics(request):
     # Summary statistics
@@ -751,49 +873,7 @@ def settings(request):
     context = {'settings': settings_obj}
     return render(request, 'admin/settings.html', context)
 
-@login_required
-@user_passes_test(lambda u: u.is_superuser)
-def delete_blog(request, blog_id):
-    blog = get_object_or_404(Blog, id=blog_id)
 
-    if request.method == 'POST':
-        if blog.uploaded_by == request.user or request.user.is_superuser:
-            blog.delete()
-            messages.success(request, "Blog deleted successfully.")
-            return redirect('admin_blogs')  # Change this to your blog listing URL name
-        else:
-            messages.error(request, "You are not authorized to delete this blog.")
-            return redirect('blog_detail', slug=blog.slug)
-
-@login_required
-@user_passes_test(lambda u: u.is_superuser)
-def edit_blog(request, blog_id):
-    blog = get_object_or_404(Blog, id=blog_id)
-    if request.method == 'POST':
-        form = BlogForm(request.POST, request.FILES, instance=blog)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Blog updated successfully.')
-            return redirect('admin_blogs')
-    else:
-        form = BlogForm(instance=blog)
-    return render(request, 'admin/edit_blog.html', {'form': form, 'blog': blog})
-
-@login_required
-@user_passes_test(lambda u: u.is_superuser)
-def create_blog(request):
-    if request.method == 'POST':
-        form = BlogForm(request.POST, request.FILES)
-        if form.is_valid():
-            blog = form.save(commit=False)
-            blog.uploaded_by = request.user
-            blog.author = request.user
-            blog.save()
-            messages.success(request, 'Blog created successfully.')
-            return redirect('admin_blogs')
-    else:
-        form = BlogForm()
-    return render(request, 'admin/create_blog.html', {'form': form})
 
 
 # admin contact us view

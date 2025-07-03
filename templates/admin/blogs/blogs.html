@@ -76,10 +76,10 @@
                     <td class="px-6 py-4 text-sm text-gray-700">{{ blog.created_at|date:"Y-m-d" }}</td>
                     <td class="px-6 py-4 text-sm">
                         <div class="flex space-x-4">
-                            <a href="#" class="text-blue-600 hover:text-blue-800 transition-colors" title="Edit">
+                            <a href="{% url 'admin_edit_blog' blog.id %}" class="text-blue-600 hover:text-blue-800 transition-colors" title="Edit">
                                 <i class="ri-edit-line text-lg"></i>
                             </a>
-                            <form method="POST" action="{% url 'delete_blog' blog.id %}" onsubmit="return confirmDelete();" style="display: inline;">
+                            <form method="POST" action="{% url 'admin_delete_blog' blog.id %}" onsubmit="return confirmDelete();" style="display: inline;">
                                 {% csrf_token %}
                                 <button type="submit" class="text-red-600 hover:text-red-800 transition-colors" title="Delete">
                                     <i class="ri-delete-bin-line text-lg"></i>
