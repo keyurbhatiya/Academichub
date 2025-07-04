@@ -3,3 +3,4 @@ psycopg2-binary
 Pillow
 django-crispy-forms
 dj-database-url
+python-dotenv
