@@ -4,3 +4,6 @@ Pillow
 django-crispy-forms
 dj-database-url
 python-dotenv
+gunicorn 
+unicorn 
+whitenoise
