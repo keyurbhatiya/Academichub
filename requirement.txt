@@ -1,5 +1,4 @@
 Django>=4.2,<5.0
-mysqlclient>=2.2.0
+psycopg2-binary
 Pillow
 django-crispy-forms
-psycopg2-binary
