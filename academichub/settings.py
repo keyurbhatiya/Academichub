@@ -3,18 +3,10 @@ import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
-
 load_dotenv()  # load .env file
-
-
-
-DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600)
-}
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -26,11 +18,15 @@ SECRET_KEY = 'django-insecure--j$ufrsdc^^$*_(7^#p4qj3pj3wawz52_j)mzut%f7xnj03rpy
 # DEBUG = True
 DEBUG = False
 
-ALLOWED_HOSTS = []
-
+# Add your allowed hosts for production
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'your-render-app-name.onrender.com',  # Replace with your actual Render app URL
+    # Add any other domains you'll use
+]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -72,29 +68,30 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'academichub.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    # new postgres
-    #  'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'academichub',
-    #     'USER': 'keyur',
-    #     'PASSWORD': 'keyur@123',
-    #     'HOST': 'localhost',
-    #     'PORT': '5432',
-    # }
-    # new neouserver
-   'default': dj_database_url.parse(
-    "psql 'postgresql://neondb_owner:npg_X0SUy7vjJVQm@ep-billowing-block-a8ab3pcq-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require'",
-    conn_max_age=600,
-    ssl_require=True
-)
-}
-
-
+# Single DATABASES configuration with proper fallback
+# Alternative approach for handling SSL conditionally
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    # Production - use Neon with SSL
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
+else:
+    # Local development - use local PostgreSQL without SSL
+    DATABASES = {
+        'default': dj_database_url.config(
+            default='postgresql://keyur:keyur%40123@localhost:5432/academichub',
+            conn_max_age=600,
+            ssl_require=False
+        )
+    }
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -113,7 +110,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -124,7 +120,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -149,6 +144,3 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_SECURE = True          # Only send session cookie over HTTPS
 CSRF_COOKIE_SECURE = True             # Same for CSRF cookie
 SESSION_COOKIE_HTTPONLY = True        # Prevent JavaScript access to cookies
-
-
-
