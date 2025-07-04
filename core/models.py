@@ -109,7 +109,7 @@ class OldPaper(models.Model):
     university = models.CharField(max_length=100, choices=UNIVERSITY_CHOICES)
     course = models.CharField(max_length=100, choices= COURSE_CHOICES)  
     semester = models.CharField(max_length=50)
-    file = models.FileField(upload_to='papers/')
+    file = models.FileField(upload_to='papers/',default='no-paper.pdf')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='approved')
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(default=timezone.now)
@@ -123,13 +123,14 @@ class Project(models.Model):
     semester = models.CharField(max_length=50)
     language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, default='other')  #New field
     image = models.ImageField(upload_to='project_images/', blank=True, null=True)  # ✅ New field
-    zip_file = models.FileField(upload_to='projects/')
+    zip_file = models.FileField(upload_to='projects/',default='no-project.zip')  # ✅ New field
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='approved')
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.title
+
 
 
 class Blog(models.Model):

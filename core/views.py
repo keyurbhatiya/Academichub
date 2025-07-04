@@ -217,6 +217,7 @@ def upload_project(request):
 
     return render(request, 'core/projects/upload_project.html', {'form': form})
 
+
 # Create a new blog post view
 
 @login_required
@@ -490,7 +491,7 @@ def admin_papers(request):
 
 # admin side paper upload
 @login_required
-def upload_old_paper(request):
+def admin_upload_old_paper(request):
     if request.method == 'POST':
         form = OldPaperForm(request.POST, request.FILES)
         if form.is_valid():
@@ -516,7 +517,7 @@ def admin_projects(request):
 # admin side project upload
 
 @login_required
-def upload_project(request):
+def admin_upload_project(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST, request.FILES)
         if form.is_valid():

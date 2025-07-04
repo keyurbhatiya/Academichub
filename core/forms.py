@@ -39,7 +39,6 @@ class ContentModerationForm(forms.Form):
     action = forms.ChoiceField(choices=[('approve', 'Approve'), ('reject', 'Reject')])
     reason = forms.CharField(widget=forms.Textarea, required=False)
 
-from django import forms
 
 class ContactForm(forms.ModelForm):
     class Meta:
@@ -53,5 +52,14 @@ class FeedbackForm(forms.ModelForm):
         widgets = {
             'message': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter your feedback'})
         }
+
+
+# In your forms.py
+def clean_file(self):
+    file = self.cleaned_data.get('file')
+    if file:
+        if file.size > 10 * 1024 * 1024:  # 10MB limit
+            raise forms.ValidationError("File size cannot exceed 10MB")
+    return file
 
 
