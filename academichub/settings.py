@@ -87,11 +87,11 @@ DATABASES = {
     #     'PORT': '5432',
     # }
     # new neouserver
-     'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"),
-        conn_max_age=600,
-        ssl_require=True
-    )
+   'default': dj_database_url.parse(
+    "postgresql://neondb_owner:npg_X0SUy7vjJVQm@ep-billowing-block-a8ab3pcq-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require",
+    conn_max_age=600,
+    ssl_require=True
+)
 }
 
 
