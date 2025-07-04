@@ -209,7 +209,7 @@
                 {% if project.image %}
                     <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-auto object-cover object-top">
                 {% else %}
-                 <img src="/static/img/blog-default-img.png" alt="{{ project.title }}" class="w-full h-auto object-cover object-top">
+                 <img src="{% static 'img/blog-default-img.png' %}" alt="{{ project.title }}" class="w-full h-auto object-cover object-top">
                 {% endif %}
                     <div class="p-6">
                         <div class="flex flex-wrap gap-2 mb-3">
@@ -286,7 +286,7 @@
                             </div>
                             {% else %}
                             <div class="aspect-video w-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
-                                <img src="/static/img/blog-default-img.png" alt="Default blog image" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+                                <img src="{% static 'img/blog-default-img.png' %}" alt="Default blog image" class="w-full h-full object-cover hover:scale-105 transition duration-300">
                             </div>
                             {% endif %}
                             <div class="p-6">
@@ -355,7 +355,7 @@
                 <div class="flex flex-col md:flex-row">
                     <div
                         class="w-full md:w-1/2 bg-gradient-to-br from-primary/10 to-secondary/10 p-8 md:p-12 flex items-center justify-center">
-                        <img src="/static/img/upload-img.jpg"
+                        <img src="{% static 'img/upload-img.jpg' %}"
                             alt="Contribute your work" class="w-full max-w-md h-auto">
                     </div>
                     <div class="w-full md:w-1/2 p-8 md:p-12">
