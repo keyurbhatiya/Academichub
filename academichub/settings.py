@@ -22,7 +22,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'your-render-app-name.onrender.com',  # Replace with your actual Render app URL
+    'https://academichub-uqg6.onrender.com/',  # Replace with your actual Render app URL
     # Add any other domains you'll use
 ]
 
@@ -71,27 +71,14 @@ WSGI_APPLICATION = 'academichub.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Single DATABASES configuration with proper fallback
-# Alternative approach for handling SSL conditionally
-DATABASE_URL = os.environ.get('DATABASE_URL')
-if DATABASE_URL:
-    # Production - use Neon with SSL
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            ssl_require=True
-        )
-    }
-else:
-    # Local development - use local PostgreSQL without SSL
-    DATABASES = {
-        'default': dj_database_url.config(
-            default='postgresql://keyur:keyur%40123@localhost:5432/academichub',
-            conn_max_age=600,
-            ssl_require=False
-        )
-    }
+# Simple approach with better error handling
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgresql://keyur:keyur%40123@localhost:5432/academichub',
+        conn_max_age=600,
+    )
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -143,4 +130,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_SECURE = True          # Only send session cookie over HTTPS
 CSRF_COOKIE_SECURE = True             # Same for CSRF cookie
-SESSION_COOKIE_HTTPONLY = True        # Prevent JavaScript access to cookies
+SESSION_COOKIE_HTTPONLY = True        # Prevent JavaScript access to cookies    
