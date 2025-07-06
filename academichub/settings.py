@@ -13,8 +13,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure--j$ufrsdc^^$*_(7^#p4qj3pj3wawz52_j)mzut%f7xnj03rpy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = ['academichub-frio.onrender.com', 'localhost', '127.0.0.1']
 
@@ -70,10 +70,12 @@ WSGI_APPLICATION = 'academichub.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL"),
-        conn_max_age=600
+        default=os.environ.get("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True  # Optional: depends on your DB setup
     )
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
