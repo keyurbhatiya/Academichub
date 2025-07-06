@@ -2,8 +2,8 @@ services:
   - type: web
     name: academichub
     env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn academichub.asgi:application -k uvicorn.workers.UvicornWorker"
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn academichub.asgi:application -k uvicorn.workers.UvicornWorker
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11
+        value: 3.11.9
