@@ -30,7 +30,7 @@ autopep8==1.5
 Babel==2.15.0
 backoff==2.2.1
 bardapi==0.1.39
-baseten==0.8.2
+baseten
 bcrypt==4.2.0
 beautifulsoup4==4.13.4
 bidict==0.22.1
