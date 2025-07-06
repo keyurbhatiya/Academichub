@@ -647,3 +647,4 @@ python-dotenv
 gunicorn 
 unicorn 
 whitenoise
+blake3>=0.3.1
