@@ -19,7 +19,7 @@ SECRET_KEY = 'django-insecure--j$ufrsdc^^$*_(7^#p4qj3pj3wawz52_j)mzut%f7xnj03rpy
 DEBUG = False
 
 # Add your allowed hosts for production
-ALLOWED_HOSTS = ['**']  # Replace with your actual domain or IP address
+ALLOWED_HOSTS = ['https://academichub.up.railway.app/']  # Replace with your actual domain or IP address
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
