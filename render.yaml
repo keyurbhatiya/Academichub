@@ -4,12 +4,14 @@ services:
     env: python
     buildCommand: |
       apt-get update && apt-get install -y libpq-dev
+      python --version
       pip install -r requirements.txt
+      python -c "import psycopg; print('psycopg imported successfully')"
     startCommand: "gunicorn academichub.asgi:application -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: DATABASE_URL
-        sync: false  # Ensure Render manages this for managed PostgreSQL
+        sync: false
       - key: DJANGO_SETTINGS_MODULE
         value: academichub.settings
