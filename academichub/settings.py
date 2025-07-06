@@ -69,10 +69,9 @@ WSGI_APPLICATION = 'academichub.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    # new postgres
-     'default': dj_database_url.config(
-        default='postgres://keyur:keyur@123@localhost:5432/academichub',
-        conn_max_age=600,
+    'default': dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),
+        conn_max_age=600
     )
 }
 
