@@ -5,7 +5,6 @@ whitenoise==6.7.0
 dj-database-url==2.2.0
 python-dotenv==1.0.1
 django-crispy-forms==2.3
-django-bootstrap5==25.2
 boto3==1.35.24
 django-cloudinary-storage==0.3.0
 psycopg[binary]==3.1.20
