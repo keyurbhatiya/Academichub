@@ -1,6 +1,8 @@
 {% extends 'core/base.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
+{% load static %}
+
 
 <main>
     <!-- Welcome Message -->
@@ -86,7 +88,7 @@
                             </div>
                         </div>
                     </div>
-                    <img src="{% static 'img/banner-2.png' %}"
+                    <img src="{% static 'img/hero-img.jpg' %}"
                         alt="Academic resources visualization" class="w-full max-w-4xl h-auto rounded-2xl shadow-xl">
                 </div>
             </div>

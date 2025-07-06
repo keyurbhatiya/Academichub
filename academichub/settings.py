@@ -1,12 +1,10 @@
-import os
-import dj_database_url
 from pathlib import Path
-from dotenv import load_dotenv
-
-load_dotenv()  # load .env file
+import dj_database_url
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -18,10 +16,11 @@ SECRET_KEY = 'django-insecure--j$ufrsdc^^$*_(7^#p4qj3pj3wawz52_j)mzut%f7xnj03rpy
 # DEBUG = True
 DEBUG = False
 
-# Add your allowed hosts for production
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
- # Replace with your actual domain or IP address
+ALLOWED_HOSTS = ['academichub-frio.onrender.com', 'localhost', '127.0.0.1']
+
+
 # Application definition
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,7 +40,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.AdminSessionTimeoutMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # For serving static files in production
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'academichub.urls'
@@ -64,16 +64,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'academichub.wsgi.application'
 
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Simple approach with better error handling
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://keyur:keyur%40123@localhost:5432/academichub',
+    # new postgres
+     'default': dj_database_url.config(
+        default='postgres://keyur:keyur@123@localhost:5432/academichub',
         conn_max_age=600,
     )
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -93,6 +95,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -104,13 +107,12 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -128,4 +130,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_SECURE = True          # Only send session cookie over HTTPS
 CSRF_COOKIE_SECURE = True             # Same for CSRF cookie
-SESSION_COOKIE_HTTPONLY = True        # Prevent JavaScript access to cookies    
+SESSION_COOKIE_HTTPONLY = True        # Prevent JavaScript access to cookies
+
+if not DEBUG:
+    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+    # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
+    # and renames the files with unique names for each version to support long-term caching
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
