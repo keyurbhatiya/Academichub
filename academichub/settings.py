@@ -1,6 +1,11 @@
-from pathlib import Path
-import dj_database_url
+from dotenv import load_dotenv
+load_dotenv()
+
 import os
+import dj_database_url
+from pathlib import Path
+
+os.environ.get("DATABASE_URL")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,8 +18,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure--j$ufrsdc^^$*_(7^#p4qj3pj3wawz52_j)mzut%f7xnj03rpy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+# DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['academichub-frio.onrender.com', 'localhost', '127.0.0.1']
 
