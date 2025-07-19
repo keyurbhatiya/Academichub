@@ -88,6 +88,22 @@
             });
         });
     </script>
+    <!-- view pdf model -->
+    <script>
+    function openPdfModal(pdfUrl) {
+        const modal = document.getElementById('pdfModal');
+        const frame = document.getElementById('pdfFrame');
+        frame.src = pdfUrl;
+        modal.classList.remove('hidden');
+    }
+
+    function closePdfModal() {
+        const modal = document.getElementById('pdfModal');
+        const frame = document.getElementById('pdfFrame');
+        frame.src = "";
+        modal.classList.add('hidden');
+    }
+</script>
 
     {% block extra_script %}{% endblock %}
 </body>

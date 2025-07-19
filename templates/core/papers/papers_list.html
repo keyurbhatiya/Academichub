@@ -3,23 +3,37 @@
     <div class="grid grid-cols-1 gap-4 sm:gap-6">
         {% for paper in papers %}
         <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 p-4 sm:p-6 border border-gray-100">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:items-center sm:justify-between">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <!-- Paper Details -->
                 <div class="mb-4 sm:mb-0">
                     <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">{{ paper.title }}</h3>
                     <p class="text-gray-600 text-xs sm:text-sm mb-1">{{ paper.university }} (sem: {{ paper.semester }})</p>
-                    <p class="text-gray-500 text-xs sm:text-sm">Uploaded by <span class="font-medium">{{ paper.uploaded_by }}</span> on {{ paper.uploaded_at|date:"F d, Y" }}</p>
+                    <p class="text-gray-500 text-xs sm:text-sm">
+                        Uploaded by <span class="font-medium">{{ paper.uploaded_by }}</span>
+                        on {{ paper.uploaded_at|date:"F d, Y" }}
+                    </p>
                 </div>
-                <!-- Download Button -->
-                <a href="{{ paper.file.url }}" 
-                        target="_blank"
-                        class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition duration-200 flex items-center shrink-0">
+
+                <!-- View PDF Modal Button -->
+                <button
+                    class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition duration-200 flex items-center"
+                    onclick="openPdfModal('{{ paper.file.url|replace:'/image/', '/raw/' }}')"
+                >
                     <i class="ri-eye-line mr-2"></i> View PDF
-                </a>
+                </button>
             </div>
         </div>
         {% endfor %}
     </div>
+
+    <!-- Modal Structure -->
+    <div id="pdfModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg w-[90%] max-w-3xl relative">
+            <button class="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-2xl" onclick="closePdfModal()">&times;</button>
+            <iframe id="pdfFrame" src="" class="w-full h-[600px] rounded-b-lg" frameborder="0"></iframe>
+        </div>
+    </div>
+
     {% else %}
     <div class="bg-white rounded-xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
         <i class="ri-file-warning-line text-3xl sm:text-4xl text-gray-400 mb-4"></i>

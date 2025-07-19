@@ -8,6 +8,17 @@
             <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Old Question Papers</h2>
             <p class="text-base sm:text-lg text-gray-600 max-w-xl sm:max-w-2xl">Access a collection of past question papers from various universities to aid your exam preparation.</p>
         </div>
+        <!-- Messages -->
+        {% if messages %}
+        <div class="mb-6 space-y-2">
+            {% for message in messages %}
+            <div class="p-4 rounded-lg flex items-center {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                <i class="ri-{% if message.tags == 'success' %}check-circle-line{% else %}error-warning-line{% endif %} mr-2 text-xl"></i>
+                <span>{{ message }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
 
         <!-- Filter Section -->
         <form id="filter-form" method="get" action="{% url 'papers' %}">

@@ -19,6 +19,9 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.db import OperationalError
+# telegram
+# from core.forms import OldPaperForm
+# from .telegram import send_file_to_telegram
 
 def home(request):
     try:
@@ -198,7 +201,9 @@ def upload_paper(request):
             return redirect('papers')
     else:
         form = OldPaperForm()
+
     return render(request, 'core/papers/upload_paper.html', {'form': form})
+
 
 @login_required
 def upload_project(request):
