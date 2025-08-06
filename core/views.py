@@ -20,6 +20,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.db import OperationalError
 from django.http import FileResponse
+from django.http import FileResponse, Http404
 import os
 # telegram
 # from core.forms import OldPaperForm
@@ -29,7 +30,10 @@ import os
 # adsense view
 def ads_txt_view(request):
     file_path = os.path.join(os.path.dirname(__file__), 'ads.txt')
-    return FileResponse(open(file_path, 'rb'), content_type='text/plain')
+    if os.path.exists(file_path):
+        return FileResponse(open(file_path, 'rb'), content_type='text/plain')
+    else:
+        raise Http404("ads.txt not found")
 
 
 def home(request):
