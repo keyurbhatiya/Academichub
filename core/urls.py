@@ -35,7 +35,7 @@ urlpatterns = [
     path('cookie-policy/', views.cookie_policy, name='cookie_policy'),
     path('uploads/', views.user_uploads_view, name='user_uploads'),
     # ✅ Correct way to serve ads.txt
-     path('ads.txt', views.ads_txt_view, name='ads_txt'),
+     path('ads.txt/', views.ads_txt_view, name='ads_txt'),
 
     # path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
 ]
