@@ -33,6 +33,9 @@ urlpatterns = [
     path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
     path('cookie-policy/', views.cookie_policy, name='cookie_policy'),
 
+    # adsense
+    path('ads.txt/', views.ads_view, name='ads'),
+
 
 
    

@@ -23,6 +23,13 @@ from django.db import OperationalError
 # from core.forms import OldPaperForm
 # from .telegram import send_file_to_telegram
 
+
+# adsense view
+def ads_view(request):
+    # Here you can render a template that includes your adsense code
+    return render(request, 'core/ads/ads.txt')
+
+
 def home(request):
     try:
         from django.contrib.auth.models import User
