@@ -1,10 +1,11 @@
-from django.urls import path,include
+from django.urls import path, include, re_path
+from django.views.static import serve
 from . import views
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
-
 from django.contrib.auth.views import PasswordChangeDoneView
 from academichub.auth_urls import urlpatterns as auth_urls
+import os
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -32,14 +33,9 @@ urlpatterns = [
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
     path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
     path('cookie-policy/', views.cookie_policy, name='cookie_policy'),
-
-    # adsense
-    path('ads.txt/', views.ads_view, name='ads'),
-
-
-
-   
     path('uploads/', views.user_uploads_view, name='user_uploads'),
+    # ✅ Correct way to serve ads.txt
+     path('ads.txt', views.ads_txt_view, name='ads_txt'),
 
     # path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
 ]

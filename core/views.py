@@ -19,15 +19,17 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.db import OperationalError
+from django.http import FileResponse
+import os
 # telegram
 # from core.forms import OldPaperForm
 # from .telegram import send_file_to_telegram
 
 
 # adsense view
-def ads_view(request):
-    # Here you can render a template that includes your adsense code
-    return render(request, 'core/ads/ads.txt')
+def ads_txt_view(request):
+    file_path = os.path.join(os.path.dirname(__file__), 'ads.txt')
+    return FileResponse(open(file_path, 'rb'), content_type='text/plain')
 
 
 def home(request):
