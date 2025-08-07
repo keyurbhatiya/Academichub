@@ -1,45 +1,179 @@
-<div id="papers-list">
-    {% if papers %}
-    <div class="grid grid-cols-1 gap-4 sm:gap-6">
-        {% for paper in papers %}
-        <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 p-4 sm:p-6 border border-gray-100">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                <!-- Paper Details -->
-                <div class="mb-4 sm:mb-0">
-                    <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">{{ paper.title }}</h3>
-                    <p class="text-gray-600 text-xs sm:text-sm mb-1">{{ paper.university }} (sem: {{ paper.semester }})</p>
-                    <p class="text-gray-500 text-xs sm:text-sm">
-                        Uploaded by <span class="font-medium">{{ paper.uploaded_by }}</span>
-                        on {{ paper.uploaded_at|date:"F d, Y" }}
-                    </p>
-                </div>
+{% extends 'core/base.html' %}
+{% block title %}Old Question Papers{% endblock %}
 
-                <!-- View PDF Modal Button -->
-                <button
-                    class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition duration-200 flex items-center"
-                    onclick="openPdfModal('{{ paper.file.url|replace:'/image/', '/raw/' }}')"
-                >
-                    <i class="ri-eye-line mr-2"></i> View PDF
-                </button>
+{% block content %}
+<main class="py-12 sm:py-16 bg-gray-50 text-gray-800">
+    <div class="container mx-auto px-4 sm:px-6">
+
+        <!-- Header Section -->
+        <div class="text-center mb-8 sm:mb-12">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-3">Old Question Papers</h2>
+            <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+                Search our collection of past papers to aid your exam preparation.
+            </p>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+        <div class="mb-6 space-y-2 max-w-3xl mx-auto">
+            {% for message in messages %}
+            <div class="p-4 rounded-lg flex items-center 
+                {% if message.tags == 'success' %}
+                    bg-green-100 text-green-800
+                {% else %}
+                    bg-red-100 text-red-800
+                {% endif %}">
+                <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-triangle{% endif %} mr-3 text-xl"></i>
+                <span>{{ message }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Search Form -->
+        <form id="filter-form" method="get" action="{% url 'papers' %}" class="mb-10 max-w-3xl mx-auto">
+            <div class="relative">
+                <input type="search" id="search-query" name="q" value="{{ request.GET.q|default:'' }}"
+                       class="w-full py-4 pl-12 pr-4 text-lg border-2 border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                       placeholder="Search by title, course, or university...">
+                <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <i class="fas fa-search text-xl"></i>
+                </div>
+            </div>
+        </form>
+
+        <!-- Papers List -->
+        <div id="papers-list" class="max-w-5xl mx-auto">
+            {% if papers %}
+            <div class="grid grid-cols-1 gap-4 sm:gap-6">
+                {% for paper in papers %}
+                <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 p-4 sm:p-6 border border-gray-100">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                        <!-- Paper Info -->
+                        <div class="mb-4 sm:mb-0 flex-grow">
+                            <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2">{{ paper.title }}</h3>
+                            <p class="text-gray-600 text-xs sm:text-sm mb-1">{{ paper.university }} (sem: {{ paper.semester }})</p>
+                            <p class="text-gray-500 text-xs sm:text-sm">
+                                Uploaded by <span class="font-medium">{{ paper.uploaded_by }}</span>
+                                on {{ paper.uploaded_at|date:"F d, Y" }}
+                            </p>
+                        </div>
+
+                        <!-- View PDF Button -->
+                        <button
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold text-sm hover:bg-blue-700 transition duration-200 flex items-center shrink-0"
+                            onclick="openPdfModal('{{ paper.file.url }}')">
+                            <i class="fas fa-eye mr-2"></i> View PDF
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="bg-white rounded-xl shadow-sm p-8 text-center border border-gray-100">
+                <i class="fas fa-search text-4xl text-gray-300 mb-4"></i>
+                <p class="text-lg text-gray-700 font-semibold">No papers found for your search.</p>
+                <p class="text-sm text-gray-500 mt-2">
+                    Try a different keyword or 
+                    <a href="{% url 'papers' %}" class="text-blue-600 hover:underline">clear the search</a>.
+                </p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- PDF Modal -->
+        <div id="pdfModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-lg shadow-2xl w-full max-w-4xl h-full max-h-[90vh] flex flex-col">
+                <div class="flex justify-between items-center p-4 border-b">
+                    <h2 id="modalTitle" class="text-xl font-semibold text-gray-800">PDF Viewer</h2>
+                    <button onclick="closePdfModal()" class="text-gray-500 hover:text-gray-900 text-3xl">&times;</button>
+                </div>
+                <div class="flex-grow p-1">
+                    <iframe id="pdfFrame" src="" class="w-full h-full" frameborder="0"></iframe>
+                </div>
             </div>
         </div>
-        {% endfor %}
-    </div>
 
-    <!-- Modal Structure -->
-    <div id="pdfModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-lg w-[90%] max-w-3xl relative">
-            <button class="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-2xl" onclick="closePdfModal()">&times;</button>
-            <iframe id="pdfFrame" src="" class="w-full h-[600px] rounded-b-lg" frameborder="0"></iframe>
-        </div>
     </div>
+</main>
 
-    {% else %}
-    <div class="bg-white rounded-xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
-        <i class="ri-file-warning-line text-3xl sm:text-4xl text-gray-400 mb-4"></i>
-        <p class="text-base sm:text-lg text-gray-600">No papers available at the moment.</p>
-        <p class="text-xs sm:text-sm text-gray-500 mt-2">Check back later or contribute by uploading a paper!</p>
-        <a href="{% url 'upload_paper' %}" class="inline-block mt-4 bg-indigo-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold text-xs sm:text-sm hover:bg-indigo-700 transition duration-200">Upload Paper</a>
-    </div>
-    {% endif %}
-</div>
+<!-- Scripts -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('filter-form');
+    const input = document.getElementById('search-query');
+    let searchTimeout;
+
+    const performSearch = () => {
+        const formData = new FormData(form);
+        const url = form.action + '?' + new URLSearchParams(formData).toString();
+
+        fetch(url, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.text())
+        .then(data => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data, 'text/html');
+            const newList = doc.getElementById('papers-list');
+            if (newList) {
+                document.getElementById('papers-list').innerHTML = newList.innerHTML;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching papers:', error);
+            document.getElementById('papers-list').innerHTML = `
+                <div class="bg-red-100 text-red-800 rounded-xl p-8 text-center">
+                    <p>An error occurred. Please try again later.</p>
+                </div>`;
+        });
+    };
+
+    input.addEventListener('keyup', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(performSearch, 300);
+    });
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        clearTimeout(searchTimeout);
+        performSearch();
+    });
+});
+
+// --- PDF Modal Functions ---
+const pdfModal = document.getElementById('pdfModal');
+const pdfFrame = document.getElementById('pdfFrame');
+const modalTitle = document.getElementById('modalTitle');
+
+function openPdfModal(url) {
+    if (pdfModal && pdfFrame) {
+        try {
+            const filename = new URL(url).pathname.split('/').pop();
+            modalTitle.textContent = decodeURIComponent(filename) || 'PDF Viewer';
+        } catch (e) {
+            modalTitle.textContent = 'PDF Viewer';
+        }
+
+        pdfFrame.src = url;
+        pdfModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closePdfModal() {
+    if (pdfModal && pdfFrame) {
+        pdfModal.classList.add('hidden');
+        pdfFrame.src = '';
+        document.body.style.overflow = 'auto';
+    }
+}
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !pdfModal.classList.contains('hidden')) {
+        closePdfModal();
+    }
+});
+</script>
+{% endblock %}

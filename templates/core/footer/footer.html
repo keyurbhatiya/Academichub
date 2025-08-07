@@ -1,104 +1,119 @@
-    <footer class="bg-gray-900 text-white pt-12 pb-6">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-                <div>
-                    <h3 class="text-xl font-['Pacifico'] mb-4">AcademicHub</h3>
-                    <p class="text-gray-400 mb-4">Connecting academic minds for collaborative knowledge sharing and
-                        innovation.</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <div class="w-8 h-8 flex items-center justify-center">
-                                <i class="ri-twitter-x-line"></i>
-                            </div>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <div class="w-8 h-8 flex items-center justify-center">
-                                <i class="ri-facebook-fill"></i>
-                            </div>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <div class="w-8 h-8 flex items-center justify-center">
-                                <i class="ri-linkedin-fill"></i>
-                            </div>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <div class="w-8 h-8 flex items-center justify-center">
-                                <i class="ri-instagram-line"></i>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+<!--
+This is a complete, redesigned footer component.
+You can replace your existing <footer>...</footer> block with this one.
+Font Awesome is used for icons, so ensure it's loaded in your base template.
+-->
 
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
-                    <ul class="space-y-2">
-                        <li><a href="{% url 'papers' %}" class="text-gray-400 hover:text-white">Papers</a></li>
-                        <li><a href="{% url 'projects' %}" class="text-gray-400 hover:text-white">Projects</a></li>
-                        <li><a href="{% url 'blogs' %}" class="text-gray-400 hover:text-white">Blogs</a></li>
-                        <!-- <li><a href="#" class="text-gray-400 hover:text-white">Research Tools</a></li> -->
-                        <!-- <li><a href="#" class="text-gray-400 hover:text-white">Academic Calendar</a></li> -->
-                    </ul>
-                </div>
+<footer class="bg-gray-900 text-white">
+    <div class="container mx-auto px-6 pt-16 pb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
+            
+            <!-- Column 1: About -->
+            <div class="col-span-1 md:col-span-2 lg:col-span-1">
+                <h3 class="text-2xl font-bold mb-3 text-white">AcademicHub</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    A community-driven platform for sharing academic papers, projects, and insights to foster learning and innovation.
+                </p>
+            </div>
 
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Support</h4>
-                    <ul class="space-y-2">
-                        <li><a href="{% url 'help_center' %}" class="text-gray-400 hover:text-white">Help Center</a></li>
-                        <li><a href="{% url 'contact' %}" class="text-gray-400 hover:text-white">Contact Us</a></li>
-                        <li><a href="{% url 'feedback' %}" class="text-gray-400 hover:text-white">Feedback</a></li>
-                        <li><a href="{% url 'faqs' %}" class="text-gray-400 hover:text-white">FAQs</a></li>
-                        <li><a href="{% url 'community_guidelines' %}" class="text-gray-400 hover:text-white">Community Guidelines</a></li>
-                    </ul>
-                </div>
+            <!-- Column 2: Quick Links -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="{% url 'papers' %}" class="footer-link">Papers</a></li>
+                    <li><a href="{% url 'projects' %}" class="footer-link">Projects</a></li>
+                    <li><a href="{% url 'blogs' %}" class="footer-link">Blogs</a></li>
+                </ul>
+            </div>
 
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Stay Updated</h4>
-                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for the latest updates and resources.</p>
-                    <form id="subscriptionForm" class="flex max-w-md mx-auto" onsubmit="handleSubmit(event)">
+            <!-- Column 3: Support -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Support</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="{% url 'help_center' %}" class="footer-link">Help Center</a></li>
+                    <li><a href="{% url 'contact' %}" class="footer-link">Contact Us</a></li>
+                    <li><a href="{% url 'faqs' %}" class="footer-link">FAQs</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 4: Newsletter -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Stay Updated</h4>
+                <p class="text-gray-400 text-sm mb-4">Subscribe for the latest resources.</p>
+                <form id="subscriptionForm" onsubmit="handleSubscription(event)">
+                    <div class="flex">
                         <input 
                             type="email" 
-                            placeholder="Enter your email" 
-                            class="flex-1 bg-gray-900 text-gray-200 px-5 py-3 rounded-l-lg border-none focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500 transition-all duration-200" 
-                            aria-label="Email address for subscription"
+                            placeholder="Your email" 
+                            class="w-full bg-gray-800 text-white px-4 py-2 rounded-l-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" 
                             required
                         >
                         <button 
                             type="submit" 
-                            class="bg-blue-600 text-white px-5 py-3 rounded-r-lg font-semibold hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-200 whitespace-nowrap"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-r-md font-semibold hover:bg-blue-700 transition"
                         >
-                            Subscribe
+                            <i class="fas fa-paper-plane"></i>
                         </button>
-                    </form>
-                    <div id="successMessage" class="hidden mt-4 p-4 bg-green-50 text-green-900 rounded-lg shadow-lg text-center max-w-md mx-auto transition-all duration-300">
-                        <p class="font-semibold">Thank you for subscribing!</p>
                     </div>
+                </form>
+                <div id="subscriptionSuccess" class="hidden mt-3 text-sm text-green-400">
+                    <p>Thank you for subscribing!</p>
                 </div>
             </div>
 
-            <div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2025 AcademicHub. All rights reserved.</p>
-                <div class="flex space-x-4 text-sm text-gray-400">
-                    <a href="{% url 'privacy_policy' %}" class="hover:text-white">Privacy Policy</a>
-                    <a href="{% url 'terms_of_service' %}" class="hover:text-white">Terms of Service</a>
-                    <a href="{% url 'cookie_policy' %}" class="hover:text-white">Cookie Policy</a>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center text-sm">
+            <p class="text-gray-500 mb-4 md:mb-0">&copy; {% now "Y" %} AcademicHub. All Rights Reserved.</p>
+            <div class="flex items-center space-x-4">
+                <a href="{% url 'privacy_policy' %}" class="footer-link-sm">Privacy</a>
+                <a href="{% url 'terms_of_service' %}" class="footer-link-sm">Terms</a>
+                <div class="flex space-x-4 pl-4 border-l border-gray-700">
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
 
-    
+<style>
+    .footer-link {
+        color: #9ca3af; /* gray-400 */
+        transition: color 0.2s ease-in-out;
+    }
+    .footer-link:hover {
+        color: #ffffff; /* white */
+    }
+    .footer-link-sm {
+        color: #6b7280; /* gray-500 */
+        transition: color 0.2s ease-in-out;
+    }
+    .footer-link-sm:hover {
+        color: #ffffff;
+    }
+    .social-icon {
+        color: #9ca3af; /* gray-400 */
+        transition: all 0.2s ease-in-out;
+    }
+    .social-icon:hover {
+        color: #3b82f6; /* blue-500 */
+        transform: scale(1.1);
+    }
+</style>
+
 <script>
-    function handleSubmit(event) {
+    function handleSubscription(event) {
         event.preventDefault();
         const form = document.getElementById('subscriptionForm');
-        const successMessage = document.getElementById('successMessage');
+        const successMessage = document.getElementById('subscriptionSuccess');
         const emailInput = form.querySelector('input[type="email"]');
         
-        // Basic validation (HTML5 'required' already ensures non-empty)
-        if (emailInput.value) {
+        if (emailInput.value && emailInput.checkValidity()) {
             successMessage.classList.remove('hidden');
             form.reset();
-            // Optionally hide the message after 3 seconds
             setTimeout(() => {
                 successMessage.classList.add('hidden');
             }, 3000);

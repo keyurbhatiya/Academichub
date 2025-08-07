@@ -2,30 +2,95 @@
 {% block title %}{{ project.title }} | Project Details{% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto px-4 py-6">
-    <div class="bg-white rounded-xl shadow-md overflow-hidden">
-        {% if project.image %}
-            <img src="{{ project.image.url }}" class="w-full h-64 object-cover" alt="{{ project.title }}">
-        {% endif %}
-        <div class="p-6">
-            <h2 class="text-2xl font-bold mb-2">{{ project.title }}</h2>
-            <div class="text-sm text-gray-500 mb-4">
-                Uploaded by <strong>{{ project.uploaded_by }}</strong> on {{ project.uploaded_at|date:"F j, Y" }}
-            </div>
-            <div class="mb-4">
-                <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-                    {{ project.language }}
-                </span>
-            </div>
-            <p class="text-gray-700 mb-4">{{ project.description }}</p>
+<main class="py-12 sm:py-16 bg-gray-50 text-gray-800">
+    <div class="container mx-auto px-4 sm:px-6">
+        <div class="max-w-5xl mx-auto">
 
-            {% if project.zip_file %}
-            <a href="{{ project.zip_file.url }}" download
-               class="inline-block bg-indigo-600 text-white px-5 py-2 rounded hover:bg-indigo-700 transition">
-               Download Project Files
-            </a>
-            {% endif %}
+            <!-- Project Header -->
+            <div class="mb-8 md:mb-12 text-center">
+                <span class="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm font-semibold rounded-full mb-4">
+                    Project Details
+                </span>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900">{{ project.title }}</h1>
+                <p class="text-lg text-gray-500 mt-3">
+                    Uploaded by <span class="font-semibold text-gray-700">{{ project.uploaded_by }}</span> on {{ project.uploaded_at|date:"F j, Y" }}
+                </p>
+            </div>
+
+            <!-- Main Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Left Column: Description & Image -->
+                <div class="lg:col-span-2 space-y-8">
+                    {% if project.image %}
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                        <img src="{{ project.image.url }}" class="w-full h-auto max-h-96 object-cover" alt="{{ project.title }}">
+                    </div>
+                    {% endif %}
+                    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm border border-gray-100">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">About This Project</h2>
+                        <div class="prose max-w-none text-gray-700">
+                            {{ project.description|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Metadata & Download -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 sticky top-24">
+                        <h3 class="text-xl font-bold text-gray-800 mb-5">Details</h3>
+                        <ul class="space-y-4 text-sm">
+                            <li class="flex items-center">
+                                <i class="fas fa-code w-6 mr-3 text-gray-400"></i>
+                                <div>
+                                    <span class="text-gray-500">Language</span>
+                                    <p class="font-semibold text-base">{{ project.language }}</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-user w-6 mr-3 text-gray-400"></i>
+                                <div>
+                                    <span class="text-gray-500">Author</span>
+                                    <p class="font-semibold text-base">{{ project.uploaded_by }}</p>
+                                </div>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-calendar-alt w-6 mr-3 text-gray-400"></i>
+                                <div>
+                                    <span class="text-gray-500">Uploaded</span>
+                                    <p class="font-semibold text-base">{{ project.uploaded_at|date:"M j, Y" }}</p>
+                                </div>
+                            </li>
+                        </ul>
+
+                        {% if project.zip_file %}
+                        <a href="{{ project.zip_file.url }}" download
+                           class="mt-6 w-full flex items-center justify-center bg-green-500 text-white px-5 py-3 rounded-lg font-bold hover:bg-green-600 transition-all transform hover:scale-105">
+                           <i class="fas fa-download mr-2"></i>
+                           Download Files
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
+</main>
+
+<style>
+/* Basic prose styling for the description */
+.prose p {
+    margin-bottom: 1em;
+    line-height: 1.7;
+}
+.prose ul {
+    list-style-type: disc;
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+}
+.prose li {
+    margin-bottom: 0.5em;
+}
+</style>
 {% endblock %}

@@ -1,142 +1,80 @@
 {% extends 'core/base.html' %}
 {% block title %}Upload Project{% endblock %}
 {% block content %}
-<main class="py-12 sm:py-16 bg-gray-100">
+<main class="py-12 sm:py-16 bg-gray-50">
     <div class="container mx-auto px-4 sm:px-6">
         <!-- Header Section -->
-        <div class="mb-8 sm:mb-12">
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Upload Project</h2>
-            <p class="text-base sm:text-lg text-gray-600 max-w-xl sm:max-w-2xl">Share your academic projects to showcase your research and inspire the AcademicHub community.</p>
+        <div class="text-center mb-8 sm:mb-12">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-3">Upload Project</h2>
+            <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">Share your work to showcase your skills and inspire the community.</p>
         </div>
 
         <!-- Upload Project Form -->
-        <div class="bg-white rounded-xl shadow-sm p-6 sm:p-8 border border-gray-100 max-w-3xl mx-auto">
-            <form method="post" enctype="multipart/form-data" class="space-y-4 sm:space-y-6">
+        <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-gray-200 max-w-3xl mx-auto">
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
                 {% csrf_token %}
-                <!-- Form Fields -->
+                
                 {% for field in form %}
-                <div class="flex flex-col mb-4">
-                    <label for="{{ field.id_for_label }}" class="text-sm font-semibold text-gray-700 mb-2">
+                <div>
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
                         {{ field.label }}{% if field.field.required %} <span class="text-red-500">*</span>{% endif %}
                     </label>
 
                     {% if field.name == 'zip_file' or field.name == 'image' %}
-                        <!-- File Upload Input -->
+                        <!-- Custom File Input -->
                         <div class="relative">
-                            <input
-                                type="file"
-                                id="{{ field.id_for_label }}"
-                                name="{{ field.name }}"
-                                class="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 opacity-0 absolute z-10 cursor-pointer"
-                                {% if field.field.required %}required{% endif %}
-                            />
-                            <div class="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 bg-white text-gray-700 flex items-center">
-                                <i class="ri-file-upload-line text-indigo-600 mr-2"></i>
-                                <span id="file-name-{{ field.name }}" class="text-gray-500 text-sm sm:text-base">Choose a file...</span>
+                            <input type="file" id="{{ field.id_for_label }}" name="{{ field.name }}" class="absolute w-full h-full opacity-0 cursor-pointer" {% if field.field.required %}required{% endif %}>
+                            <div class="flex items-center w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 text-gray-500 hover:border-blue-500 transition">
+                                <i class="fas fa-upload mr-3 text-gray-400"></i>
+                                <span id="file-name-{{ field.name }}">Choose a file...</span>
                             </div>
                         </div>
-
-                    {% elif field.name == 'description' %}
-                        <!-- Textarea for Description -->
-                        <textarea
-                            id="{{ field.id_for_label }}"
-                            name="{{ field.name }}"
-                            rows="4"
-                            class="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 placeholder-gray-400 text-sm sm:text-base"
-                            placeholder="{{ field.help_text|default:'Describe your project' }}"
-                            {% if field.field.required %}required{% endif %}
-                        >{{ field.value|default_if_none:'' }}</textarea>
-
-                    {% elif field.name == 'semester' %}
-                        <!-- Semester Dropdown -->
-                        <select
-                            id="{{ field.id_for_label }}"
-                            name="{{ field.name }}"
-                            class="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base"
-                            {% if field.field.required %}required{% endif %}
-                        >
-                            <option value="" disabled {% if not field.value %}selected{% endif %}>Select a year</option>
-                            {% for i in "1234" %}
-                                <option value="{{ i }}" {% if field.value == i %}selected{% endif %}>Year {{ i }}</option>
+                    {% elif field.field.widget.input_type == 'select' %}
+                        <!-- Select Dropdown -->
+                        <select id="{{ field.id_for_label }}" name="{{ field.name }}" class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" {% if field.field.required %}required{% endif %}>
+                            {% for value, text in field.field.choices %}
+                                <option value="{{ value }}" {% if field.value|stringformat:"s" == value|stringformat:"s" %}selected{% endif %}>{{ text }}</option>
                             {% endfor %}
                         </select>
-
-                    {% elif field.name == 'language' %}
-                        <!-- Language Dropdown -->
-                        <select
-                            id="{{ field.id_for_label }}"
-                            name="{{ field.name }}"
-                            class="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 text-sm sm:text-base"
-                            {% if field.field.required %}required{% endif %}
-                        >
-                            <option value="" disabled {% if not field.value %}selected{% endif %}>Select a programming language</option>
-                            {% for lang in form.language.field.choices %}
-                                <option value="{{ lang.0 }}" {% if field.value == lang.0 %}selected{% endif %}>{{ lang.1 }}</option>
-                            {% endfor %}
-                        </select>
-
+                    {% elif field.field.widget.input_type == 'textarea' %}
+                         <!-- Textarea -->
+                        <textarea id="{{ field.id_for_label }}" name="{{ field.name }}" rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="{{ field.help_text|default:'Describe your project...' }}" {% if field.field.required %}required{% endif %}>{{ field.value|default_if_none:'' }}</textarea>
                     {% else %}
-                        <!-- Default Input -->
-                        <input
-                            type="{{ field.field.widget.input_type|default:'text' }}"
-                            id="{{ field.id_for_label }}"
-                            name="{{ field.name }}"
-                            value="{{ field.value|default_if_none:'' }}"
-                            class="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 placeholder-gray-400 text-sm sm:text-base"
-                            placeholder="{{ field.help_text|default:field.label }}"
-                            {% if field.field.required %}required{% endif %}
-                        />
+                        <!-- Default Text Input -->
+                        <input type="{{ field.field.widget.input_type|default:'text' }}" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default_if_none:'' }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="{{ field.help_text|default:field.label }}" {% if field.field.required %}required{% endif %}>
                     {% endif %}
 
                     {% if field.errors %}
-                        <div class="mt-2 text-xs sm:text-sm text-red-600">
-                            {% for error in field.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
+                        <div class="mt-2 text-xs text-red-600">
+                            {% for error in field.errors %}<p>{{ error }}</p>{% endfor %}
                         </div>
                     {% endif %}
                 </div>
                 {% endfor %}
 
-
-
                 <!-- Submit Button -->
-                <div class="flex justify-end">
-                    <button type="submit" class="bg-indigo-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-xs sm:text-sm hover:bg-indigo-700 transition duration-200 flex items-center">
-                        <i class="ri-upload-2-line mr-2"></i> Upload Project
+                <div class="flex justify-end pt-4">
+                    <button type="submit" class="bg-green-500 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-600 transition-all transform hover:scale-105 flex items-center">
+                        <i class="fas fa-upload mr-2"></i> Upload Project
                     </button>
-                </div>
-                <!-- Back Button -->
-                <div class="flex justify-start mt-4">
-                    <a href="{% url 'projects' %}" class="text-indigo-600 hover:text-indigo-800 text-sm sm:text-base">
-                        <i class="ri-arrow-left-line mr-2"></i> Back to Projects
-                    </a>
                 </div>
             </form>
         </div>
     </div>
 </main>
 
-<!-- JavaScript for File Input Display -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const fileFields = ['zip_file', 'image'];
-
-        fileFields.forEach(function (name) {
-            const input = document.getElementById(`id_${name}`);
-            const label = document.getElementById(`file-name-${name}`);
-
-            if (input && label) {
-                input.addEventListener('change', function () {
-                    if (this.files.length > 0) {
-                        label.textContent = this.files[0].name;
-                    } else {
-                        label.textContent = 'Choose a file...';
-                    }
-                });
-            }
-        });
+document.addEventListener('DOMContentLoaded', function () {
+    const fileFields = ['zip_file', 'image'];
+    fileFields.forEach(function (fieldName) {
+        const input = document.getElementById(`id_${fieldName}`);
+        const label = document.getElementById(`file-name-${fieldName}`);
+        if (input && label) {
+            input.addEventListener('change', function () {
+                label.textContent = this.files.length > 0 ? this.files[0].name : 'Choose a file...';
+            });
+        }
     });
+});
 </script>
-
 {% endblock %}

@@ -3,485 +3,151 @@
 {% block content %}
 {% load static %}
 
+<main class="bg-gray-50">
 
-<main>
     <!-- Welcome Message -->
     {% if user.is_authenticated %}
-    <div class="fixed top-4 right-4 z-50">
-        <div class="flex items-start max-w-xs w-full p-4 bg-white border-l-4 border-indigo-500 rounded-lg shadow-md transition-opacity duration-500" id="welcome-message">
-            <div class="mt-0.5 mr-3">
-                <i class="ri-user-smile-line text-indigo-500 text-xl" aria-hidden="true"></i>
-            </div>
-            <div class="text-sm text-gray-800">
+    <div class="fixed top-4 right-4 z-50" id="welcome-message-container">
+        <div class="flex items-center max-w-xs w-full p-4 bg-white rounded-lg shadow-lg border-l-4 border-blue-500">
+            <i class="fas fa-check-circle text-blue-500 text-xl mr-3"></i>
+            <div class="text-sm font-medium text-gray-800">
                 Welcome back, {{ user.first_name|default:user.username }}!
             </div>
         </div>
     </div>
     {% endif %}
 
-    <!-- New Hero Section -->
-    <section class="wave-bg pt-24 pb-16 md:py-10 relative overflow-hidden">
-        <div class="container mx-auto px-4">
-            <div class="relative flex flex-col items-center text-center py-12 md:py-20">
-                <div class="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 backdrop-blur-sm"></div>
-                <div class="relative z-10 max-w-4xl mx-auto">
-                    <span
-                        class="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium mb-6">
-                        Welcome to Academic Hub
-                    </span>
-                    <h1
-                        class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                        Unlock Knowledge, One Click at a Time
-                    </h1>
-                    <p class="text-lg md:text-xl text-gray-700 serif max-w-2xl mx-auto mb-10">
-                        Access thousands of university exam papers, student projects, academic blogs, and educational
-                        resources all in one place.
-                    </p>
-                    <!-- Search Box -->
-                    <!-- <div class="max-w-2xl mx-auto mb-10">
-                        <div class="flex flex-col md:flex-row gap-4 p-2 bg-white rounded-2xl shadow-lg">
-                            <div class="relative flex-grow">
-                                <input type="text" placeholder="What would you like to learn today?"
-                                    class="w-full py-4 pl-12 pr-4 bg-transparent border-none focus:outline-none focus:ring-0 text-gray-700 placeholder-gray-400">
-                                <div
-                                    class="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-400">
-                                    <i class="ri-search-line ri-lg"></i>
-                                </div>
-                            </div>
-                            <button
-                                class="px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white font-medium hover:opacity-90 transition-opacity !rounded-xl whitespace-nowrap flex items-center gap-2">
-                                <span>Start Learning</span>
-                                <i class="ri-arrow-right-line"></i>
-                            </button>
-                        </div>
-                    </div> -->
-
-                    <div class="flex flex-wrap justify-center gap-8 mb-12">
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                                <i class="ri-book-open-line ri-lg"></i>
-                            </div>
-                            <div class="text-left">
-                                <div class="font-bold text-2xl">{{ total_papers }}</div>
-                                <div class="text-gray-600">Academic Papers</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
-                                <i class="ri-group-line ri-lg"></i>
-                            </div>
-                            <div class="text-left">
-                                <div class="font-bold text-2xl">{{ total_users }}</div>
-                                <div class="text-gray-600">Active Students</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                                <i class="ri-book-line ri-lg"></i>
-                            </div>
-                            <div class="text-left">
-                                <div class="font-bold text-2xl">{{ total_projects }}</div>
-                                <div class="text-gray-600">Projects</div>
-                            </div>
-                        </div>
-                    </div>
-                    <img src="{% static 'img/hero-img.jpg' %}"
-                        alt="Academic resources visualization" class="w-full max-w-4xl h-auto rounded-2xl shadow-xl">
-                </div>
-            </div>
-            <div class="flex justify-center mt-16">
-                <a href="#papers-section" class="bounce w-10 h-10 flex items-center justify-center text-primary">
-                    <i class="ri-arrow-down-line ri-2x"></i>
-                </a>
+    <!-- Hero Section -->
+    <section class="bg-white border-b border-gray-200">
+        <div class="container mx-auto px-6 text-center py-16 md:py-20">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Unlock Knowledge</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+                Your central hub for academic papers, student projects, and insightful blogs.
+            </p>
+            <div class="flex justify-center items-center space-x-6 text-sm text-gray-500">
+                <span><i class="fas fa-file-alt mr-2 text-blue-500"></i>{{ total_papers }} Papers</span>
+                <span><i class="fas fa-project-diagram mr-2 text-green-500"></i>{{ total_projects }} Projects</span>
+                <span><i class="fas fa-users mr-2 text-purple-500"></i>{{ total_users }} Users</span>
             </div>
         </div>
     </section>
 
-    <!-- New Papers Section -->
-    <section id="papers-section" class="py-24 bg-gradient-to-b from-white to-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <span
-                    class="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">Research
-                    & Papers</span>
-                <h2
-                    class="text-4xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    Academic Papers</h2>
-                <p class="text-lg text-gray-600 serif max-w-2xl mx-auto leading-relaxed">
-                    Discover and access thousands of university exam papers and academic research to enhance your
-                    learning journey and academic success.
-                </p>
-            </div>
-            <!-- Papers Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-                {% for paper in papers %}
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden card-hover">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                                {{ paper.course|default:"Unknown Course" }}  
-                                Sem - {{ paper.semester|default:"N/A" }}
-                            </span>
-                            <span class="text-sm text-gray-500">{{ paper.uploaded_at|date:"Y" }}</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">{{ paper.title }}</h3>
-                        <p class="text-gray-600 mb-4 text-sm">Exam Paper</p>
-                        <div class="flex items-center text-sm text-gray-500">
-                            <div class="w-5 h-5 mr-2 flex items-center justify-center">
-                                <i class="ri-building-4-line"></i>
-                            </div>
-                            {{ paper.university|default:"Unknown University" }}
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 px-6 py-3 flex justify-between items-center">
-                        <!-- <div class="flex items-center text-sm text-gray-500">
-                            <div class="w-5 h-5 mr-2 flex items-center justify-center">
-                                <i class="ri-eye-line"></i>
-                            </div>
-                            {{ paper.views|default:"1" }} views
-                        </div> -->
-                        <a href="{{ paper.file.url }}" target="_blank"
-                            class="text-primary hover:text-primary/80 transition-colors">
-                            <div class="w-5 h-5 flex items-center justify-center">
-                                <i class="ri-eye-line"></i>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                {% empty %}
-                <p class="col-span-3 text-center text-gray-500">No papers found.</p>
-                {% endfor %}
-            </div>
-            <!-- View All -->
-            <div class="flex justify-center">
-                <a href="{% url 'papers' %}"
-                    class="px-6 py-3 bg-white text-primary border border-primary font-medium hover:bg-gray-50 transition-colors rounded-full whitespace-nowrap flex items-center">
-                    View All Papers
-                </a>
-            </div>
-        </div>
-    </section>
+    <!-- Main Content with Sidebar -->
+    <div class="container mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
 
-    <!--New Projects Showcase -->
-    <section class="py-24 relative overflow-hidden">
-        <!-- <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-teal-500/5"></div> -->
-        <div class="container mx-auto px-4 relative">
-            <div class="text-center mb-16">
-                <span class="inline-block px-4 py-1.5 bg-teal-100 text-teal-600 rounded-full text-sm font-medium mb-4">
-                    Featured Projects
-                </span>
-                <h2 class="text-4xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-teal-600 bg-clip-text text-transparent">
-                    Student Projects
-                </h2>
-                <p class="text-lg text-gray-600 font-serif max-w-2xl mx-auto leading-relaxed">
-                    Discover groundbreaking projects and innovative solutions created by talented students from leading universities.
-                </p>
-            </div>
-            <!-- <div class="mb-12 flex justify-center">
-                <div class="inline-flex bg-white/80 p-2 rounded-full shadow-lg">
-                    <button data-filter="all"
-                        class="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-teal-600 text-white rounded-full text-sm font-medium">
-                        All Projects
-                    </button>
-                    <button data-filter="ai-ml"
-                        class="px-6 py-2.5 text-gray-700 hover:bg-gray-50 rounded-full text-sm font-medium">
-                        AI & ML
-                    </button>
-                    <button data-filter="web-mobile"
-                        class="px-6 py-2.5 text-gray-700 hover:bg-gray-50 rounded-full text-sm font-medium">
-                        Web & Mobile
-                    </button>
-                    <button data-filter="research"
-                        class="px-6 py-2.5 text-gray-700 hover:bg-gray-50 rounded-full text-sm font-medium">
-                        Research
-                    </button>
-                    <button data-filter="design"
-                        class="px-6 py-2.5 text-gray-700 hover:bg-gray-50 rounded-full text-sm font-medium">
-                        Design
-                    </button>
-                </div>
-            </div> -->
-        {% if projects %}
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
-            {% for project in projects %}
-            <div class="masonry-item bg-white rounded-lg shadow-sm overflow-hidden card-hover">
-                {% if project.image %}
-                    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-auto object-cover object-top">
-                {% else %}
-                 <img src="{% static 'img/blog-default-img.png' %}" alt="{{ project.title }}" class="w-full h-auto object-cover object-top">
-                {% endif %}
-                    <div class="p-6">
-                        <div class="flex flex-wrap gap-2 mb-3">
-                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{{ project.language }}</span>
-                            <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Deep Learning</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">{{ project.title }}</h3>
-                        <p class="text-gray-600 mb-4 text-sm">
-                            {{ project.description }}
-                        </p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                            <div class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center">
-                                <i class="ri-user-line"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-medium">{{ project.uploaded_by }}</p>
-                                <p class="text-xs text-gray-500">{{ project.uploaded_at|date:"F d, Y" }}</p>
-                            </div>
-                        </div>
-                        <!-- download button  -->
-                            <button class="text-primary bg-blue-100 hover:text-primary/80 transition-colors">
-                                <a href="{{ project.zip_file.url }}" class="bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-xs sm:text-sm hover:bg-blue-700 transition duration-200 flex items-center shrink-0" download>
-                                   <i class="ri-download-2-line"> Download</i> 
-                                </a>
-                                
-                            </button>
-                        </div>
-                </div>
-        </div>
-            {% endfor %}
-        </div>
-        {% else %}
-        <div class="bg-white rounded-xl shadow-sm p-6 sm:p-8 text-center border border-gray-100">
-            <i class="ri-folder-open-line text-3xl sm:text-4xl text-gray-400 mb-4"></i>
-            <p class="text-base sm:text-lg text-gray-600">No projects available at the moment.</p>
-            <p class="text-xs sm:text-sm text-gray-500 mt-2">Contribute by sharing your own project!</p>
-            <a href="{% url 'upload_project' %}" class="inline-block mt-4 bg-indigo-600 text-white px-4 sm:px-6 py-2 rounded-lg font-semibold text-xs sm:text-sm hover:bg-indigo-700 transition duration-200">Upload Project</a>
-        </div>
-  
-        {% endif %}
-        </div>
-         <!-- View All -->
-        <div class="flex justify-center">
-            <a href="{% url 'projects' %}"
-                class="px-6 py-3 bg-white text-primary border border-primary font-medium hover:bg-gray-50 transition-colors rounded-full whitespace-nowrap flex items-center">                
-                View All Projects
-            </a>
-        </div>
-    </section>
+            <!-- Main Content Area -->
+            <div class="lg:col-span-2 space-y-12">
 
-    <!--New Blog Section -->
-    <section class="py-24 bg-gradient-to-b from-gray-50 to-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <span class="inline-block px-4 py-1.5 bg-indigo-100 text-indigo-600 rounded-full text-sm font-medium mb-4">
-                    Latest Insights
-                </span>
-                <h2 class="text-4xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-teal-600 bg-clip-text text-transparent">
-                    Academic Blogs
-                </h2>
-                <p class="text-lg text-gray-600 font-serif max-w-2xl mx-auto leading-relaxed">
-                    Explore cutting-edge research, insightful perspectives, and emerging trends from leading academics.
-                </p>
-            </div>
-            <div class="relative">
-                <div id="blog-carousel" class="carousel flex overflow-x-auto gap-6 pb-4 snap-x snap-mandatory scroll-smooth">
-                    {% for blog in blogs %}
-                    <div class="flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 snap-start" role="article">
-                        <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow h-full">
-                            {% if blog.image %}
-                            <div class="aspect-video w-full overflow-hidden">
-                                <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="w-full h-48 object-cover object-top" loading="lazy">
-                            </div>
-                            {% else %}
-                            <div class="aspect-video w-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
-                                <img src="{% static 'img/blog-default-img.png' %}" alt="Default blog image" class="w-full h-full object-cover hover:scale-105 transition duration-300">
-                            </div>
-                            {% endif %}
-                            <div class="p-6">
-                                <div class="flex items-center mb-3">
-                                    <span class="px-3 py-1 bg-indigo-100 text-indigo-600 text-xs rounded-full flex items-center">
-                                        <div class="w-3 h-3 mr-1 flex items-center justify-center">
-                                            <i class="ri-book-open-line" aria-hidden="true"></i>
-                                        </div>
-                                        {{ blog.category|default:"Education" }}
-                                    </span>
-                                </div>
-                                <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-3 line-clamp-2">
-                                    <a href="{% url 'blog_detail' blog.slug %}" class="hover:underline" aria-label="Read {{ blog.title }}">
-                                        {{ blog.title }}
-                                    </a>
-                                </h3>
-                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                                    <div class="flex items-center mb-4 sm:mb-0">
-                                        <div class="w-8 h-8 bg-gray-200 rounded-full mr-2 flex items-center justify-center">
-                                            <i class="ri-user-line" aria-hidden="true"></i>
-                                        </div>
-                                        <div class="flex flex-col">
-                                            <span class="text-xs sm:text-sm font-medium text-gray-700">{{ blog.author }}</span>
-                                            <time class="text-xs text-gray-500" datetime="{{ blog.created_at|date:'c' }}">{{ blog.created_at|date:"M d, Y" }}</time>
-                                        </div>
-                                    </div>
-                                    <a href="{% url 'blog_detail' blog.slug %}" class="text-primary hover:text-primary-600 hover:text-primary-800 text-xs sm:text-sm font-semibold flex items-center" aria-label="Read more about {{ blog.title }}">
-                                        Read More <i class="ri-arrow-right-line ml-1" aria-hidden="true"></i>
-                                    </a>
-                                </div>
-                            </div>
+                <!-- Latest Papers Section -->
+                <section>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-blue-500 pb-2">Latest Papers</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {% for paper in papers %}
+                        <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-lg text-gray-800 mb-2">{{ paper.title }}</h3>
+                            <p class="text-sm text-gray-500 mb-3">{{ paper.university }} &bull; Sem {{ paper.semester }}</p>
+                            <a href="{{ paper.file.url }}" target="_blank" class="font-semibold text-sm text-blue-600 hover:underline">View Paper &rarr;</a>
                         </div>
+                        {% empty %}
+                        <p class="md:col-span-2 text-gray-500">No papers found.</p>
+                        {% endfor %}
                     </div>
-                    {% empty %}
-                    <p class="text-center text-gray-500 w-full">No blogs found.</p>
-                    {% endfor %}
-                </div>
-                <!-- Navigation Arrows -->
-                <button id="prev-btn"
-                    class="absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-5 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center text-gray-600 hover:text-indigo-600 transition-colors hidden md:block"
-                    aria-label="Previous blog">
-                    <i class="ri-arrow-left-s-line ri-lg" aria-hidden="true"></i>
-                </button>
-                <button id="next-btn"
-                    class="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-5 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center text-gray-600 hover:text-indigo-600 transition-colors hidden md:block"
-                    aria-label="Next blog">
-                    <i class="ri-arrow-right-s-line ri-lg" aria-hidden="true"></i>
-                </button>
-            </div>
-            <!-- View All -->
-            <div class="flex justify-center mt-8">
-                <a href="{% url 'blogs' %}"
-                    class="px-6 py-3 bg-white text-primary border border-primary font-medium hover:bg-gray-50 transition-colors rounded-full whitespace-nowrap flex items-center"
-                    aria-label="View all blogs">
-                    View All Blogs
-                </a>
-            </div>
-        </div>
-    </section>
+                </section>
 
-    <!-- New CTA Section -->
-    <section class="py-24 relative">
-        <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5"></div>
-        <div class="container mx-auto px-4 relative">
-            <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-                <div class="flex flex-col md:flex-row">
-                    <div
-                        class="w-full md:w-1/2 bg-gradient-to-br from-primary/10 to-secondary/10 p-8 md:p-12 flex items-center justify-center">
-                        <img src="{% static 'img/upload-img.jpg' %}"
-                            alt="Contribute your work" class="w-full max-w-md h-auto">
-                    </div>
-                    <div class="w-full md:w-1/2 p-8 md:p-12">
-                        <h2 class="text-3xl font-bold mb-6">Contribute Your Work</h2>
-                        <p class="text-lg text-gray-600 serif mb-8">
-                            Share your academic papers, projects, and research with students and educators worldwide.
-                            Join our growing community of contributors.
-                        </p>
-                        <div class="space-y-4 mb-8">
-                            <div class="flex items-start benefit-item">
-                                <div class="w-6 h-6 mr-3 text-primary flex-shrink-0 flex items-center justify-center">
-                                    <i class="ri-check-line ri-lg"></i>
-                                </div>
-                                <p class="text-gray-700">Gain visibility for your academic work across global
-                                    institutions</p>
-                            </div>
-                            <div class="flex items-start benefit-item">
-                                <div class="w-6 h-6 mr-3 text-primary flex-shrink-0 flex items-center justify-center">
-                                    <i class="ri-check-line ri-lg"></i>
-                                </div>
-                                <p class="text-gray-700">Connect with peers and potential collaborators in your field
-                                </p>
-                            </div>
-                            <div class="flex items-start benefit-item">
-                                <div class="w-6 h-6 mr-3 text-primary flex-shrink-0 flex items-center justify-center">
-                                    <i class="ri-check-line ri-lg"></i>
-                                </div>
-                                <p class="text-gray-700">Help students access quality educational resources</p>
-                            </div>
+                <!-- Featured Projects Section -->
+                <section>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-green-500 pb-2">Featured Projects</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {% for project in projects %}
+                         <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-lg text-gray-800 mb-2">{{ project.title }}</h3>
+                            <p class="text-sm text-gray-600 line-clamp-2 mb-3">{{ project.description }}</p>
+                            <a href="{{ project.zip_file.url }}" class="font-semibold text-sm text-green-600 hover:underline" download>Download Project &darr;</a>
                         </div>
-                        <div class="flex flex-col sm:flex-row items-center gap-4">
-                            <a href="{% url 'upload_project' %}">
-                            <button 
-                                class="w-full sm:w-auto px-6 py-3 bg-primary text-white font-medium hover:bg-primary/90 transition-colors !rounded-button whitespace-nowrap flex items-center justify-center">
-                                <div class="w-5 h-5 mr-2 flex items-center justify-center">
-                                    <i class="ri-upload-2-line"></i>
-                                </div>
-                                Upload Your Work
-                            </button>
-                            </a>
-                            <div class="flex items-center">
-                                <div class="text-2xl font-bold text-primary mr-2">12,458</div>
-                                <div class="text-sm text-gray-600">contributions so far</div>
-                            </div>
-                        </div>
+                        {% empty %}
+                        <p class="md:col-span-2 text-gray-500">No projects found.</p>
+                        {% endfor %}
                     </div>
+                </section>
+
+                <!-- Ad Slot 1 - Horizontal Banner -->
+                <div class="bg-gray-200 rounded-lg h-24 flex items-center justify-center text-gray-500">
+                    Horizontal Ad Slot (728x90)
                 </div>
+
+                <!-- Recent Blogs Section -->
+                <section>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b-2 border-purple-500 pb-2">Recent Blogs</h2>
+                    <div class="space-y-6">
+                        {% for blog in blogs %}
+                        <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
+                            <h3 class="font-bold text-lg text-gray-800 mb-2">{{ blog.title }}</h3>
+                            <p class="text-sm text-gray-500 mb-3">By {{ blog.author }} in <span class="font-medium">{{ blog.category|default:"General" }}</span></p>
+                            <a href="{% url 'blog_detail' blog.slug %}" class="font-semibold text-sm text-purple-600 hover:underline">Read More &rarr;</a>
+                        </div>
+                        {% empty %}
+                        <p class="text-gray-500">No blogs found.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+
             </div>
+
+            <!-- Sidebar -->
+            <aside class="space-y-8">
+                <!-- Ad Slot 2 - Vertical Box -->
+                <div class="bg-gray-200 rounded-lg p-6 text-center text-gray-500">
+                    <p>Square Ad (300x250)</p>
+                </div>
+
+                <!-- About Section -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-lg mb-4">About AcademicHub</h3>
+                    <p class="text-sm text-gray-600 mb-4">We are a community-driven platform dedicated to making academic resources accessible to all.</p>
+                    <a href="#" class="text-sm font-semibold text-blue-600 hover:underline">Learn More...</a>
+                </div>
+                
+                <!-- Ad Slot 3 - Vertical Banner -->
+                <div class="bg-gray-200 rounded-lg h-64 flex items-center justify-center text-gray-500">
+                    Vertical Ad Slot (300x600)
+                </div>
+
+                <!-- CTA -->
+                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
+                    <h3 class="font-bold text-lg mb-3">Contribute Your Work</h3>
+                    <p class="text-sm text-gray-600 mb-4">Help others by sharing your knowledge.</p>
+                    <a href="{% url 'upload_project' %}" class="w-full block bg-blue-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-blue-700 transition-all">
+                        Upload Now
+                    </a>
+                </div>
+            </aside>
+
         </div>
-    </section>
+    </div>
 </main>
 
-<!-- msg popup js -->
-<script>
-    // msg popup auto-hide
-    document.addEventListener('DOMContentLoaded', () => {
-        const messages = document.querySelectorAll('#welcome-message');
-        messages.forEach((message, index) => {
-            setTimeout(() => {
-                message.style.opacity = '0';
-                setTimeout(() => message.remove(), 500);
-            }, 2000 + (index * 2000));
-        });
-    });
-
-    // Blog Carousel
-    const carousel = document.querySelector('#blog-carousel');
-    const prevBtn = document.querySelector('#prev-btn');
-    const nextBtn = document.querySelector('#next-btn');
-
-    if (carousel && prevBtn && nextBtn) {
-        let scrollAmount = 0;
-        const scrollStep = carousel.querySelector('.snap-start').offsetWidth + 24; // Card width + gap
-
-        nextBtn.addEventListener('click', () => {
-            scrollAmount += scrollStep;
-            if (scrollAmount >= carousel.scrollWidth - carousel.clientWidth) {
-                scrollAmount = carousel.scrollWidth - carousel.clientWidth;
-                nextBtn.disabled = true;
-            }
-            prevBtn.disabled = false;
-            carousel.scrollTo({ left: scrollAmount, behavior: 'smooth' });
-        });
-
-        prevBtn.addEventListener('click', () => {
-            scrollAmount -= scrollStep;
-            if (scrollAmount <= 0) {
-                scrollAmount = 0;
-                prevBtn.disabled = true;
-            }
-            nextBtn.disabled = false;
-            carousel.scrollTo({ left: scrollAmount, behavior: 'smooth' });
-        });
+<style>
+    .line-clamp-2 {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
     }
-</script>
+</style>
 
 <script>
+    // JS for Welcome Message Auto-hide
     document.addEventListener('DOMContentLoaded', () => {
-        const carousel = document.getElementById('blog-carousel');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-
-        if (carousel && prevBtn && nextBtn) {
-            const scrollAmount = carousel.offsetWidth * 0.9;
-
-                nextBtn.addEventListener('click', () => {
-                carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-                });
-
-                prevBtn.addEventListener('click', () => {
-                    carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-                });
-
-            // Show/hide navigation buttons based on scroll position
-            const updateButtons = () => {
-                prevBtn.style.display = carousel.scrollLeft <= 0 ? 'none' : 'block';
-                nextBtn.style.display = carousel.scrollLeft >= (carousel.scrollWidth - carousel.offsetWidth - 1) ? 'none' : 'block';
-            };
-
-            carousel.addEventListener('scroll', updateButtons);
-            updateButtons();
+        const welcomeMessage = document.getElementById('welcome-message-container');
+        if (welcomeMessage) {
+            setTimeout(() => {
+                welcomeMessage.style.transition = 'opacity 0.5s ease';
+                welcomeMessage.style.opacity = '0';
+                setTimeout(() => welcomeMessage.remove(), 500);
+            }, 3000);
         }
-        });
-        
+    });
 </script>
 
 {% endblock %}
