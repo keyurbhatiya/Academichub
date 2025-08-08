@@ -3,146 +3,143 @@
 {% block title %}{{ blog.title }} | AcademicHub{% endblock %}
 
 {% block content %}
-<main class="py-12 sm:py-16 bg-gray-50">
-    <div class="container mx-auto px-4 sm:px-6">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+<main class="bg-white">
+    <!-- Main Article Section -->
+    <div class="container mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <article class="max-w-3xl mx-auto">
+            <!-- Blog Header -->
+            <header class="mb-8 text-center">
+                <p class="text-sm font-semibold text-purple-600 uppercase tracking-wider mb-2">{{ blog.category|default:"General" }}</p>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">{{ blog.title }}</h1>
+                <p class="text-sm text-gray-500">
+                    {{ blog.created_at|date:"F j, Y" }} &bull; {{ blog.reading_time|default:"5" }} min read
+                </p>
+            </header>
 
-            <!-- Main Blog Content -->
-            <div class="lg:col-span-2">
-                <article class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-gray-200">
-                    <!-- Blog Header -->
-                    <header class="mb-8">
-                        <p class="text-sm font-semibold text-purple-600 uppercase mb-2">{{ blog.category|default:"General" }}</p>
-                        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">{{ blog.title }}</h1>
-                       
-                        <div class="mt-4 flex items-center space-x-4">
-                            <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-semibold text-gray-800">{{ blog.author }}</p>
-                                <p class="text-sm text-gray-500">
-                                    Posted on {{ blog.created_at|date:"F j, Y" }} &bull; {{ blog.reading_time|default:"5" }} min read
-                                </p>
-                            </div>
-                        </div>
-                    </header>
+            <!-- Featured Image -->
+            {% if blog.image %}
+            <figure class="mb-10 rounded-2xl overflow-hidden shadow-xl border border-gray-100">
+                <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="w-full h-auto object-cover">
+            </figure>
+            {% endif %}
 
-                    <!-- Featured Image -->
-                    {% if blog.image %}
-                    <figure class="mb-8 rounded-lg overflow-hidden">
-                        <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="w-full h-auto object-cover">
-                    </figure>
-                    {% endif %}
-
-                    <!-- Blog Content -->
-                    <div class="prose lg:prose-lg max-w-none text-gray-800">
-                        {{ blog.content|safe }}
-                    </div>
-                </article>
-
-                <!-- Horizontal Ad Slot Below Article -->
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5598747900532447"
-                    crossorigin="anonymous"></script>
-                <!-- hori -->
-                <ins class="adsbygoogle"
-                    style="display:block"
-                    data-ad-client="ca-pub-5598747900532447"
-                    data-ad-slot="3367865871"
-                    data-ad-format="auto"
-                    data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-
-                <!-- Comments Section -->
-                <section id="comments" class="mt-12 bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-gray-200">
-                    <h2 class="text-2xl font-bold mb-6 text-gray-900">Comments ({{ comments.count }})</h2>
-                    <div class="space-y-6">
-                        <!-- Comment Form -->
-                        <div>
-                            <form method="post" action="{% url 'add_comment' blog.slug %}" class="space-y-4">
-                                {% csrf_token %}
-                                <textarea name="content" class="w-full border-black border-2 border-gray-300 rounded-lg p-4 focus:ring-2 focus:ring-purple-500" rows="4" placeholder="Share your thoughts..." required></textarea>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <input type="text" name="name" class="w-full border-black border-2 border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500" placeholder="Your Name" value="{% if user.is_authenticated %}{{ user.get_full_name|default:user.username }}{% endif %}" required>
-                                    <input type="email" name="email" class="w-full border-black border-2 border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500" placeholder="Your Email" value="{% if user.is_authenticated %}{{ user.email }}{% endif %}" required>
-                                </div>
-                                <button type="submit" class="bg-purple-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-purple-600 transition">Post Comment</button>
-                            </form>
-                        </div>
-                        <!-- Comments List -->
-                        {% for comment in comments %}
-                        <div class="flex space-x-4 pt-6 border-t border-gray-100">
-                            <div class="w-12 h-12 bg-gray-200 rounded-full flex-shrink-0 flex items-center justify-center text-gray-500"><i class="fas fa-user"></i></div>
-                            <div>
-                                <p class="font-semibold text-gray-800">{{ comment.name }}</p>
-                                <p class="text-xs text-gray-500 mb-2">{{ comment.created_at|timesince }} ago</p>
-                                <p class="text-gray-700">{{ comment.content|linebreaks }}</p>
-                            </div>
-                        </div>
-                        {% empty %}
-                        <p class="text-gray-600 text-center py-4">No comments yet. Be the first to share your thoughts!</p>
-                        {% endfor %}
-                    </div>
-                </section>
+            <!-- Blog Content -->
+            <div class="prose lg:prose-xl max-w-none text-gray-800">
+                {{ blog.content|safe }}
             </div>
 
-            <!-- Sidebar -->
-            <aside class="space-y-8 sticky top-24 h-screen">
-                <!-- Vertical Ad Slot -->
-                <div>
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5598747900532447"
-                         crossorigin="anonymous"></script>
-                    <!-- ver -->
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-5598747900532447"
-                         data-ad-slot="2737326390"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>
-                         (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
+            <!-- Author & Sharing Section -->
+            <div class="mt-12 pt-8 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <!-- Author Info -->
+                    <div class="flex items-center">
+                        <div class="w-14 h-14 bg-gray-200 rounded-full flex-shrink-0 flex items-center justify-center text-gray-500 text-xl font-bold">
+                            {{ blog.author.username|slice:":1"|upper }}
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-xs text-gray-500">Written by</p>
+                            <p class="font-bold text-gray-900">{{ blog.author }}</p>
+                        </div>
+                    </div>
+                    <!-- Social Sharing -->
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm font-semibold text-gray-600 mr-2">Share:</span>
+                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri|urlencode }}&text={{ blog.title|urlencode }}" target="_blank" class="social-share-btn hover:bg-gray-800 hover:text-white" aria-label="Share on X"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" target="_blank" class="social-share-btn hover:bg-blue-600 hover:text-white" aria-label="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.linkedin.com/shareArticle?url={{ request.build_absolute_uri|urlencode }}&title={{ blog.title|urlencode }}" target="_blank" class="social-share-btn hover:bg-blue-700 hover:text-white" aria-label="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://api.whatsapp.com/send?text={{ blog.title|urlencode }}%20{{ request.build_absolute_uri|urlencode }}" target="_blank" class="social-share-btn hover:bg-green-500 hover:text-white" aria-label="Share on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.instagram.com" target="_blank" class="social-share-btn hover:bg-pink-500 hover:text-white" aria-label="Share on Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
                 </div>
-            </aside>
+            </div>
+        </article>
+    </div>
 
+    <!-- Ad Slot Section -->
+    <div class="container mx-auto px-4 sm:px-6 my-12">
+        <div class="bg-gray-100 rounded-lg min-h-[100px] flex items-center justify-center text-gray-400">
+             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5598747900532447"
+                 crossorigin="anonymous"></script>
+            <!-- ver -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-5598747900532447"
+                 data-ad-slot="2737326390"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
+    </div>
 
-        <!-- Related Posts & Ad -->
-        {% if related_posts %}
-        <section class="max-w-7xl mx-auto mt-16 pt-12 border-t border-gray-200">
+    <!-- Comments & Related Posts Section -->
+    <div class="bg-gray-50 py-16">
+        <div class="container mx-auto px-4 sm:px-6">
+            <!-- Comments Section -->
+            <section class="max-w-3xl mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-gray-900">Comments ({{ comments.count }})</h2>
+                <div class="space-y-6">
+                    <!-- Comment Form -->
+                    <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+                        <form method="post" action="{% url 'add_comment' blog.slug %}" class="space-y-4">
+                            {% csrf_token %}
+                            <textarea name="content" class="w-full border-gray-300 rounded-lg p-4 focus:ring-2 focus:ring-purple-500" rows="4" placeholder="Share your thoughts..." required></textarea>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input type="text" name="name" class="w-full border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500" placeholder="Your Name" value="{% if user.is_authenticated %}{{ user.get_full_name|default:user.username }}{% endif %}" required>
+                                <input type="email" name="email" class="w-full border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500" placeholder="Your Email" value="{% if user.is_authenticated %}{{ user.email }}{% endif %}" required>
+                            </div>
+                            <button type="submit" class="bg-purple-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-purple-600 transition">Post Comment</button>
+                        </form>
+                    </div>
+                    <!-- Comments List -->
+                    {% for comment in comments %}
+                    <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-200 flex space-x-4">
+                        <div class="w-12 h-12 bg-gray-200 rounded-full flex-shrink-0 flex items-center justify-center text-gray-500"><i class="fas fa-user"></i></div>
+                        <div>
+                            <p class="font-semibold text-gray-800">{{ comment.name }}</p>
+                            <p class="text-xs text-gray-500 mb-2">{{ comment.created_at|timesince }} ago</p>
+                            <p class="text-gray-700 leading-relaxed">{{ comment.content|linebreaks }}</p>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-gray-600 text-center py-4">No comments yet. Be the first to share your thoughts!</p>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Related Posts -->
+    {% if related_posts %}
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4 sm:px-6">
             <h2 class="text-3xl font-bold mb-8 text-center text-gray-900">Related Articles</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
                 {% for related_post in related_posts %}
                 <a href="{% url 'blog_detail' related_post.slug %}" class="block bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:shadow-xl hover:-translate-y-1 transition-all">
                     <h3 class="font-bold text-lg text-gray-800 mb-2">{{ related_post.title|truncatechars:60 }}</h3>
                     <p class="text-sm text-gray-600 line-clamp-3">{{ related_post.summary|striptags|default:related_post.content|striptags|truncatechars:100 }}</p>
                 </a>
                 {% endfor %}
-                <!-- In-Feed Ad Slot -->
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5598747900532447"
-                    crossorigin="anonymous"></script>
-                <!-- hori -->
-                <ins class="adsbygoogle"
-                    style="display:block"
-                    data-ad-client="ca-pub-5598747900532447"
-                    data-ad-slot="3367865871"
-                    data-ad-format="auto"
-                    data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
             </div>
-        </section>
-        {% endif %}
-    </div>
+        </div>
+    </section>
+    {% endif %}
 </main>
 <style>
     .prose h2 { margin-top: 2em; margin-bottom: 1em; }
     .prose h3 { margin-top: 1.5em; margin-bottom: 0.75em; }
-    .prose p, .prose ul, .prose ol { margin-bottom: 1.25em; }
-    .prose a { color: #8b5cf6; text-decoration: underline; }
+    .prose p, .prose ul, .prose ol { margin-bottom: 1.25em; line-height: 1.75; }
+    .prose a { color: #8b5cf6; text-decoration: underline; font-weight: 600; }
+    .social-share-btn {
+        width: 40px; height: 40px;
+        display: inline-flex; align-items: center; justify-content: center;
+        border-radius: 9999px;
+        background-color: #f3f4f6;
+        color: #4b5563;
+        transition: all 0.2s ease-in-out;
+    }
     .line-clamp-3 {
         overflow: hidden;
         display: -webkit-box;
