@@ -1,116 +1,96 @@
-<header class="bg-white shadow-sm sticky top-0 z-50">
-    <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
-        <a href="{% url 'home' %}" class="text-2xl font-['Pacifico'] text-primary">AcademicHub</a>
+<header class="sticky top-0 z-50 backdrop-blur-lg bg-white/70 shadow-sm border-b border-gray-200">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        
+        <!-- Logo -->
+        <a href="{% url 'home' %}" class="text-2xl font-['Pacifico'] text-primary tracking-wide hover:opacity-90 transition">
+            AcademicHub
+        </a>
 
-            <div class="hidden md:flex space-x-6 items-center">
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-8">
             <a href="{% url 'home' %}"
-            class="{% if request.resolver_match.url_name == 'home' %}text-primary font-semibold{% else %}text-gray-800 hover:text-primary font-medium{% endif %}">
-            Home
+               class="{% if request.resolver_match.url_name == 'home' %}text-primary font-semibold border-b-2 border-primary{% else %}text-gray-700 hover:text-primary transition{% endif %} pb-1">
+                Home
             </a>
-
             <a href="{% url 'papers' %}"
-            class="{% if request.resolver_match.url_name == 'papers' %}text-primary font-semibold{% else %}text-gray-600 hover:text-primary{% endif %}">
-            Papers
+               class="{% if request.resolver_match.url_name == 'papers' %}text-primary font-semibold border-b-2 border-primary{% else %}text-gray-700 hover:text-primary transition{% endif %} pb-1">
+                Papers
             </a>
-
             <a href="{% url 'projects' %}"
-            class="{% if request.resolver_match.url_name == 'projects' %}text-primary font-semibold{% else %}text-gray-600 hover:text-primary{% endif %}">
-            Projects
+               class="{% if request.resolver_match.url_name == 'projects' %}text-primary font-semibold border-b-2 border-primary{% else %}text-gray-700 hover:text-primary transition{% endif %} pb-1">
+                Projects
             </a>
-
             <a href="{% url 'blogs' %}"
-            class="{% if request.resolver_match.url_name == 'blogs' %}text-primary font-semibold{% else %}text-gray-600 hover:text-primary{% endif %}">
-            Blogs
+               class="{% if request.resolver_match.url_name == 'blogs' %}text-primary font-semibold border-b-2 border-primary{% else %}text-gray-700 hover:text-primary transition{% endif %} pb-1">
+                Blogs
             </a>
 
             {% if user.is_authenticated %}
             <!-- Upload Dropdown -->
             <div class="relative group">
-                <button class="text-gray-600 hover:text-primary font-medium flex items-center">
+                <button class="flex items-center text-gray-700 hover:text-primary transition">
                     Upload <i class="ri-arrow-down-s-line ml-1"></i>
                 </button>
-                <div class="absolute hidden group-hover:block bg-white shadow-lg mt-2 rounded w-48 z-50">
+                <div class="absolute hidden group-hover:block bg-white rounded-xl shadow-lg mt-3 w-48 overflow-hidden">
                     <a href="{% url 'upload_paper' %}"
-                    class="{% if request.resolver_match.url_name == 'upload_paper' %}bg-gray-100 text-primary{% else %}text-gray-700 hover:bg-gray-100{% endif %} block px-4 py-2 text-sm">
-                    Upload Paper
+                       class="block px-5 py-3 text-sm hover:bg-gray-100 {% if request.resolver_match.url_name == 'upload_paper' %}bg-gray-50 text-primary{% endif %}">
+                       Upload Paper
                     </a>
                     <a href="{% url 'upload_project' %}"
-                    class="{% if request.resolver_match.url_name == 'upload_project' %}bg-gray-100 text-primary{% else %}text-gray-700 hover:bg-gray-100{% endif %} block px-4 py-2 text-sm">
-                    Upload Project
+                       class="block px-5 py-3 text-sm hover:bg-gray-100 {% if request.resolver_match.url_name == 'upload_project' %}bg-gray-50 text-primary{% endif %}">
+                       Upload Project
                     </a>
                 </div>
             </div>
             {% endif %}
         </div>
 
-
+        <!-- Right Section -->
         <div class="flex items-center space-x-4">
-            <!-- <div class="relative w-10 h-10 flex items-center justify-center cursor-pointer">
-                <i class="ri-search-line text-gray-600 ri-lg"></i>
-            </div> -->
-
             {% if user.is_authenticated %}
+            <!-- Profile Dropdown -->
             <div class="relative">
-                <button class="flex items-center space-x-2 focus:outline-none" id="profileDropdownButton">
-                    <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center">
-                        <span class="font-semibold text-sm sm:text-lg">{% firstof user.first_name|slice:":1" user.username|slice:":1" %}</span>
+                <button id="profileDropdownButton" class="flex items-center space-x-3 hover:opacity-80 transition">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-purple-500 text-white flex items-center justify-center font-semibold text-sm">
+                        {% firstof user.first_name|slice:":1" user.username|slice:":1" %}
                     </div>
-                    <div class="hidden md:block">
-                        <span class="text-sm font-medium text-gray-700">
-                            {% firstof user.first_name user.username %}
-                        </span>
-                    </div>
-                    <div class="w-5 h-5 flex items-center justify-center">
-                        <i class="ri-arrow-down-s-line text-gray-600"></i>
-                    </div>
+                    <span class="hidden md:block text-sm font-medium text-gray-700">
+                        {% firstof user.first_name user.username %}
+                    </span>
+                    <i class="ri-arrow-down-s-line text-gray-600"></i>
                 </button>
-
-                <div id="profileDropdown"
-                    class="hidden absolute right-0 mt-2 w-56 bg-white rounded shadow-lg py-2 z-10">
-                    <a href="{% url 'profile' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                    <a href="{% url 'user_uploads' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Uploads</a>
-                    <!-- <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a> -->
-                    <div class="border-t border-gray-100 my-1"></div>
-                    <div class="border-t border-gray-100 my-1"></div>
-                    <a href="{% url 'logout' %}"
-                        class="block px-4 py-2 text-sm text-red-700 hover:bg-gray-100">Logout</a>
+                <div id="profileDropdown" class="hidden absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-lg overflow-hidden">
+                    <a href="{% url 'profile' %}" class="block px-5 py-3 text-sm hover:bg-gray-100">Profile</a>
+                    <a href="{% url 'user_uploads' %}" class="block px-5 py-3 text-sm hover:bg-gray-100">My Uploads</a>
+                    <div class="border-t border-gray-100"></div>
+                    <a href="{% url 'logout' %}" class="block px-5 py-3 text-sm text-red-600 hover:bg-gray-100">Logout</a>
                 </div>
             </div>
             {% else %}
-            <div class="flex items-center space-x-2">
-                <a href="{% url 'login' %}"
-                    class="bg-primary text-white hover:bg-primary hover:text-white  hover:bg-opacity-80 font-medium px-4 py-2 rounded-button">Login</a>
-            </div>
+            <a href="{% url 'login' %}" class="bg-primary text-white px-5 py-2 rounded-full hover:bg-primary/90 transition font-medium shadow-sm">
+                Login
+            </a>
             {% endif %}
 
+            <!-- Mobile Menu Button -->
             <button class="md:hidden w-10 h-10 flex items-center justify-center" id="mobileMenuButton">
                 <i class="ri-menu-line text-gray-700 ri-lg"></i>
             </button>
         </div>
     </nav>
+
     <!-- Mobile Menu -->
-    <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 py-2">
-        <div class="flex flex-col space-y-3 py-2">
-            <a href="{% url 'home' %}" class="text-gray-800 font-medium py-2">Home</a>
-            <a href="{% url 'papers' %}" class="text-gray-600 py-2">Papers</a>
-            <a href="{% url 'projects' %}" class="text-gray-600 py-2">Projects</a>
-            <a href="{% url 'blogs' %}" class="text-gray-600 py-2">Blogs</a>
+    <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-200 px-4 py-3">
+        <div class="flex flex-col space-y-4">
+            <a href="{% url 'home' %}" class="text-gray-800 font-medium">Home</a>
+            <a href="{% url 'papers' %}" class="text-gray-600">Papers</a>
+            <a href="{% url 'projects' %}" class="text-gray-600">Projects</a>
+            <a href="{% url 'blogs' %}" class="text-gray-600">Blogs</a>
             {% if user.is_authenticated %}
-            <div class="relative group">
-                <button class="text-gray-600 hover:text-primary font-medium flex items-center">
-                    Upload <i class="ri-arrow-down-s-line ml-1"></i>
-                </button>
-                <div class="absolute hidden group-hover:block bg-white shadow-lg mt-2 rounded w-48 z-50">
-                    <a href="{% url 'upload_paper' %}"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Upload Paper</a>
-                    <a href="{% url 'upload_project' %}"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Upload Project</a>
-                    <!-- my uploads -->
-                    <a href="{% url 'user_uploads' %}"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Uploads</a>
-                </div>
-            </div>
-            {% endif %} 
+            <a href="{% url 'upload_paper' %}" class="text-gray-600">Upload Paper</a>
+            <a href="{% url 'upload_project' %}" class="text-gray-600">Upload Project</a>
+            <a href="{% url 'user_uploads' %}" class="text-gray-600">My Uploads</a>
+            {% endif %}
         </div>
     </div>
 </header>
