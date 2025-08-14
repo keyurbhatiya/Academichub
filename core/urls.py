@@ -12,11 +12,9 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
-    path('upload/paper/', views.upload_paper, name='upload_paper'),
-    path('upload/project/', views.upload_project, name='upload_project'),
     path('papers/', views.papers, name='papers'),
     path('projects/', views.projects, name='projects'),
-    path('projects/<int:pk>/', views.project_detail, name='project_detail'),
+    path('project/<slug:slug>/', views.project_detail, name='project_detail'),
     path('blogs/', views.blogs, name='blogs'),
     path('blogs/create/', views.blog_create, name='blog_create'),
     path('blogs/<slug:slug>/', views.blog_detail, name='blog_detail'),
@@ -34,8 +32,9 @@ urlpatterns = [
     path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
     path('cookie-policy/', views.cookie_policy, name='cookie_policy'),
     path('uploads/', views.user_uploads_view, name='user_uploads'),
-    # ✅ Correct way to serve ads.txt
     path('ads.txt', views.ads_txt_view, name='ads_txt'),
-
-    # path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),
 ]
+
+# ✅ Custom error handlers (must be at module level)
+handler404 = 'core.views.custom_404'
+handler500 = 'core.views.custom_500'

@@ -107,29 +107,44 @@ COURSE_CHOICES = [
 class OldPaper(models.Model):
     title = models.CharField(max_length=200)
     university = models.CharField(max_length=100, choices=UNIVERSITY_CHOICES)
-    course = models.CharField(max_length=100, choices= COURSE_CHOICES)  
+    course = models.CharField(max_length=100, choices=COURSE_CHOICES)
     semester = models.CharField(max_length=50)
-    file = models.FileField(upload_to='papers/',default='no-paper.pdf')
+    drive_url = models.URLField(max_length=500, blank=True, null=True)  # New field
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='approved')
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.title
+
 
 class Project(models.Model):
     title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, blank=True)  # ✅ Added slug field
     description = models.TextField()
     semester = models.CharField(max_length=50)
-    language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, default='other')  #New field
-    image = models.ImageField(upload_to='project_images/', blank=True, null=True)  # ✅ New field
-    zip_file = models.FileField(upload_to='projects/',default='no-project.zip')  # ✅ New field
+    language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, default='other')
+    image = models.ImageField(upload_to='project_images/', blank=True, null=True)
+    github_url = models.URLField(max_length=500, blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='approved')
     uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        # Auto-generate slug from title if not set
+        if not self.slug:
+            base_slug = slugify(self.title)
+            slug = base_slug
+            counter = 1
+            while Project.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
 
 
 

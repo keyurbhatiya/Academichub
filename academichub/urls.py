@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/feedback/delete/<int:feedback_id>/', views.admin_delete_feedback, name='admin_delete_feedback'),
     path('admin/projects/upload/', views.admin_upload_project, name='admin_upload_project'),
     path('admin/projects/delete/<int:project_id>/', views.admin_delete_project, name='admin_delete_project'),
+    path('admin/papers/delete/<int:paper_id>/', views.admin_delete_paper, name='admin_delete_paper'),
 
     # path('admin/', admin.site.urls),
     path('', include('core.urls')),

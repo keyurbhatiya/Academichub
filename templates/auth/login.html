@@ -120,7 +120,7 @@
                 <input type="password" class="form-control w-full p-3 rounded-lg placeholder-black" id="password" name="password" placeholder="Enter your password" required>
             </div>
             <button type="submit" class="btn-primary w-full p-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-lg font-semibold relative z-10">Login</button>
-            <p class="mt-4 text-center text-black">Don't have an account? <a href="{% url 'register' %}" class="text-black hover:underline">Register here</a>.</p>
+            <p class="mt-4 text-center text-black">Don't have an account? <a href="#" class="text-black hover:underline">Register here</a>.</p>
             {% if form.non_field_errors %}
                 <div class="alert alert-danger mt-4 p-3 bg-red-500 text-black rounded-lg">
                     {{ form.non_field_errors }}

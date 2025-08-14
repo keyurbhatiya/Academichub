@@ -39,6 +39,11 @@ def ads_txt_view(request):
         response['Content-Disposition'] = 'inline; filename="ads.txt"'
         return response
 
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)
+
+def custom_500(request):
+    return render(request, '500.html', status=500)
 
 def home(request):
     try:
@@ -58,21 +63,22 @@ def home(request):
         return render(request, 'core/home/home.html', context)
     except OperationalError as e:
         error = str(e)
-        return render(request, 'auth/error_page/error_page.html', {
+        return render(request, '500.html', {
             'error': error,
             'data': None,
         })
 
 def register(request):
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Registration successful! Please log in.')
-            return redirect('login')
-    else:
-        form = RegisterForm()
-    return render(request, 'auth/register.html', {'form': form})
+    pass
+    # if request.method == 'POST':
+    #     form = RegisterForm(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         messages.success(request, 'Registration successful! Please log in.')
+    #         return redirect('login')
+    # else:
+    #     form = RegisterForm()
+    # return render(request, 'auth/register.html', {'form': form})
 
 def login_view(request):
     if request.method == 'POST':
@@ -156,8 +162,8 @@ def projects(request):
     
     return render(request, 'core/projects/projects.html', context)
 
-def project_detail(request, pk):
-    project = get_object_or_404(Project, pk=pk)
+def project_detail(request, slug):
+    project = get_object_or_404(Project, slug=slug)
     return render(request, 'core/projects/project_detail.html', {'project': project})
 
 def blogs(request):
@@ -515,17 +521,26 @@ def admin_papers(request):
 @login_required
 def admin_upload_old_paper(request):
     if request.method == 'POST':
-        form = OldPaperForm(request.POST, request.FILES)
+        # No longer passing request.FILES
+        form = OldPaperForm(request.POST)
         if form.is_valid():
             paper = form.save(commit=False)
             paper.uploaded_by = request.user
             paper.save()
-            messages.success(request, 'Paper uploaded successfully!')
-            return redirect('admin_papers')
+            messages.success(request, 'Old paper has been added successfully!')
+            return redirect('admin_papers') # Redirect to the admin papers list
     else:
         form = OldPaperForm()
-
+        
     return render(request, 'admin/papers/papers_upload.html', {'form': form})
+
+def admin_delete_paper(request, paper_id):
+    if request.method == 'POST':
+        paper = get_object_or_404(OldPaper, id=paper_id)
+        paper.delete()
+        messages.success(request, 'Paper deleted successfully!')
+        return redirect('admin_papers')
+    return redirect('admin_papers')
 
 # admin side projects view
 @login_required
@@ -545,18 +560,20 @@ def admin_upload_project(request):
         if form.is_valid():
             project = form.save(commit=False)
             project.uploaded_by = request.user
-            project.status = 'approved'  
+            project.status = 'approved'  # Directly approving since it's admin upload
             project.save()
-            messages.success(request, 'Project uploaded successfully and is pending moderation.')
+            messages.success(request, 'Project uploaded successfully.')
             return redirect('admin_projects')
         else:
-            messages.error(request, 'Please correct the errors below: ' + '; '.join(
+            error_messages = '; '.join(
                 f"{field}: {', '.join(errors)}" for field, errors in form.errors.items()
-            ))
+            )
+            messages.error(request, f'Please correct the errors below: {error_messages}')
     else:
         form = ProjectForm()
 
     return render(request, 'admin/projects/projects_upload.html', {'form': form})
+
 
 # admin side project delete
 def admin_delete_project(request, project_id):

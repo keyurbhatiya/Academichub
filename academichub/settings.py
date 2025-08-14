@@ -158,4 +158,5 @@ CLOUDINARY_STORAGE = {
     'RESOURCE_TYPE': 'raw',  # <--- This is important for non-image files like PDFs
 }
 
+# X_FRAME_OPTIONS = 'SAMEORIGIN'
 

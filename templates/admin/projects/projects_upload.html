@@ -3,69 +3,13 @@
 {% block title %}Upload Project | AcademicHub{% endblock %}
 
 {% block content %}
-<!-- Breadcrumb -->
-<div class="px-4 py-2 bg-gray-50 text-sm">
-    <div class="flex items-center space-x-2">
-        <a href="{% url 'admin_dashboard' %}" class="text-gray-500 hover:text-blue-600">Home</a>
-        <div class="w-4 h-4 flex items-center justify-center text-gray-400">
-            <i class="ri-arrow-right-s-line"></i>
-        </div>
-        <a href="{% url 'admin_projects' %}" class="text-gray-500 hover:text-blue-600">Projects</a>
-        <div class="w-4 h-4 flex items-center justify-center text-gray-400">
-            <i class="ri-arrow-right-s-line"></i>
-        </div>
-        <span class="text-gray-700">Upload Project</span>
-    </div>
-</div>
-
-<!-- Messages -->
-{% if messages %}
-<div class="mx-4 my-6 space-y-3">
-    {% for message in messages %}
-    <div class="relative p-4 rounded-xl border-l-4 shadow-sm transition-all duration-300 hover:shadow-md 
-        {% if message.tags == 'success' %}bg-gradient-to-r from-green-50 to-emerald-50 border-green-500 text-green-800
-        {% elif message.tags == 'error' %}bg-gradient-to-r from-red-50 to-rose-50 border-red-500 text-red-800
-        {% elif message.tags == 'warning' %}bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-500 text-yellow-800
-        {% else %}bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-500 text-blue-800{% endif %}">
-        <div class="flex items-start">
-            <div class="flex-shrink-0 mr-3">
-                <div class="w-8 h-8 rounded-full flex items-center justify-center 
-                    {% if message.tags == 'success' %}bg-green-100
-                    {% elif message.tags == 'error' %}bg-red-100
-                    {% elif message.tags == 'warning' %}bg-yellow-100
-                    {% else %}bg-blue-100{% endif %}">
-                    <i class="{% if message.tags == 'success' %}ri-check-circle-fill text-green-600
-                        {% elif message.tags == 'error' %}ri-error-warning-fill text-red-600
-                        {% elif message.tags == 'warning' %}ri-alert-fill text-yellow-600
-                        {% else %}ri-information-fill text-blue-600{% endif %} text-lg" aria-hidden="true"></i>
-                </div>
-            </div>
-            <div class="flex-1 min-w-0">
-                <p class="font-medium leading-5">{{ message }}</p>
-            </div>
-            <div class="flex-shrink-0 ml-4">
-                <button type="button" class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 
-                    {% if message.tags == 'success' %}text-green-500 hover:bg-green-100 focus:ring-green-500
-                    {% elif message.tags == 'error' %}text-red-500 hover:bg-red-100 focus:ring-red-500
-                    {% elif message.tags == 'warning' %}text-yellow-500 hover:bg-yellow-100 focus:ring-yellow-500
-                    {% else %}text-blue-500 hover:bg-blue-100 focus:ring-blue-500{% endif %} transition-colors duration-200" 
-                    onclick="this.closest('.relative').remove()">
-                    <span class="sr-only">Dismiss</span>
-                    <i class="ri-close-line text-lg" aria-hidden="true"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-{% endif %}
 
 <!-- Upload Project Section -->
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
     <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">Upload Project</h1>
 
     <div class="bg-white rounded-xl shadow-sm p-6 sm:p-8 border border-gray-100 max-w-3xl mx-auto">
-        <form method="post" action="{% url 'upload_project' %}" enctype="multipart/form-data" class="space-y-4 sm:space-y-6">
+        <form method="post" action="{% url 'admin_upload_project' %}" enctype="multipart/form-data" class="space-y-4 sm:space-y-6">
             {% csrf_token %}
             <!-- Form Fields -->
             {% for field in form %}
@@ -74,8 +18,8 @@
                     {{ field.label }}{% if field.field.required %} <span class="text-red-500">*</span>{% endif %}
                 </label>
 
-                {% if field.name == 'zip_file' or field.name == 'image' %}
-                    <!-- File Upload Input -->
+                {% if field.name == 'image' %}
+                    <!-- File Upload Input for Image -->
                     <div class="relative border border-gray-300 rounded-lg bg-white p-2 sm:p-3 flex items-center justify-between hover:border-indigo-600 transition-colors {% if field.errors %}border-red-500{% endif %}" 
                          ondragover="event.preventDefault(); this.classList.add('border-indigo-600');" 
                          ondragleave="this.classList.remove('border-indigo-600');" 
@@ -133,14 +77,14 @@
                     </select>
 
                 {% else %}
-                    <!-- Default Input -->
+                    <!-- Default Input (including github_url) -->
                     <input
                         type="{{ field.field.widget.input_type|default:'text' }}"
                         id="{{ field.id_for_label }}"
                         name="{{ field.name }}"
                         value="{{ field.value|default_if_none:'' }}"
                         class="w-full px-3 py-2 sm:px-4 sm:py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 placeholder-gray-400 text-sm sm:text-base {% if field.errors %}border-red-500{% endif %}"
-                        placeholder="{{ field.help_text|default:field.label }}"
+                        placeholder="{% if field.name == 'github_url' %}https://github.com/username/repository{% else %}{{ field.help_text|default:field.label }}{% endif %}"
                         {% if field.field.required %}required{% endif %}
                     />
                 {% endif %}
@@ -174,16 +118,13 @@
 <!-- JavaScript for File Input Display -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const fileFields = ['zip_file', 'image'];
+    const fileFields = ['image']; // Only image now
 
     fileFields.forEach(function (name) {
         const input = document.getElementById(`id_${name}`);
         const label = document.getElementById(`file-name-${name}`);
 
-        if (!input || !label) {
-            console.warn(`File input or label not found for field: ${name}`);
-            return;
-        }
+        if (!input || !label) return;
 
         input.addEventListener('change', function () {
             label.textContent = this.files.length > 0 ? this.files[0].name : 'Choose a file...';

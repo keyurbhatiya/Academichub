@@ -1,177 +1,208 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
 {% block title %}Old Question Papers{% endblock %}
+
 {% block content %}
-<main class="py-12 sm:py-16 bg-gray-50 text-gray-800">
-    <div class="container mx-auto px-4 sm:px-6">
-        <!-- Header Section -->
-        <div class="text-center mb-8 sm:mb-12">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-3">Old Question Papers</h2>
-            <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">Search our collection of past papers to aid your exam preparation.</p>
-        </div>
-
-        <!-- Messages -->
-        {% if messages %}
-        <div class="mb-6 space-y-2 max-w-3xl mx-auto">
-            {% for message in messages %}
-            <div class="p-4 rounded-lg flex items-center {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
-                <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-triangle{% endif %} mr-3 text-xl"></i>
-                <span>{{ message }}</span>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-        <!-- Filter & Search Section -->
-        <form id="filter-form" method="get" action="{% url 'papers' %}" class="mb-10 max-w-3xl mx-auto">
-            <div class="relative">
-                <input type="search" id="search-query" name="q" value="{{ request.GET.q|default:'' }}"
-                       class="w-full py-4 pl-12 pr-4 text-lg border-2 border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                       placeholder="Search by title, course, or university...">
-                <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
-                    <i class="fas fa-search text-xl"></i>
-                </div>
-            </div>
-            <!-- Hidden submit button to allow enter key submission -->
-            <button type="submit" class="hidden">Search</button>
-        </form>
-
-        <!-- Papers List -->
-        <div id="papers-list" class="max-w-5xl mx-auto">
-            {% if papers %}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {% for paper in papers %}
-                <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 p-6 border border-gray-100">
-                    <div class="flex items-start justify-between">
-                        <div class="flex-1">
-                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded-full mb-3">
-                                {{ paper.course|default:"General" }}
-                            </span>
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ paper.title }}</h3>
-                            <p class="text-sm text-gray-500">
-                                {{ paper.university }} &bull; Sem: {{ paper.semester }}
-                            </p>
-                        </div>
-                        <button
-                            onclick="openPdfModal('{{ paper.file.url }}')"
-                            class="ml-4 bg-gray-100 text-gray-700 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-blue-500 hover:text-white transition-colors">
-                            <i class="fas fa-eye text-xl"></i>
-                        </button>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <div class="bg-white rounded-xl shadow-sm p-8 text-center border border-gray-100">
-                <i class="fas fa-search text-4xl text-gray-300 mb-4"></i>
-                <p class="text-lg text-gray-700 font-semibold">No papers found for your search.</p>
-                <p class="text-sm text-gray-500 mt-2">Try a different keyword or <a href="{% url 'papers' %}" class="text-blue-600 hover:underline">clear the search</a>.</p>
-            </div>
-            {% endif %}
-        </div>
+<section class="container mx-auto p-4 sm:p-6">
+    <div class="text-center mb-8 sm:mb-12">
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900">Old Question Papers</h1>
+        <p class="text-lg text-gray-600 mt-2">Search our extensive collection of past papers to ace your exams.</p>
     </div>
-</main>
-<!-- PDF Modal -->
-<div id="pdfModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg shadow-2xl w-full max-w-4xl h-full max-h-[90vh] flex flex-col">
-        <!-- Modal Header -->
-        <div class="flex justify-between items-center p-4 border-b">
-            <h2 id="modalTitle" class="text-xl font-semibold text-gray-800">PDF Viewer</h2>
-            <button onclick="closePdfModal()" class="text-gray-500 hover:text-gray-900 text-3xl">&times;</button>
+
+    <form id="filter-form" method="get" action="{% url 'papers' %}" class="mb-10 max-w-lg mx-auto">
+        <div class="relative">
+            <label for="search-input" class="sr-only">Search Papers</label>
+            <i class="ri-search-line absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"></i>
+            <input type="search" id="search-input" name="q" value="{{ request.GET.q|default:'' }}" placeholder="Search by title, course, or university..." class="w-full py-3 pl-12 pr-4 text-base border-2 border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
         </div>
-        <!-- PDF Embed -->
-        <div class="flex-grow p-1">
-            <iframe id="pdfFrame" src="" class="w-full h-full" frameborder="0"></iframe>
+    </form>
+
+    <div id="search-loader" class="text-center py-8 hidden">
+        <div class="inline-block w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-gray-600 mt-2">Searching for papers...</p>
+    </div>
+
+    <div id="papers-container" class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% include 'core/papers/papers_list.html' %}
+    </div>
+</section>
+
+<div id="pdfModal" role="dialog" aria-modal="true" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-2xl w-full max-w-5xl h-full max-h-[95vh] flex flex-col">
+        <div class="flex justify-between items-center p-4 border-b">
+            <h2 id="modalTitle" class="text-xl font-semibold text-gray-800 truncate pr-4">PDF Viewer</h2>
+            <div class="flex items-center space-x-4">
+                <button id="copyLinkBtn" class="text-blue-600 hover:text-blue-800 transition-colors" title="Copy share link">
+                    <i class="ri-clipboard-line text-lg"></i>
+                </button>
+                <a id="downloadBtn" href="#" target="_blank" class="text-blue-600 hover:text-blue-800 transition-colors" title="Open in new tab">
+                    <i class="ri-external-link-line text-lg"></i>
+                </a>
+                <button id="closeModalBtn" onclick="closeModal()" class="text-gray-500 hover:text-gray-900 text-3xl leading-none">&times;</button>
+            </div>
+        </div>
+        <div class="flex-grow p-1 relative">
+            <div id="pdf-loader" class="absolute inset-0 flex items-center justify-center bg-gray-50">
+                <div class="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+            <div id="pdf-error" class="hidden absolute inset-0 flex flex-col items-center justify-center text-red-600 p-4 text-center">
+                <i class="ri-error-warning-fill text-3xl mb-2"></i>
+                <p class="font-semibold">Failed to load PDF.</p>
+                <p class="text-sm text-gray-600">The Google Drive link may be invalid or not shared publicly.</p>
+            </div>
+            <iframe id="pdfViewer" src="about:blank" class="w-full h-full" frameborder="0"></iframe>
         </div>
     </div>
 </div>
 
-
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('filter-form');
-    const input = document.getElementById('search-query');
+    const searchInput = document.getElementById('search-input');
+    const papersContainer = document.getElementById('papers-container');
+    const searchLoader = document.getElementById('search-loader');
     let searchTimeout;
 
+    // --- AJAX Search Functionality ---
     const performSearch = () => {
-        const formData = new FormData(form);
-        const url = form.action + '?' + new URLSearchParams(formData).toString();
+        const url = `${form.action}?q=${encodeURIComponent(searchInput.value)}`;
+
+        searchLoader.classList.remove('hidden');
+        papersContainer.style.opacity = '0.5';
 
         fetch(url, {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest' // Indicate AJAX request
-            }
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
         .then(response => response.text())
-        .then(data => {
-            // Replace the content of the list, not the whole container
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(data, 'text/html');
-            const newList = doc.getElementById('papers-list');
-            if (newList) {
-                document.getElementById('papers-list').innerHTML = newList.innerHTML;
-            }
+        .then(html => {
+            papersContainer.innerHTML = html;
         })
         .catch(error => {
-            console.error('Error fetching papers:', error);
-            document.getElementById('papers-list').innerHTML = `
-                <div class="bg-red-100 text-red-800 rounded-xl p-8 text-center">
-                    <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
-                    <p class="text-lg font-semibold">An error occurred.</p>
-                    <p class="mt-2">Could not load papers. Please try again later.</p>
-                </div>`;
+            console.error('Search failed:', error);
+            papersContainer.innerHTML = `<div class="col-span-full text-center py-8 text-red-600">Failed to load papers. Please try again.</div>`;
+        })
+        .finally(() => {
+            searchLoader.classList.add('hidden');
+            papersContainer.style.opacity = '1';
         });
     };
 
-    // Search on typing with a debounce
-    input.addEventListener('keyup', () => {
+    searchInput.addEventListener('input', () => {
         clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(performSearch, 300); // Wait 300ms after user stops typing
+        searchTimeout = setTimeout(performSearch, 500); // Debounce
     });
 
-    // Prevent default form submission on enter, as keyup handles it
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        clearTimeout(searchTimeout); // Clear any pending timeout
-        performSearch(); // Perform search immediately on enter
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        clearTimeout(searchTimeout);
+        performSearch();
     });
 });
-</script>
-<!-- pdf model -->
- <script>
-    // --- PDF Modal Functions ---
+
+// --- START: MODAL AND UTILITY FUNCTIONS (This block was missing) ---
+
 const pdfModal = document.getElementById('pdfModal');
-const pdfFrame = document.getElementById('pdfFrame');
+const pdfViewer = document.getElementById('pdfViewer');
 const modalTitle = document.getElementById('modalTitle');
+const downloadBtn = document.getElementById('downloadBtn');
+const copyLinkBtn = document.getElementById('copyLinkBtn');
+const pdfLoader = document.getElementById('pdf-loader');
+const pdfError = document.getElementById('pdf-error');
+const closeModalBtn = document.getElementById('closeModalBtn');
+let previousActiveElement;
 
-function openPdfModal(url) {
-    if (pdfModal && pdfFrame) {
-        try {
-            const filename = new URL(url).pathname.split('/').pop();
-            modalTitle.textContent = decodeURIComponent(filename) || 'PDF Viewer';
-        } catch {
-            modalTitle.textContent = 'PDF Viewer';
-        }
-
-        pdfFrame.src = url;
-        pdfModal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+/**
+ * Opens the PDF modal with the specified Google Drive URL and title.
+ * @param {string} url - The original Google Drive share URL.
+ * @param {string} title - The title of the paper.
+ */
+function openModal(url, title) {
+    if (!url || !url.includes('drive.google.com')) {
+        showPdfError();
+        return;
     }
+
+    const fileIdMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (!fileIdMatch || !fileIdMatch[1]) {
+        showPdfError();
+        return;
+    }
+    const embedUrl = `https://drive.google.com/file/d/${fileIdMatch[1]}/preview`;
+    
+    previousActiveElement = document.activeElement;
+    modalTitle.textContent = title;
+    downloadBtn.href = url; // Link to open in new tab
+    copyLinkBtn.onclick = () => copyToClipboard(url, copyLinkBtn); // Set the copy link for this specific modal
+
+    // Reset UI states
+    pdfError.classList.add('hidden');
+    pdfViewer.classList.add('hidden');
+    pdfLoader.classList.remove('hidden');
+    
+    // Show Modal
+    pdfModal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+
+    // Attach listeners before setting src to avoid race conditions
+    pdfViewer.onload = () => {
+        pdfLoader.classList.add('hidden');
+        pdfViewer.classList.remove('hidden');
+    };
+    pdfViewer.onerror = () => {
+        showPdfError();
+    };
+
+    pdfViewer.src = embedUrl;
+    closeModalBtn.focus();
 }
 
-function closePdfModal() {
-    if (pdfModal && pdfFrame) {
-        pdfModal.classList.add('hidden');
-        pdfFrame.src = ''; // Reset PDF to stop loading
-        document.body.style.overflow = 'auto';
-    }
+/**
+ * Closes the PDF modal and resets its state.
+ */
+function closeModal() {
+    pdfModal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+    pdfViewer.src = 'about:blank'; // Important to stop loading/free resources
+    if (previousActiveElement) previousActiveElement.focus();
 }
 
-// Close modal with Escape key
+/**
+ * Displays the error message inside the modal.
+ */
+function showPdfError() {
+    pdfLoader.classList.add('hidden');
+    pdfViewer.classList.add('hidden');
+    pdfError.classList.remove('hidden');
+}
+
+/**
+ * Copies the provided text to the clipboard and gives visual feedback.
+ * @param {string} text - The text to copy.
+ * @param {HTMLElement} element - The button element that was clicked.
+ */
+function copyToClipboard(text, element) {
+    navigator.clipboard.writeText(text).then(() => {
+        const originalIcon = element.innerHTML;
+        const originalTitle = element.title;
+        element.innerHTML = `<i class="ri-check-line text-lg text-green-600"></i>`;
+        element.title = "Copied!";
+        setTimeout(() => {
+            element.innerHTML = originalIcon;
+            element.title = originalTitle;
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+    });
+}
+
+// Global listener to close the modal with the Escape key.
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !pdfModal.classList.contains('hidden')) {
-        closePdfModal();
+        closeModal();
     }
 });
+
+// --- END: MODAL AND UTILITY FUNCTIONS ---
 </script>
 {% endblock %}

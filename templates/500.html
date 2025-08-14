@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>You're Lost in Space</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400&display=swap');
+        
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --link-color: #58a6ff;
+            --highlight-color: #238636;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(13, 17, 23, 0.7);
+            border-radius: 12px;
+            border: 1px solid rgba(48, 54, 61, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: #ff9900;
+            text-shadow: 0 0 10px rgba(255, 153, 0, 0.5);
+            margin-bottom: 0.5em;
+        }
+        
+        .message {
+            font-size: 1.2rem;
+            color: #d1d5db;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+        
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: rgba(88, 166, 255, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--link-color);
+        }
+        
+        a:hover {
+            background-color: var(--link-color);
+            color: var(--bg-color);
+            box-shadow: 0 0 15px rgba(88, 166, 255, 0.6);
+        }
+
+        /* Animated Starry Background */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            z-index: 1;
+        }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle linear infinite;
+        }
+
+        @keyframes twinkle {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="star-field"></div>
+    <div class="container">
+        <h1>🚨 Connection Lost! 🔌</h1>
+        <p class="message">
+            Our ship has lost contact with the starbase. It appears the connection has timed out. Please check your network and try again.
+        </p>
+        <a href="{% url 'home' %}">Attempt to Return to Base</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const starField = document.getElementById('star-field');
+            const numStars = 200;
+
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = star.style.height = `${Math.random() * 2 + 1}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                star.style.animationDuration = `${Math.random() * 5 + 3}s`;
+                starField.appendChild(star);
+            }
+        });
+    </script>
+</body>
+</html>

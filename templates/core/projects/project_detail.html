@@ -1,82 +1,92 @@
 {% extends 'core/base.html' %}
-{% block title %}{{ project.title }} | Project Details{% endblock %}
-
+{% block title %}{{ project.title }} | Academic Projects{% endblock %}
 {% block content %}
 <main class="py-12 sm:py-16 bg-gray-50 text-gray-800">
-    <div class="container mx-auto px-4 sm:px-6">
-        <div class="max-w-5xl mx-auto">
+    <div class="container mx-auto px-4 sm:px-6 max-w-4xl">
 
-            <!-- Project Header -->
-            <div class="mb-8 md:mb-12 text-center">
-                <span class="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm font-semibold rounded-full mb-4">
-                    Project Details
-                </span>
-                <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900">{{ project.title }}</h1>
-                <p class="text-lg text-gray-500 mt-3">
-                    Uploaded by <span class="font-semibold text-gray-700">{{ project.uploaded_by }}</span> on {{ project.uploaded_at|date:"F j, Y" }}
-                </p>
+        <div class="mb-8 sm:mb-10 flex items-center justify-between flex-wrap">
+            <div class="flex items-center mb-4 sm:mb-0">
+                <a href="{% url 'projects' %}" class="inline-flex items-center text-green-600 hover:text-green-800 transition-colors duration-200">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Projects
+                </a>
             </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 ml-4 text-center sm:text-left flex-grow">{{ project.title }}</h1>
+        </div>
 
-            <!-- Main Content Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-gray-100">
+            <div class="mb-6 flex flex-wrap items-center justify-between text-sm text-gray-600 border-b pb-4">
+                <div class="flex flex-wrap items-center">
+                    <div class="flex items-center mr-6 mb-2">
+                        <i class="fas fa-code text-gray-400 mr-2"></i>
+                        <span class="font-medium">Language:</span>
+                        <span class="ml-1">{{ project.language|default:"General" }}</span>
+                    </div>
+                    <div class="flex items-center mr-6 mb-2">
+                        <i class="fas fa-user text-gray-400 mr-2"></i>
+                        <span class="font-medium">Uploaded by:</span>
+                        <span class="ml-1">{{ project.uploaded_by }}</span>
+                    </div>
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-calendar-alt text-gray-400 mr-2"></i>
+                        <span class="font-medium">Date:</span>
+                        <span class="ml-1">{{ project.uploaded_at|date:"F j, Y" }}</span>
+                    </div>
+                </div>
                 
-                <!-- Left Column: Description & Image -->
-                <div class="lg:col-span-2 space-y-8">
-                    {% if project.image %}
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <img src="{{ project.image.url }}" class="w-full h-auto max-h-96 object-cover" alt="{{ project.title }}">
-                    </div>
-                    {% endif %}
-                    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm border border-gray-100">
-                        <h2 class="text-2xl font-bold text-gray-800 mb-4">About This Project</h2>
-                        <div class="prose max-w-none text-gray-700">
-                            {{ project.description|linebreaks }}
-                        </div>
-                    </div>
-                </div>
+                <button id="copy-url-btn" 
+                        class="flex items-center px-4 py-2 bg-gray-100 hover:bg-green-100 rounded-lg transition-colors duration-200 text-gray-800 hover:text-green-800 font-semibold mt-4 sm:mt-0">
+                    <i class="fas fa-copy mr-2"></i>
+                    <span id="btn-text">Copy Project URL</span>
+                </button>
+            </div>
 
-                <!-- Right Column: Metadata & Download -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 sticky top-24">
-                        <h3 class="text-xl font-bold text-gray-800 mb-5">Details</h3>
-                        <ul class="space-y-4 text-sm">
-                            <li class="flex items-center">
-                                <i class="fas fa-code w-6 mr-3 text-gray-400"></i>
-                                <div>
-                                    <span class="text-gray-500">Language</span>
-                                    <p class="font-semibold text-base">{{ project.language }}</p>
-                                </div>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-user w-6 mr-3 text-gray-400"></i>
-                                <div>
-                                    <span class="text-gray-500">Author</span>
-                                    <p class="font-semibold text-base">{{ project.uploaded_by }}</p>
-                                </div>
-                            </li>
-                            <li class="flex items-center">
-                                <i class="fas fa-calendar-alt w-6 mr-3 text-gray-400"></i>
-                                <div>
-                                    <span class="text-gray-500">Uploaded</span>
-                                    <p class="font-semibold text-base">{{ project.uploaded_at|date:"M j, Y" }}</p>
-                                </div>
-                            </li>
-                        </ul>
-
-                        {% if project.zip_file %}
-                        <a href="{{ project.zip_file.url }}" download
-                           class="mt-6 w-full flex items-center justify-center bg-green-500 text-white px-5 py-3 rounded-lg font-bold hover:bg-green-600 transition-all transform hover:scale-105">
-                           <i class="fas fa-download mr-2"></i>
-                           Download Files
-                        </a>
-                        {% endif %}
-                    </div>
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-3">Description</h2>
+                <div class="prose max-w-none text-gray-700">
+                    <p class="whitespace-pre-wrap">{{ project.description }}</p>
                 </div>
             </div>
+
+            <div class="mb-8 border-t pt-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Files & Links</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {% if project.github_url %}
+                    <a href="{{ project.github_url }}" target="_blank" rel="noopener noreferrer"
+                       class="flex items-center justify-center p-4 bg-gray-100 hover:bg-green-100 rounded-lg transition-colors duration-200 text-gray-800 hover:text-green-800 font-semibold border-2 border-transparent hover:border-green-300">
+                        <i class="fab fa-github text-2xl mr-3"></i>
+                        <span>View on GitHub</span>
+                    </a>
+                    {% endif %}
+                    {% if project.live_url %}
+                    <a href="{{ project.live_url }}" target="_blank" rel="noopener noreferrer"
+                       class="flex items-center justify-center p-4 bg-gray-100 hover:bg-green-100 rounded-lg transition-colors duration-200 text-gray-800 hover:text-green-800 font-semibold border-2 border-transparent hover:border-green-300">
+                        <i class="fas fa-external-link-alt text-2xl mr-3"></i>
+                        <span>Live Demo</span>
+                    </a>
+                    {% endif %}
+                    {% if not project.github_url and not project.live_url %}
+                    <p class="text-gray-500 italic col-span-2">No external links provided for this project.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if project.tech_stack %}
+            <div class="border-t pt-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-3">Technologies Used</h2>
+                <div class="flex flex-wrap gap-2">
+                    {% for tech in project.tech_stack %}
+                    <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
+                        {{ tech }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
 
         </div>
     </div>
 </main>
+
 
 <style>
 /* Basic prose styling for the description */
@@ -93,4 +103,33 @@
     margin-bottom: 0.5em;
 }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const copyButton = document.getElementById('copy-url-btn');
+    const buttonText = document.getElementById('btn-text');
+
+    copyButton.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            // Change button text and color to indicate success
+            buttonText.textContent = 'URL Copied!';
+            copyButton.classList.remove('bg-gray-100', 'hover:bg-green-100', 'text-gray-800', 'hover:text-green-800');
+            copyButton.classList.add('bg-green-500', 'text-white');
+            
+            // Revert button text and color after a short delay
+            setTimeout(() => {
+                buttonText.textContent = 'Copy Project URL';
+                copyButton.classList.remove('bg-green-500', 'text-white');
+                copyButton.classList.add('bg-gray-100', 'hover:bg-green-100', 'text-gray-800', 'hover:text-green-800');
+            }, 2000); // Reverts after 2 seconds
+        } catch (err) {
+            console.error('Failed to copy URL: ', err);
+            // You could add an error message here for the user
+            buttonText.textContent = 'Failed to Copy';
+        }
+    });
+});
+</script>
+
 {% endblock %}

@@ -47,7 +47,7 @@
                         <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                             <h3 class="font-bold text-lg text-gray-800 mb-2">{{ paper.title }}</h3>
                             <p class="text-sm text-gray-500 mb-3">{{ paper.university }} &bull; Sem {{ paper.semester }}</p>
-                            <a href="{{ paper.file.url }}" target="_blank" class="font-semibold text-sm text-blue-600 hover:underline">View Paper &rarr;</a>
+                            <a href="{{ paper.drive_url }}" target="_blank" class="font-semibold text-sm text-blue-600 hover:underline">View Paper &rarr;</a>
                         </div>
                         {% empty %}
                         <p class="md:col-span-2 text-gray-500">No papers found.</p>
@@ -63,7 +63,7 @@
                          <div class="bg-white p-5 rounded-lg shadow-sm border border-gray-100">
                             <h3 class="font-bold text-lg text-gray-800 mb-2">{{ project.title }}</h3>
                             <p class="text-sm text-gray-600 line-clamp-2 mb-3">{{ project.description }}</p>
-                            <a href="{{ project.zip_file.url }}" class="font-semibold text-sm text-green-600 hover:underline" download>Download Project &darr;</a>
+                            <a href="{{ project.github_url }}" target="_blank" class="font-semibold text-sm text-green-600 hover:underline" >View Project &darr;</a>
                         </div>
                         {% empty %}
                         <p class="md:col-span-2 text-gray-500">No projects found.</p>
@@ -146,7 +146,7 @@
                  <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
                     <h3 class="font-bold text-lg mb-3">Contribute Your Work</h3>
                     <p class="text-sm text-gray-600 mb-4">Help others by sharing your knowledge.</p>
-                    <a href="{% url 'upload_project' %}" class="w-full block bg-blue-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-blue-700 transition-all">
+                    <a href="#" class="w-full block bg-blue-600 text-white font-bold px-6 py-3 rounded-lg hover:bg-blue-700 transition-all">
                         Upload Now
                     </a>
                 </div>
